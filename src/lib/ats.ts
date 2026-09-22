@@ -30,6 +30,19 @@ const STOP = new Set(
 
 const ACTION_VERBS = /^(built|developed|designed|led|created|implemented|improved|reduced|increased|launched|managed|automated|analyzed|analysed|organized|organised|delivered|optimized|optimised|coordinated|researched|presented|taught|mentored|wrote|tested|deployed|migrated|architected|engineered|founded|initiated|streamlined|achieved|won|published|collaborated|contributed|maintained|integrated|configured|resolved|trained|drove|owned)\b/i;
 
+/**
+ * A resume with no bullet glyphs still has achievement lines. Treat a
+ * descriptive sentence as a bullet, but skip the things that are never
+ * achievements: contact lines, headings, and bare date ranges.
+ */
+function isProseBullet(line: string): boolean {
+  if (line.split(/\s+/).length < 6) return false;
+  if (/[:]$/.test(line)) return false;
+  if (/@|https?:\/\/|linkedin\.com|github\.com/i.test(line)) return false;
+  if (/^[A-Za-z]+ \d{4}\s*[-\u2013\u2014]\s*(Present|[A-Za-z]+ \d{4})/.test(line)) return false;
+  return true;
+}
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()
@@ -94,13 +107,26 @@ export function runAtsChecks(resume: string, jd: string): AtsReport {
   add("length", "Length fits one page (250–700 words)", wordCount >= 250 && wordCount <= 700, `Your resume has ~${wordCount} words. Freshers should stay on one page.`, 6);
 
   // Bullet glyphs vary wildly: • - * ▪ ● ◦ ‣ and, very commonly in profiles
-  // pasted out of LinkedIn, ✔️ ✅ ➤ →.
-  const marked = lines.filter((l) => /^[•\-*▪▫●○◦‣·»✓✔✅➤→]/.test(l));
-  // Resumes without bullet characters: treat descriptive prose lines as bullets.
-  const bullets = marked.length >= 3 ? marked : lines.filter((l) => l.split(/\s+/).length >= 6 && !/[:]$/.test(l));
-  // Strip whatever marker and emoji variation selector precedes the first word.
-  const verbBullets = bullets.filter((l) => ACTION_VERBS.test(l.replace(/^[^\p{L}]+/u, "")));
-  add("verbs", "Bullets start with action verbs", bullets.length > 0 && verbBullets.length / bullets.length >= 0.6, `${verbBullets.length}/${bullets.length || 0} bullets start with a strong verb.`, 8);
+  // pasted out of LinkedIn, ✔️ ✅ ➤ →. A marked line only counts as a bullet
+  // once it carries some content, so a divider like "---" or a lone "•" can't
+  // pass for one.
+  const stripMarker = (l: string) => l.replace(/^[^\p{L}]+/u, "").trim();
+  const marked = lines.filter((l) => /^[•\-*▪▫●○◦‣·»✓✔✅➤→]/.test(l) && stripMarker(l).split(/\s+/).length >= 4);
+  // If the resume marks its bullets at all, those are the bullets — however few.
+  // Requiring several of them made a two-bullet resume fall through to the prose
+  // fallback, which then counted its contact and education lines and scored a
+  // well-written resume at 2/5.
+  const bullets = marked.length > 0 ? marked : lines.filter(isProseBullet);
+  const verbBullets = bullets.filter((l) => ACTION_VERBS.test(stripMarker(l)));
+  add(
+    "verbs",
+    "Bullets start with action verbs",
+    bullets.length > 0 && verbBullets.length / bullets.length >= 0.6,
+    bullets.length === 0
+      ? "No bullet points found. Describe each role in 3–4 bullets, each starting with a verb: Built, Led, Reduced, Analysed."
+      : `${verbBullets.length}/${bullets.length} bullets start with a strong verb. Start each one with what you did: Built, Led, Reduced, Analysed.`,
+    8,
+  );
 
   const numbers = (text.match(/\b\d+(\.\d+)?\s*(%|percent|\+|x\b|k\b|lakh|crore|users|students|people|hours|days|weeks|projects|members|teams|marks|cgpa|gpa|rank|clients|customers|orders|requests|ms\b|sec\b)/gi) ?? []).length
     + (text.match(/\b(cgpa|gpa|rank|top)\s*[:#]?\s*\d+(\.\d+)?/gi) ?? []).length;
