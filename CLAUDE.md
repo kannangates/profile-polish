@@ -23,7 +23,7 @@ If a change breaks one of these, it is the wrong change — however good the fea
 |---|---|---|
 | 1 | **BYOK calls go browser → provider directly.** A student's API key must never be sent to our server, logged, or put in a URL. | If the server never holds it, it cannot leak it. |
 | 2 | **Student content stays client-side.** Profile text, resume text and drafts live in IndexedDB / component state. The only exception is the shared-key proxy, which forwards one prompt to Gemini and stores nothing. | This is the product's promise, stated in the README and in-app. |
-| 3 | **No server-side database, no accounts, no auth.** | Holding resumes and keys server-side without real auth is a liability; adding auth breaks constraint 3. |
+| 3 | **No server-side database, no accounts, no auth.** | Holding resumes and keys server-side without real auth is a liability, and an account gate breaks the two-minute constraint above. Changing this is a decision about what the project is, not a feature — see *Changing an invariant* below. |
 | 4 | **Everything in the browser has a TTL.** Drafts and the parsed profile expire after `DRAFT_TTL_MS` (48 h) and are purged on app load. | Shared computers. |
 | 5 | **Keys default to `sessionStorage`.** `localStorage` is opt-in behind the "Remember on this device" toggle, with a shared-computer warning. | Lab machines. |
 | 6 | **No direct DOM manipulation.** Drive UI through React state. The single allowed exception is a detached `<a>` element for file downloads (see `drafts/page.tsx`). | React owns the DOM; mutating it underneath causes bugs that only appear in production builds. |
@@ -33,6 +33,23 @@ If a change breaks one of these, it is the wrong change — however good the fea
 | 10 | **Don't oversell.** Copy describes what the app does (polish, draft, check) — never promises replies, interviews or jobs. | The app was renamed from "CareerLift" for exactly this reason. |
 | 11 | **Never claim something was saved unless storage confirms it.** Decide UI state from what is stored, never from the value being typed, and surface a failed write instead of swallowing it. | A card that read `hasKey` from the input buffer unmounted the Save button on the first keystroke, so pasting a key looked successful and stored nothing. Every later request then failed with an error about the deployment. |
 | 12 | **Anything checkable without a model is checked without one.** Rule-based results appear instantly, cost nothing, and work before a student has a key. | The ATS checks and the profile gap panel both run in the browser; the AI builds on their findings instead of repeating them. |
+
+### Changing an invariant
+
+These are hard, not permanent. One may be revisited when the project's goals
+genuinely change — but that is a deliberate decision, made in its own PR, not
+something a feature quietly assumes.
+
+If a change needs an invariant relaxed: say so plainly, amend the table with the
+new reasoning, and only then build on it. Do not ship a feature that contradicts
+a row while the row still stands.
+
+One known candidate, recorded so it stops looking like an accident: the README
+roadmap floats **optional accounts with cross-device sync**, which invariant 3
+forbids today. It is a real possibility if students ask for it, and it would mean
+accepting server-side storage of student data, real authentication, and a
+host-side cost — so it changes constraints 1 and 3 and invariants 2 and 3
+together. Treat it as a fork in the road, not a backlog item.
 
 ## Project layout
 
