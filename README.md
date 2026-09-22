@@ -220,7 +220,19 @@ Other common changes: a new AI provider (`src/lib/ai/providers/` — see [CONTRI
 
 **Sending it back (optional)**
 
-PRs are welcome. Read [CLAUDE.md](CLAUDE.md) first — it lists the ten invariants that keep the app free and private, and the checklist every PR is verified against before merge. Anything that respects those has a good chance of being merged.
+PRs are welcome. Read [CLAUDE.md](CLAUDE.md) first — it lists the invariants that keep the app free and private, and the checklist every PR is verified against before merge. Anything that respects those has a good chance of being merged.
+
+## Codebase map
+
+`graphify-out/` holds a generated knowledge graph of this repo — 351 nodes, 676 edges, 18 communities — for anyone (or any AI assistant) getting oriented:
+
+| File | What it is |
+|---|---|
+| `graphify-out/graph.html` | Interactive graph. Open it in a browser, no server needed. |
+| `graphify-out/GRAPH_REPORT.md` | Plain-language report: the most connected nodes, cross-cutting links, and where the structure is weak. |
+| `graphify-out/graph.json` | Raw graph data, for tooling. |
+
+Regenerate it with the [graphify](https://github.com/safishamsi/graphify) skill after significant changes. It is a snapshot, not a build output — treat a stale graph as documentation drift.
 
 ## Privacy model
 

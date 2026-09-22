@@ -18,6 +18,7 @@ If a change breaks one of these, it is the wrong change — however good the fea
 
 ## Hard invariants (never break these)
 
+
 | # | Invariant | Why |
 |---|---|---|
 | 1 | **BYOK calls go browser → provider directly.** A student's API key must never be sent to our server, logged, or put in a URL. | If the server never holds it, it cannot leak it. |
@@ -30,6 +31,8 @@ If a change breaks one of these, it is the wrong change — however good the fea
 | 8 | **No secret may be added to client code or committed.** Server secrets live in Vercel env vars only; `.env*` is git-ignored. | Obvious, but easy to slip. |
 | 9 | **No analytics that capture page content or user input.** | See `docs/PRIVACY.md`. |
 | 10 | **Don't oversell.** Copy describes what the app does (polish, draft, check) — never promises replies, interviews or jobs. | The app was renamed from "CareerLift" for exactly this reason. |
+| 11 | **Never claim something was saved unless storage confirms it.** Decide UI state from what is stored, never from the value being typed, and surface a failed write instead of swallowing it. | A card that read `hasKey` from the input buffer unmounted the Save button on the first keystroke, so pasting a key looked successful and stored nothing. Every later request then failed with an error about the deployment. |
+| 12 | **Anything checkable without a model is checked without one.** Rule-based results appear instantly, cost nothing, and work before a student has a key. | The ATS checks and the profile gap panel both run in the browser; the AI builds on their findings instead of repeating them. |
 
 ## Project layout
 
@@ -67,6 +70,8 @@ npm run build      # production build — must pass before merge
 - **Provider SDKs are lazy-loaded** in `client.ts` so a Gemini user never downloads the other three bundles. Keep it that way when adding a provider.
 - **Comments explain why, not what.** Most code should not need one.
 - **Copy is written for a 19-year-old in a hurry.** Short sentences, no jargon, no exclamation marks.
+- **Phones are the default.** Most students open this on a phone. Check every change at 375px: navigation stays reachable, banners stay small, upload zones say "tap" rather than "drop", and nothing scrolls sideways.
+- **Model ids go stale.** `src/lib/config.ts` holds a curated list per provider, but Settings can also fetch the live list with the student's key. When a default stops working, check the provider's docs rather than guessing an id.
 - **Branch and PR for every change** (`feat/…`, `fix/…`, `docs/…`, `chore/…`). Never commit to `main`; `main` auto-deploys to production.
 - **Never delete a branch without the owner asking.**
 
@@ -94,7 +99,11 @@ git diff origin/main --stat
 git diff origin/main | grep -nE "AIza|gsk_|sk-ant-|sk-[A-Za-z0-9]{20}"   # must return nothing
 ```
 
-**4. It works in a browser, not just in CI.** Start the dev server and exercise the changed path end to end. A page that compiles is not a page that works — several bugs in this repo's history (a stuck loading spinner, a mis-parsed PDF section, an error only visible after clicking Generate) passed both `tsc` and `eslint`.
+**4. It works in a browser, not just in CI.** Start the dev server and *use* the changed path end to end — type into the fields, click the buttons, read what renders. Reading the page's markup is not using it. Every user-visible bug in this repo's history passed `tsc`, `eslint` and `build`: a stuck loading spinner, a mis-parsed PDF section, an error only visible after clicking Generate, a Save button that unmounted as you typed, and an ATS rule that scored a well-written profile at zero.
+
+**4a. Check the rendered result, not the edit.** A find-and-replace that matches nothing reports success and changes nothing. After editing, confirm the new behaviour in the running app — and if a change does not appear, suspect a stale build before suspecting the logic.
+
+**4b. Test on real data, not only on a fixture you wrote.** The synthetic profile in this repo's history was clean, comma-separated and short. A real LinkedIn export broke the location regex, truncated multi-line headlines, reported 24 roles for six, and used `✔️` as a bullet glyph. Fixtures confirm what you expected; real files find what you did not.
 
 **5. The no-key path still behaves.** With no API key saved and no shared key configured, the app must say so up front (`SetupBanner`) rather than failing at the moment of generation.
 
