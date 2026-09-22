@@ -8,7 +8,12 @@ Fix your profile · write messages that get replies · post about what's trendin
 
 Runs in your browser · Bring your own free API key · No sign-up · No database · MIT licensed
 
+### 👉 [**Use it now — careerlift-app.vercel.app**](https://careerlift-app.vercel.app)
+
 [Getting started](#getting-started-students) · [Deploy your own](#deploy-your-own-free) · [How it works](#how-it-works) · [Privacy](#privacy-model) · [Contributing](CONTRIBUTING.md)
+
+[![CI](https://github.com/kannangates/careerlift/actions/workflows/ci.yml/badge.svg)](https://github.com/kannangates/careerlift/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 </div>
 
@@ -37,7 +42,7 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 
 ## Getting started (students)
 
-1. Open the app (the URL your college / senior shared, or see [Deploy your own](#deploy-your-own-free)).
+1. Open **[careerlift-app.vercel.app](https://careerlift-app.vercel.app)**.
 2. On LinkedIn (web, not the mobile app): your profile → **More** (or **Resources**) → **Save to PDF**.
 3. Drop that PDF on the first screen. Check the preview, click **Looks good**.
 4. Go to **Settings**, click **Get a key** next to Google Gemini (free, no card, ~1 minute), paste it, **Save**.
@@ -63,6 +68,8 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional. A free [Upstash](https://upstash.com) Redis makes the limits reliable across serverless instances. Without it, limits are in-memory per instance (fine for a small pilot). |
 
 4. Click **Deploy**. You get a `https://<name>.vercel.app` URL to share. Every merge to `main` redeploys automatically.
+
+> The official instance runs at [careerlift-app.vercel.app](https://careerlift-app.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons.
 
 <details>
 <summary>Other hosts</summary>
