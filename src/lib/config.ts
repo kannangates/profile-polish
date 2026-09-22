@@ -22,6 +22,15 @@ export interface ProviderInfo {
   keyUrl: string;
   keyHint: string;
   free: boolean;
+  /** Roughly how long getting a key takes, shown on the setup card. */
+  setupTime: string;
+  /** Step-by-step instructions shown in Settings. */
+  setupSteps: string[];
+  /** Expected start of a valid key — used only to warn about paste mistakes. */
+  keyPrefix: string;
+  keyPlaceholder: string;
+  /** Extra warning shown under the steps, e.g. "needs a card". */
+  setupWarning?: string;
 }
 
 export const PROVIDERS: ProviderInfo[] = [
@@ -39,6 +48,17 @@ export const PROVIDERS: ProviderInfo[] = [
     keyUrl: "https://aistudio.google.com/apikey",
     keyHint: "Free tier, no card needed. Best default for students.",
     free: true,
+    setupTime: "about 1 minute",
+    keyPrefix: "AIza",
+    keyPlaceholder: "AIza…",
+    setupSteps: [
+      "Open Google AI Studio and sign in with any Google account (your college Gmail works).",
+      "If it asks, accept the terms — you do NOT need to enter a credit card.",
+      "Click the blue **Create API key** button.",
+      "Choose **Create API key in new project** (or pick an existing project if you have one).",
+      "Your key appears — it starts with `AIza`. Click the copy icon.",
+      "Come back here, paste it in the box below and click **Save**.",
+    ],
   },
   {
     id: "groq",
@@ -54,6 +74,18 @@ export const PROVIDERS: ProviderInfo[] = [
     keyUrl: "https://console.groq.com/keys",
     keyHint: "Free tier, very fast responses. No image support on most models.",
     free: true,
+    setupTime: "about 2 minutes",
+    keyPrefix: "gsk_",
+    keyPlaceholder: "gsk_…",
+    setupSteps: [
+      "Open the Groq console and sign in with Google or GitHub (no card needed).",
+      "Go to **API Keys** in the left menu.",
+      "Click **Create API Key**.",
+      "Give it any name, e.g. `ProfilePolish`, and submit.",
+      "Copy the key — it starts with `gsk_`. **Groq shows it only once**, so copy it now.",
+      "Come back here, paste it below and click **Save**.",
+    ],
+    setupWarning: "Groq shows the key only once. If you lose it, just create another — they're free.",
   },
   {
     id: "openai",
@@ -68,6 +100,17 @@ export const PROVIDERS: ProviderInfo[] = [
     keyUrl: "https://platform.openai.com/api-keys",
     keyHint: "Paid — needs a card on the OpenAI account.",
     free: false,
+    setupTime: "about 5 minutes",
+    keyPrefix: "sk-",
+    keyPlaceholder: "sk-…",
+    setupSteps: [
+      "Open the OpenAI platform and sign in.",
+      "Go to **Settings → Billing** and add a payment method, then buy a small amount of credit. OpenAI has no free API tier, so keys won't work without credit.",
+      "Go to **API keys** and click **Create new secret key**.",
+      "Name it, create it, then copy the key — it starts with `sk-` and is shown only once.",
+      "Come back here, paste it below and click **Save**.",
+    ],
+    setupWarning: "This costs real money from your own account. If you're a student, use Google Gemini or Groq instead — they're free.",
   },
   {
     id: "anthropic",
@@ -82,6 +125,17 @@ export const PROVIDERS: ProviderInfo[] = [
     keyUrl: "https://console.anthropic.com/settings/keys",
     keyHint: "Paid — needs credits on the Anthropic account.",
     free: false,
+    setupTime: "about 5 minutes",
+    keyPrefix: "sk-ant-",
+    keyPlaceholder: "sk-ant-…",
+    setupSteps: [
+      "Open the Anthropic Console and sign in.",
+      "Go to **Plans & Billing** and buy credits. There's no free API tier, so a key won't work without credit.",
+      "Go to **API keys** and click **Create Key**.",
+      "Name it, create it, then copy the key — it starts with `sk-ant-` and is shown only once.",
+      "Come back here, paste it below and click **Save**. Claude Haiku 4.5 is preselected as the cheapest option.",
+    ],
+    setupWarning: "This costs real money from your own account. If you're a student, use Google Gemini or Groq instead — they're free.",
   },
 ];
 

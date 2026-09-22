@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FileDrop } from "@/components/FileDrop";
@@ -175,11 +176,20 @@ export default function OnboardingPage() {
 
         {error && <p className="text-sm text-danger">{error}</p>}
 
-        <div className="border-t border-border pt-4 text-center text-sm">
-          <LinkButton href="/posts" variant="ghost">
-            Continue without profile →
-          </LinkButton>
-          <p className="mt-1 text-xs text-muted">You can still write posts and messages; suggestions just won&apos;t be personalised.</p>
+        <div className="space-y-3 border-t border-border pt-4 text-center text-sm">
+          <div>
+            <LinkButton href="/posts" variant="ghost">
+              Continue without profile →
+            </LinkButton>
+            <p className="mt-1 text-xs text-muted">You can still write posts and messages; suggestions just won&apos;t be personalised.</p>
+          </div>
+          <p className="text-xs text-muted">
+            You&apos;ll also need a free AI key to generate anything —{" "}
+            <Link href="/settings" className="text-accent hover:underline">
+              set it up in Settings
+            </Link>{" "}
+            (about a minute, no credit card).
+          </p>
         </div>
       </Card>
     </Shell>

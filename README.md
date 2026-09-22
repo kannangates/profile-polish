@@ -40,15 +40,15 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 | **Post Generator** | Live trending topics from Google Trends (India), Hacker News and Dev.to, plus evergreen student topics. Pick a topic, add your angle, choose a style → 3 hooks, a full post, hashtags, best time to post. |
 | **Resume ATS Check** | Instant rule-based score (13 checks, zero AI calls): contact info, standard headings, length, action verbs, metrics, clichés, table/column artefacts, and keyword match against a pasted job description. Then an AI review with keyword gaps and before/after bullet rewrites, or a full one-page rewrite. PDF, DOCX and TXT. |
 | **My Drafts** | Everything you save, with a 48-hour countdown. Export all to Markdown. |
-| **Settings** | Bring-your-own-key for **Google Gemini, Groq, OpenAI, Anthropic Claude**. Model dropdown per provider (curated list + "Load models from provider" for the live list + custom id). Session-only keys by default; opt-in "remember on this device"; one-click "clear all my data". |
+| **Settings** | Step-by-step instructions for getting a free key from each provider, plus bring-your-own-key for **Google Gemini, Groq, OpenAI, Anthropic Claude**. Model dropdown per provider (curated list + "Load models from provider" for the live list + custom id). Session-only keys by default; opt-in "remember on this device"; one-click "clear all my data". |
 
 ## Getting started (students)
 
 1. Open **[profilepolish-app.vercel.app](https://profilepolish-app.vercel.app)**.
 2. On LinkedIn (web, not the mobile app): your profile → **More** (or **Resources**) → **Save to PDF**.
 3. Drop that PDF on the first screen. Check the preview, click **Looks good**.
-4. Go to **Settings**, click **Get a key** next to Google Gemini (free, no card, ~1 minute), paste it, **Save**.
-   - Or use the app's shared free key if the host set one up — it's limited to a few requests per day per person.
+4. Go to **Settings** → open **"How do I get this key?"** under Google Gemini. It walks you through it step by step (free, no credit card, about a minute). Paste the key, click **Save**.
+   - Or use the app's shared free key if the host set one up — it's limited to a few requests per day per person. Settings tells you whether this deployment has one.
 5. Use any page. Copy the result straight into LinkedIn or your resume.
 
 > **On a college lab computer?** Leave "Remember my keys" off (the default) and click **Clear all my data** in Settings before you leave.
@@ -150,6 +150,8 @@ npm run build      # production build
 │   │   ├── FileDrop.tsx             Drag-and-drop file input
 │   │   ├── Markdown.tsx             react-markdown wrapper
 │   │   ├── PrivacyBanner.tsx        "Everything stays in your browser" notice
+│   │   ├── SetupBanner.tsx          "Add a free key" prompt when none is set
+│   │   ├── SetupSteps.tsx           Per-provider key instructions
 │   │   ├── CopyButton.tsx
 │   │   └── ui.tsx                   Button, Card, Label, Badge, Spinner, PageHeader
 │   └── lib/
