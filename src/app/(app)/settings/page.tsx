@@ -22,7 +22,10 @@ import {
 import { useIsClient } from "@/lib/useIsClient";
 
 interface Row {
-  key: string;
+  /** What is currently typed in the box. */
+  input: string;
+  /** What is actually stored. Empty until Save succeeds. */
+  savedKey: string;
   model: string;
   editing: boolean;
   savedFlash: boolean;
@@ -30,6 +33,8 @@ interface Row {
   liveModels: string[] | null;
   loadingModels: boolean;
   modelsError: string | null;
+  /** false when the key is held in memory only (browser storage blocked). */
+  memoryOnly: boolean;
 }
 
 const CUSTOM = "__custom__";
@@ -38,7 +43,17 @@ function loadRows(): Record<ProviderId, Row> {
   return Object.fromEntries(
     PROVIDERS.map((p) => [
       p.id,
-      { key: getKey(p.id), model: getModel(p.id), editing: false, savedFlash: false, liveModels: null, loadingModels: false, modelsError: null },
+      {
+        input: getKey(p.id),
+        savedKey: getKey(p.id),
+        model: getModel(p.id),
+        editing: false,
+        savedFlash: false,
+        liveModels: null,
+        loadingModels: false,
+        modelsError: null,
+        memoryOnly: false,
+      },
     ]),
   ) as Record<ProviderId, Row>;
 }
@@ -56,7 +71,7 @@ function SettingsForm() {
   const [rows, setRows] = useState<Record<ProviderId, Row>>(loadRows);
   const [cleared, setCleared] = useState(false);
   const [sharedKey, setSharedKey] = useState<boolean | null>(null);
-  const anyKey = PROVIDERS.some((p) => !!rows[p.id].key);
+  const anyKey = PROVIDERS.some((p) => !!rows[p.id].savedKey);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,18 +87,18 @@ function SettingsForm() {
   const update = (id: ProviderId, patch: Partial<Row>) => setRows((r) => ({ ...r, [id]: { ...r[id], ...patch } }));
 
   const save = (id: ProviderId) => {
-    const key = rows[id].key.trim();
-    setKey(id, key);
+    const key = rows[id].input.trim();
+    const persisted = setKey(id, key);
     setModel(id, rows[id].model);
     const nextActive: ActiveProvider = key ? id : active === id ? "shared" : active;
     setActiveProvider(nextActive);
     setActive(nextActive);
-    update(id, { editing: false, savedFlash: true, key });
+    update(id, { editing: false, savedFlash: true, input: key, savedKey: key, memoryOnly: !!key && !persisted });
     setTimeout(() => update(id, { savedFlash: false }), 1500);
   };
 
   const loadLive = async (id: ProviderId) => {
-    const key = rows[id].key.trim();
+    const key = rows[id].input.trim();
     if (!key) return;
     update(id, { loadingModels: true, modelsError: null });
     try {
@@ -144,7 +159,7 @@ function SettingsForm() {
               Shared free key{sharedKey === false ? " (not available)" : ""}
             </ProviderPill>
             {PROVIDERS.map((p) => (
-              <ProviderPill key={p.id} selected={active === p.id} disabled={!rows[p.id].key} onClick={() => { setActiveProvider(p.id); setActive(p.id); }}>
+              <ProviderPill key={p.id} selected={active === p.id} disabled={!rows[p.id].savedKey} onClick={() => { setActiveProvider(p.id); setActive(p.id); }}>
                 {p.name}
               </ProviderPill>
             ))}
@@ -182,13 +197,13 @@ function SettingsForm() {
             onLoadModels={() => loadLive(p.id)}
             onRemove={() => {
               setKey(p.id, "");
-              update(p.id, { key: "", editing: false, liveModels: null });
+              update(p.id, { input: "", savedKey: "", editing: false, liveModels: null, memoryOnly: false });
               if (active === p.id) {
                 setActiveProvider("shared");
                 setActive("shared");
               }
             }}
-            onCancel={() => update(p.id, { editing: false, key: getKey(p.id), model: getModel(p.id) })}
+            onCancel={() => update(p.id, { editing: false, input: getKey(p.id), model: getModel(p.id) })}
           />
         ))}
 
@@ -226,7 +241,9 @@ interface ProviderCardProps {
 }
 
 function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadModels, onRemove, onCancel }: ProviderCardProps) {
-  const hasKey = !!row.key;
+  // Based on what is stored, never on what is being typed — otherwise the
+  // form (and the Save button) would vanish on the first keystroke.
+  const hasKey = !!row.savedKey;
   const showForm = row.editing || !hasKey;
 
   // Curated list + anything the provider reported + whatever is currently set.
@@ -235,7 +252,7 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
   const isCustom = !options.some((o) => o.id === row.model);
   const [customMode, setCustomMode] = useState(isCustom);
   const selectedNote = options.find((o) => o.id === row.model)?.note;
-  const looksWrong = row.key.trim().length > 6 && !row.key.trim().startsWith(p.keyPrefix);
+  const looksWrong = row.input.trim().length > 6 && !row.input.trim().startsWith(p.keyPrefix);
 
   return (
     <Card className="space-y-3">
@@ -244,7 +261,11 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
           <span className="font-medium">{p.name}</span>
           {p.free ? <Badge tone="success">Free tier</Badge> : <Badge tone="warn">Paid</Badge>}
           {isActive && <Badge tone="accent">In use</Badge>}
-          {hasKey && !row.editing && <Badge>Key saved · {maskKey(row.key)}</Badge>}
+          {hasKey && !row.editing && (
+            <Badge tone={row.memoryOnly ? "warn" : "neutral"}>
+              {row.memoryOnly ? "This session only" : "Key saved"} · {maskKey(row.savedKey)}
+            </Badge>
+          )}
         </div>
         <a href={p.keyUrl} target="_blank" rel="noreferrer" className="text-sm text-accent hover:underline">
           Get a key ↗
@@ -252,7 +273,14 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
       </div>
       <p className="text-sm text-muted">{p.keyHint}</p>
 
-      <SetupSteps provider={p} defaultOpen={showForm && !row.key} />
+      {row.memoryOnly && (
+        <p className="rounded-lg bg-warning-bg px-3 py-2 text-xs text-warning-fg">
+          ⚠️ Your browser is blocking site storage, so the key could not be saved. It works right now, but it will be gone if you reload or
+          reopen this page. This usually means a private/incognito window or blocked site data — switch to a normal window to keep it.
+        </p>
+      )}
+
+      <SetupSteps provider={p} defaultOpen={showForm && !row.savedKey} />
 
       {showForm ? (
         <div className="space-y-3">
@@ -264,8 +292,8 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
                 type="password"
                 autoComplete="off"
                 placeholder={p.keyPlaceholder}
-                value={row.key}
-                onChange={(e) => onChange({ key: e.target.value })}
+                value={row.input}
+                onChange={(e) => onChange({ input: e.target.value })}
               />
               {looksWrong && (
                 <p className="mt-1 text-xs text-warning-fg">
@@ -313,10 +341,10 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
           </div>
           {row.modelsError && <p className="text-xs text-danger">{row.modelsError}</p>}
           <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={onSave} disabled={!row.model.trim()}>
+            <Button onClick={onSave} disabled={!row.model.trim() || !row.input.trim()}>
               Save
             </Button>
-            <Button variant="secondary" onClick={onLoadModels} disabled={!row.key.trim() || row.loadingModels}>
+            <Button variant="secondary" onClick={onLoadModels} disabled={!row.input.trim() || row.loadingModels}>
               {row.loadingModels ? <Spinner /> : null} Load models from {p.name.split(" ")[0]}
             </Button>
             {hasKey && (
