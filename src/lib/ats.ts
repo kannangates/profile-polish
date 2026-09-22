@@ -19,7 +19,13 @@ export interface AtsReport {
 }
 
 const STOP = new Set(
-  "a an and are as at be by for from has have in is it its of on or that the to was were will with you your we our this these those they their them not but if then than can may into over under about after before between during through per via each all any more most other some such only own same so too very just also who what which when where why how required preferred experience skills ability strong good excellent work working team teams role roles job candidate candidates must should would could include including etc year years month months".split(" "),
+  ("a an and are as at be by for from has have in is it its of on or that the to was were will with you your we our this these those they their them " +
+    "not but if then than can may into over under about after before between during through per via each all any more most other some such only own " +
+    "same so too very just also who what which when where why how required preferred experience skills ability strong good excellent work working " +
+    "team teams role roles job candidate candidates must should would could include including etc year years month months " +
+    // Job-ad boilerplate: present in every posting, useless for matching.
+    "hiring hire requirements responsibilities qualifications looking join apply ideal opportunity closely define drive deliver ensure help build " +
+    "plus bonus nice great exciting fast paced company culture benefits salary remote hybrid onsite").split(" "),
 );
 
 const ACTION_VERBS = /^(built|developed|designed|led|created|implemented|improved|reduced|increased|launched|managed|automated|analyzed|analysed|organized|organised|delivered|optimized|optimised|coordinated|researched|presented|taught|mentored|wrote|tested|deployed|migrated|architected|engineered|founded|initiated|streamlined|achieved|won|published|collaborated|contributed|maintained|integrated|configured|resolved|trained|drove|owned)\b/i;
@@ -44,10 +50,20 @@ export function extractJdKeywords(jd: string, limit = 25): string[] {
     const bg = `${a} ${b}`;
     counts.set(bg, (counts.get(bg) ?? 0) + 1.5);
   }
-  const ranked = [...counts.entries()]
-    .filter(([, c]) => c >= 2)
-    .sort((x, y) => y[1] - x[1])
-    .map(([w]) => w);
+  const rankAtLeast = (min: number) =>
+    [...counts.entries()]
+      .filter(([, c]) => c >= min)
+      .sort((x, y) => y[1] - x[1])
+      .map(([w]) => w);
+  // A short JD mentions each requirement once, so requiring repeats finds
+  // almost nothing. Fall back to single mentions — but only single words:
+  // every adjacent word pair would otherwise qualify ("roadmap run",
+  // "experiments analyse"), which is noise, not a keyword list.
+  let ranked = rankAtLeast(2);
+  if (ranked.length < 10) {
+    const singles = rankAtLeast(1).filter((w) => !w.includes(" "));
+    ranked = [...ranked, ...singles.filter((w) => !ranked.includes(w))];
+  }
   const bigrams = ranked.filter((w) => w.includes(" "));
   // "machine learning" already covers "machine" and "learning".
   return ranked.filter((w) => w.includes(" ") || !bigrams.some((b) => b.split(" ").includes(w))).slice(0, limit);
@@ -77,10 +93,13 @@ export function runAtsChecks(resume: string, jd: string): AtsReport {
   add("summary", "Summary / Objective found", has(/\b(summary|objective|profile)\b/), "A 2-line summary at the top helps both ATS and recruiters.", 4);
   add("length", "Length fits one page (250–700 words)", wordCount >= 250 && wordCount <= 700, `Your resume has ~${wordCount} words. Freshers should stay on one page.`, 6);
 
-  const marked = lines.filter((l) => /^[•\-*▪●◦‣]/.test(l));
+  // Bullet glyphs vary wildly: • - * ▪ ● ◦ ‣ and, very commonly in profiles
+  // pasted out of LinkedIn, ✔️ ✅ ➤ →.
+  const marked = lines.filter((l) => /^[•\-*▪▫●○◦‣·»✓✔✅➤→]/.test(l));
   // Resumes without bullet characters: treat descriptive prose lines as bullets.
   const bullets = marked.length >= 3 ? marked : lines.filter((l) => l.split(/\s+/).length >= 6 && !/[:]$/.test(l));
-  const verbBullets = bullets.filter((l) => ACTION_VERBS.test(l.replace(/^[•\-*▪●◦‣]\s*/, "")));
+  // Strip whatever marker and emoji variation selector precedes the first word.
+  const verbBullets = bullets.filter((l) => ACTION_VERBS.test(l.replace(/^[^\p{L}]+/u, "")));
   add("verbs", "Bullets start with action verbs", bullets.length > 0 && verbBullets.length / bullets.length >= 0.6, `${verbBullets.length}/${bullets.length || 0} bullets start with a strong verb.`, 8);
 
   const numbers = (text.match(/\b\d+(\.\d+)?\s*(%|percent|\+|x\b|k\b|lakh|crore|users|students|people|hours|days|weeks|projects|members|teams|marks|cgpa|gpa|rank|clients|customers|orders|requests|ms\b|sec\b)/gi) ?? []).length
