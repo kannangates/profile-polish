@@ -150,7 +150,7 @@ git diff origin/main | grep -nE "AIza|gsk_|sk-ant-|sk-[A-Za-z0-9]{20}"   # must 
 
 Be direct about real problems and quiet about style preferences. Priority order:
 
-1. Does it break an invariant? → request changes, cite the number.
+1. Does it break an invariant? → request changes, and name the invariant in the words the table uses.
 2. Does it leak a secret or student data? → request changes immediately.
 3. Does it break the free-to-host constraint (new paid service, new always-on server)? → request changes.
 4. Does it build and work? → run the checklist.
