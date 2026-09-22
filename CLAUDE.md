@@ -41,6 +41,7 @@ Full tree is in the README. The short version:
 | Add/remove a model or provider | `src/lib/config.ts` + `src/lib/ai/providers/` |
 | Routing between BYOK and the shared key | `src/lib/ai/client.ts` |
 | Rule-based ATS checks | `src/lib/ats.ts` |
+| Rule-based profile gap checks | `src/lib/profile-gaps.ts` |
 | Trending sources | `src/lib/trending.ts` |
 | LinkedIn PDF parsing | `src/lib/profile-parser.ts` |
 | Browser storage & TTL | `src/lib/db.ts`, `src/lib/keys.ts` |

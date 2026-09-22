@@ -152,7 +152,7 @@ export function parsePlainText(text: string): ParsedProfile {
  * "August 2024 - Present (2 years 2 months)". Counting those is accurate,
  * where counting lines is not.
  */
-const ROLE_DATE_LINE = /^[A-Za-z]+ \d{4}\s*[-\u2013\u2014]\s*(Present|[A-Za-z]+ \d{4})/;
+export const ROLE_DATE_LINE = /^[A-Za-z]+ \d{4}\s*[-\u2013\u2014]\s*(Present|[A-Za-z]+ \d{4})/;
 
 export function countRoles(experience: string): number {
   return experience.split("\n").filter((l) => ROLE_DATE_LINE.test(l.trim())).length;

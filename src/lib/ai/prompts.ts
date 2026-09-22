@@ -12,13 +12,13 @@ function profileBlock(profile?: Profile | null) {
   return `STUDENT'S CURRENT LINKEDIN PROFILE (extracted from their PDF export):\n"""\n${profile.raw.slice(0, 12000)}\n"""`;
 }
 
-export function profileOptimizePrompt(profile: Profile, focus: string) {
+export function profileOptimizePrompt(profile: Profile, focus: string, gapFindings?: string) {
   return {
     system: SYSTEM_BASE,
     prompt: `${profileBlock(profile)}
 
 Review this LinkedIn profile for a student / early-career candidate${focus ? ` who is targeting: ${focus}` : ""}.
-
+${gapFindings ? `\nAUTOMATED COMPLETENESS CHECKS ALREADY SHOWN TO THEM (do not just repeat these — write the actual content that fills each gap):\n${gapFindings}\n` : ""}
 Produce:
 ## Profile score
 A score out of 100 with a one-line reason.
