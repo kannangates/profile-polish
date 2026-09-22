@@ -8,7 +8,7 @@ You do **not** need to contribute to use this — it's MIT licensed, so fork it 
 
 **[CLAUDE.md](CLAUDE.md) is the source of truth.** It lists twelve invariants and the checklist every PR is verified against before merge. Read it before you start; it takes two minutes and will save you a rewrite. The short version:
 
-1. **Zero cost stays zero cost.** Don't add services that need a card, and don't add server-side state (databases, auth) without a discussion first.
+1. **Zero cost stays zero cost.** Don't add services that need a card. Server-side state (databases, auth) is forbidden by invariant 3, not merely discouraged — a feature needing it requires changing that invariant first, in its own PR. See [CLAUDE.md](CLAUDE.md) → *Changing an invariant*.
 2. **Privacy is the product.** Student profiles, resumes, drafts and API keys must never reach our server. BYOK calls go browser → provider. If a change makes that untrue, it won't be merged.
 3. **No direct DOM manipulation.** Drive the UI through React state. The one exception is a detached `<a>` for downloads.
 4. **Keep prompts honest.** Prompts must forbid inventing achievements, numbers or skills the student didn't provide.

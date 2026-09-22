@@ -271,7 +271,7 @@ Model ids change every few months. The **Load models from …** button in Settin
 
 ## Roadmap ideas
 
-- Optional accounts + cross-device sync (Supabase free tier) — only if students ask
+- Cross-device sync — genuinely useful, but it is **not** a drop-in feature: it needs accounts and server-side storage, which [CLAUDE.md](CLAUDE.md)'s invariant 3 forbids today. Doing it means deliberately changing that invariant first, and accepting that student data would leave the browser. Only worth it if students actually ask
 - Cover-letter generator reusing the resume + JD pipeline
 - Hindi / Tamil / Telugu output option
 - "Compare with a strong profile" mode using anonymised examples
