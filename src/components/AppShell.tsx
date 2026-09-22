@@ -7,6 +7,7 @@ import { APP_NAME } from "@/lib/config";
 import { purgeExpired } from "@/lib/db";
 import { useProfile } from "@/lib/hooks";
 import { PrivacyBanner } from "./PrivacyBanner";
+import { SetupBanner } from "./SetupBanner";
 import { Badge } from "./ui";
 
 const NAV = [
@@ -61,6 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="md:hidden">
             <ProfileChip name={profile?.name} loaded={profile !== undefined} />
           </div>
+          <SetupBanner />
           <PrivacyBanner />
           {children}
         </div>

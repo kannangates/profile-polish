@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Button, Card, Label, PageHeader, Spinner } from "@/components/ui";
+import { SetupSteps } from "@/components/SetupSteps";
 import { listModels } from "@/lib/ai/client";
-import { PROVIDERS, type ModelOption, type ProviderId, type ProviderInfo } from "@/lib/config";
+import { PROVIDERS, PROVIDER_BY_ID, type ModelOption, type ProviderId, type ProviderInfo } from "@/lib/config";
 import { clearEverything } from "@/lib/db";
 import {
   clearAllKeys,
@@ -54,6 +55,19 @@ function SettingsForm() {
   const [remember, setRememberState] = useState(getRemember);
   const [rows, setRows] = useState<Record<ProviderId, Row>>(loadRows);
   const [cleared, setCleared] = useState(false);
+  const [sharedKey, setSharedKey] = useState<boolean | null>(null);
+  const anyKey = PROVIDERS.some((p) => !!rows[p.id].key);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/status")
+      .then((r) => r.json())
+      .then((d: { sharedKey: boolean }) => !cancelled && setSharedKey(d.sharedKey))
+      .catch(() => !cancelled && setSharedKey(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const update = (id: ProviderId, patch: Partial<Row>) => setRows((r) => ({ ...r, [id]: { ...r[id], ...patch } }));
 
@@ -85,14 +99,49 @@ function SettingsForm() {
       <PageHeader title="Settings" description="Bring your own API key (BYOK). It's stored only in this browser and sent straight to the provider — never to us." />
 
       <div className="space-y-4">
+        {!anyKey && (
+          <Card className="space-y-3 border-accent/40 bg-accent-soft">
+            <div className="flex items-center gap-2">
+              <span aria-hidden>🔑</span>
+              <span className="font-medium">Start here: get a free key (about 1 minute)</span>
+            </div>
+            <p className="text-sm">
+              ProfilePolish uses an AI provider to write your drafts. You bring your own key so the app stays free and your text never
+              passes through our server.
+              {sharedKey === false && " This deployment has no shared key, so a key of your own is required."}
+              {sharedKey === true && " You can also try a few requests a day on the shared key without any setup."}
+            </p>
+            <ol className="ml-5 list-decimal space-y-1 text-sm">
+              <li>
+                Pick <strong>Google Gemini</strong> below — it&apos;s free and needs no credit card.
+              </li>
+              <li>
+                Open <strong>How do I get this key?</strong> and follow the {PROVIDER_BY_ID.gemini.setupSteps.length} steps.
+              </li>
+              <li>Paste the key, click <strong>Save</strong>, and you&apos;re done.</li>
+            </ol>
+            <p className="text-xs text-muted">
+              Free tiers have daily limits. If you run out, switch to Groq (also free) in the same way.
+            </p>
+          </Card>
+        )}
+
         <Card className="space-y-3">
           <div>
             <div className="font-medium">Which AI to use</div>
-            <p className="text-sm text-muted">With no key of your own, requests use the app&apos;s shared free key — limited to a few per day per person so everyone gets a turn.</p>
+            <p className="text-sm text-muted">
+              {sharedKey === false
+                ? "This deployment doesn't have a shared key, so you'll need your own. It's free and takes a minute — steps are below."
+                : "With no key of your own, requests use the app's shared free key — limited to a few per day per person so everyone gets a turn."}
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <ProviderPill selected={active === "shared"} onClick={() => { setActiveProvider("shared"); setActive("shared"); }}>
-              Shared free key
+            <ProviderPill
+              selected={active === "shared" && sharedKey !== false}
+              disabled={sharedKey === false}
+              onClick={() => { setActiveProvider("shared"); setActive("shared"); }}
+            >
+              Shared free key{sharedKey === false ? " (not available)" : ""}
             </ProviderPill>
             {PROVIDERS.map((p) => (
               <ProviderPill key={p.id} selected={active === p.id} disabled={!rows[p.id].key} onClick={() => { setActiveProvider(p.id); setActive(p.id); }}>
@@ -186,6 +235,7 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
   const isCustom = !options.some((o) => o.id === row.model);
   const [customMode, setCustomMode] = useState(isCustom);
   const selectedNote = options.find((o) => o.id === row.model)?.note;
+  const looksWrong = row.key.trim().length > 6 && !row.key.trim().startsWith(p.keyPrefix);
 
   return (
     <Card className="space-y-3">
@@ -202,6 +252,8 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
       </div>
       <p className="text-sm text-muted">{p.keyHint}</p>
 
+      <SetupSteps provider={p} defaultOpen={showForm && !row.key} />
+
       {showForm ? (
         <div className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
@@ -211,10 +263,15 @@ function ProviderCard({ provider: p, row, isActive, onChange, onSave, onLoadMode
                 className="field font-mono text-sm"
                 type="password"
                 autoComplete="off"
-                placeholder="Paste your key"
+                placeholder={p.keyPlaceholder}
                 value={row.key}
                 onChange={(e) => onChange({ key: e.target.value })}
               />
+              {looksWrong && (
+                <p className="mt-1 text-xs text-warning-fg">
+                  {p.name} keys normally start with <code className="font-mono">{p.keyPrefix}</code> — double-check you copied the whole key.
+                </p>
+              )}
             </div>
             <div>
               <Label
