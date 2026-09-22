@@ -179,6 +179,19 @@ npm run build      # production build
 └── .nvmrc                           Node 22
 ```
 
+## Use it in a workshop
+
+If you're running a LinkedIn session for students, these are ready to use:
+
+| | |
+|---|---|
+| **Slide deck** — *From Ghosted to Shortlisted: The AI LinkedIn Glow-Up* (21 slides, MBA edition) | [Open the deck](https://claude.ai/artifact/RhPCUU14Qq8q3B9skcBHeP?sk=q9NFme-_lX1X2zrLrKmqUQ) |
+| **Speaker script** to go with it | [Open the script](https://claude.ai/artifact/11PRdwCRnyR9cyHUKvgXNe) |
+
+The deck covers why LinkedIn matters, how recruiters and ATS actually screen candidates, the profile sections worth maintaining, what to post, ready-to-use AI prompts, and a 7-day sprint. The final slide points students at ProfilePolish so they can do the work straight after the session.
+
+**Running the session:** the demo that lands best is live — ask a student for their LinkedIn PDF export, drop it in, and read the profile review out loud. It takes about two minutes and is more convincing than any slide. Have them open the site on their phones and add a free Gemini key while you talk through the first few slides, so nobody is stuck on setup at the end.
+
 ## Fork it and make it your own
 
 This is MIT licensed and built to be forked. Run it for your own college, rename it,
