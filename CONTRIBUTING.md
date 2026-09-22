@@ -1,4 +1,4 @@
-# Contributing to CareerLift
+# Contributing to ProfilePolish
 
 Thanks for helping students! This project is intentionally small and free to run, so contributions that keep it that way are the most welcome.
 

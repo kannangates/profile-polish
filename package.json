@@ -1,5 +1,5 @@
 {
-  "name": "linkedin-ai",
+  "name": "profile-polish",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -36,5 +36,12 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "description": "Free, private LinkedIn & resume coach for college students. BYOK AI, runs in your browser.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kannangates/profile-polish.git"
+  },
+  "homepage": "https://profilepolish-app.vercel.app"
 }
