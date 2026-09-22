@@ -1,0 +1,50 @@
+# Optional: have Claude review every pull request against CLAUDE.md.
+#
+# This job SKIPS unless an ANTHROPIC_API_KEY repository secret is set, so forks
+# and contributors are never blocked by it. Enabling it spends API credit from
+# whoever owns the key — see CLAUDE.md → "Enabling automated Claude review".
+name: Claude review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Check whether a key is configured
+        id: gate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "No ANTHROPIC_API_KEY secret set — skipping automated review."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.enabled == 'true'
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        if: steps.gate.outputs.enabled == 'true'
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request against the rules in CLAUDE.md.
+
+            Work through the "Pre-merge verification checklist" and the
+            "When reviewing someone else's PR" priority order in that file.
+            Flag any broken invariant by number. Be specific: name the file and
+            line, say what breaks and under what input.
+
+            Do not approve or merge. Leave a review comment with your findings,
+            and say plainly if you could not verify something.

@@ -173,10 +173,40 @@ npm run build      # production build
 ├── public/                          Static assets (pdf.js worker is copied here on install)
 ├── scripts/copy-pdf-worker.mjs      postinstall: copies pdf.worker.min.mjs into public/
 ├── docs/                            Extra documentation
-├── .github/                         CI (typecheck + lint + build), issue & PR templates
+├── .github/                         CI (typecheck + lint + build), optional Claude PR review, issue & PR templates
+├── CLAUDE.md                        Invariants + pre-merge checklist for AI/human reviewers
 ├── .env.example                     All server env vars, documented
 └── .nvmrc                           Node 22
 ```
+
+## Fork it and make it your own
+
+This is MIT licensed and built to be forked. Run it for your own college, rename it,
+or add the feature you wish it had — you don't need permission, and you don't need
+to contribute anything back.
+
+**Make it yours in 5 minutes**
+
+1. Fork the repo on GitHub, then `git clone` your fork and `npm install`.
+2. Change the name and tagline in [`src/lib/config.ts`](src/lib/config.ts) (`APP_NAME`, `APP_TAGLINE`).
+3. Change the colours in [`src/app/globals.css`](src/app/globals.css) — every colour is a CSS variable on `:root`, with a dark-mode block below it.
+4. Import your fork at [vercel.com/new](https://vercel.com/new) and deploy. You now have your own free instance.
+
+**Add your own feature**
+
+Most features are one new page plus one new prompt. To add, say, a cover-letter writer:
+
+1. Write the prompt builder in [`src/lib/ai/prompts.ts`](src/lib/ai/prompts.ts) — copy the shape of `messagePrompt`.
+2. Create `src/app/(app)/cover-letter/page.tsx` — copy [`messages/page.tsx`](<src/app/(app)/messages/page.tsx>), which is the simplest full example: form on the left, `<OutputPanel>` on the right, `useGenerate()` in between.
+3. Add it to the `NAV` array in [`src/components/AppShell.tsx`](src/components/AppShell.tsx).
+
+That's it — streaming, copy, "save draft", error handling and the BYOK/shared-key routing all come from `useGenerate()` and `<OutputPanel>`. You don't touch the AI plumbing.
+
+Other common changes: a new AI provider (`src/lib/ai/providers/` — see [CONTRIBUTING.md](CONTRIBUTING.md)), new ATS rules ([`src/lib/ats.ts`](src/lib/ats.ts)), new trending sources ([`src/lib/trending.ts`](src/lib/trending.ts)).
+
+**Sending it back (optional)**
+
+PRs are welcome. Read [CLAUDE.md](CLAUDE.md) first — it lists the ten invariants that keep the app free and private, and the checklist every PR is verified against before merge. Anything that respects those has a good chance of being merged.
 
 ## Privacy model
 
