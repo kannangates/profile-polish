@@ -52,19 +52,28 @@ export function parseLinkedInPdf(lines: ExtractedLine[]): ParsedProfile {
   const name = tallest?.text ?? "";
   const sections = splitSections(texts, tallest ? lines.indexOf(tallest) : -1);
 
-  // Headline + location follow the name in the main column.
+  // Between the name and the first main-column heading sit the headline (which
+  // wraps over several lines) and, usually last, the location. Real exports
+  // write places like "Greater Chennai Area" with no comma, so match on shape
+  // rather than on punctuation.
   let headline = "";
   let location = "";
   if (tallest) {
     const idx = lines.indexOf(tallest);
-    const after = lines.slice(idx + 1, idx + 6).map((l) => l.text).filter((t) => !ALL_HEADINGS.includes(t));
-    // Location line usually looks like "City, State, Country" and is short.
-    const locIdx = after.findIndex((t) => /^[^,]{2,40},\s*[^,]{2,40}(,\s*[^,]{2,40})?$/.test(t) && t.length < 80);
-    if (locIdx >= 0) {
-      location = after[locIdx];
-      headline = after.slice(0, locIdx).join(" ");
+    const block: string[] = [];
+    for (let i = idx + 1; i < lines.length && block.length < 8; i++) {
+      const t = lines[i].text;
+      if (ALL_HEADINGS.includes(t)) break;
+      if (/^Page \d+ of \d+$/.test(t)) continue;
+      block.push(t);
+    }
+    const last = block[block.length - 1] ?? "";
+    const looksLikePlace = block.length > 1 && last.length < 60 && !last.includes("|") && last.trim().split(/\s+/).length <= 6;
+    if (looksLikePlace) {
+      location = last;
+      headline = block.slice(0, -1).join(" ");
     } else {
-      headline = after[0] ?? "";
+      headline = block.join(" ");
     }
   }
 
@@ -100,10 +109,22 @@ export function parsePlainText(text: string): ParsedProfile {
   };
 }
 
+/**
+ * Each role in a LinkedIn export carries a date range of its own, e.g.
+ * "August 2024 - Present (2 years 2 months)". Counting those is accurate,
+ * where counting lines is not.
+ */
+const ROLE_DATE_LINE = /^[A-Za-z]+ \d{4}\s*[-\u2013\u2014]\s*(Present|[A-Za-z]+ \d{4})/;
+
+export function countRoles(experience: string): number {
+  return experience.split("\n").filter((l) => ROLE_DATE_LINE.test(l.trim())).length;
+}
+
 export function profileSummaryLine(p: ParsedProfile): string {
   const parts: string[] = [];
-  const roles = (p.experience.match(/\n/g)?.length ?? 0) > 0 ? Math.max(1, Math.round(p.experience.split("\n").length / 4)) : 0;
-  if (roles) parts.push(`~${roles} experience entr${roles === 1 ? "y" : "ies"}`);
+  const roles = countRoles(p.experience);
+  if (roles) parts.push(`${roles} role${roles === 1 ? "" : "s"}`);
+  else if (p.experience) parts.push("experience");
   if (p.education) parts.push("education");
   if (p.skills.length) parts.push(`${p.skills.length} skills`);
   if (p.certifications.length) parts.push(`${p.certifications.length} certification${p.certifications.length === 1 ? "" : "s"}`);

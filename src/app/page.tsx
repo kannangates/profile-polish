@@ -147,11 +147,18 @@ export default function OnboardingPage() {
                   <div className="text-3xl" aria-hidden>
                     📄
                   </div>
-                  <p className="mt-2 font-medium">Drop your LinkedIn PDF here, or click to choose</p>
+                  <p className="mt-2 font-medium">
+                    <span className="sm:hidden">Tap to choose your LinkedIn PDF</span>
+                    <span className="hidden sm:inline">Drop your LinkedIn PDF here, or click to choose</span>
+                  </p>
                   <p className="mt-1 text-xs text-muted">Read entirely in your browser. The file is never uploaded anywhere.</p>
                 </>
               )}
             </FileDrop>
+            <p className="rounded-lg bg-accent-soft px-3 py-2 text-xs text-muted sm:hidden">
+              On a phone? LinkedIn only offers <strong>Save to PDF</strong> on the website. Open linkedin.com in your browser and ask for the
+              desktop site — or use <strong>Paste profile text</strong> above.
+            </p>
             <ol className="grid gap-2 text-sm text-muted sm:grid-cols-3">
               <Step n={1}>Open your LinkedIn profile (web, not the app)</Step>
               <Step n={2}>
@@ -198,12 +205,12 @@ export default function OnboardingPage() {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-1 flex-col items-center px-4 py-10">
+    <div className="flex flex-1 flex-col items-center px-4 py-8 sm:py-10">
       <div className="mb-8 text-center">
         <div className="text-sm font-medium text-accent">
           <span aria-hidden>●</span> {APP_NAME}
         </div>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">{APP_TAGLINE}</h1>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{APP_TAGLINE}</h1>
         <p className="mt-2 max-w-lg text-sm text-muted">
           Polish your profile, draft messages and posts, and check your resume against ATS rules. Free forever — your data never leaves your browser.
         </p>

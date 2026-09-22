@@ -34,14 +34,14 @@ export function SetupBanner() {
   if (ownKey || sharedKey) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent-soft px-4 py-3 text-sm">
-      <span aria-hidden>🔑</span>
+    <div className="flex flex-col gap-2 rounded-lg border border-accent/40 bg-accent-soft px-4 py-3 text-sm sm:flex-row sm:items-center sm:gap-3">
       <p className="flex-1">
-        <strong>One step before you start:</strong> add a free AI key. It takes about a minute, needs no credit card, and stays in your browser.
+        <span aria-hidden>🔑 </span>
+        <strong>One step before you start:</strong> add a free AI key. About a minute, no credit card, stays in your browser.
       </p>
       <Link
         href="/settings"
-        className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-hover"
+        className="rounded-lg bg-accent px-3 py-2 text-center text-sm font-medium text-white transition hover:bg-accent-hover sm:py-1.5"
       >
         Get a free key →
       </Link>
