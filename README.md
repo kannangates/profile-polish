@@ -233,7 +233,7 @@ PRs are welcome. Read [CLAUDE.md](CLAUDE.md) first — it lists the invariants t
 | `graphify-out/GRAPH_REPORT.md` | Plain-language report: the most connected nodes, cross-cutting links, and where the structure is weak. |
 | `graphify-out/graph.json` | Raw graph data, for tooling. |
 
-Regenerate it with the [graphify](https://github.com/safishamsi/graphify) skill after significant changes. It is a snapshot, not a build output — treat a stale graph as documentation drift.
+Regenerate it with the [graphify](https://github.com/safishamsi/graphify) skill after significant changes — and regenerate it *after* a docs edit lands, never in the same pass, or the map will describe the version before it. See [CLAUDE.md](CLAUDE.md) → The codebase map. It is a snapshot, not a build output: a stale graph is documentation drift.
 
 ## Privacy model
 
