@@ -6,7 +6,7 @@ You do **not** need to contribute to use this — it's MIT licensed, so fork it 
 
 ## Ground rules
 
-**[CLAUDE.md](CLAUDE.md) is the source of truth.** It lists ten invariants and the checklist every PR is verified against before merge. Read it before you start; it takes two minutes and will save you a rewrite. The short version:
+**[CLAUDE.md](CLAUDE.md) is the source of truth.** It lists twelve invariants and the checklist every PR is verified against before merge. Read it before you start; it takes two minutes and will save you a rewrite. The short version:
 
 1. **Zero cost stays zero cost.** Don't add services that need a card, and don't add server-side state (databases, auth) without a discussion first.
 2. **Privacy is the product.** Student profiles, resumes, drafts and API keys must never reach our server. BYOK calls go browser → provider. If a change makes that untrue, it won't be merged.

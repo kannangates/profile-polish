@@ -48,3 +48,7 @@ public/pdf.worker.min.mjs
 .claude/
 # local scratch for testing with real files (never commit personal PDFs)
 public/_test/
+
+# graphify: commit the map and report, not the caches or interpreter pins
+graphify-out/cache/
+graphify-out/.graphify_*
