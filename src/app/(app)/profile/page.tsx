@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { FileDrop } from "@/components/FileDrop";
+import { ProfileGaps } from "@/components/ProfileGaps";
 import { OutputPanel } from "@/components/OutputPanel";
 import { Button, Card, Label, LinkButton, PageHeader } from "@/components/ui";
 import { useGenerate } from "@/components/useGenerate";
 import { profileOptimizePrompt } from "@/lib/ai/prompts";
 import { useProfile } from "@/lib/hooks";
 import { fileToBase64 } from "@/lib/pdf";
+import { analyseProfile, gapsToText } from "@/lib/profile-gaps";
 import type { ImageInput, Profile } from "@/lib/types";
 
 export default function ProfilePage() {
@@ -52,7 +54,7 @@ export default function ProfilePage() {
         createdAt: 0,
         expiresAt: 0,
       } satisfies Profile);
-    const { system, prompt } = profileOptimizePrompt(p, focus.trim());
+    const { system, prompt } = profileOptimizePrompt(p, focus.trim(), profile ? gapsToText(analyseProfile(profile)) : undefined);
     gen.run({ system, prompt, images: screenshot ? [screenshot.img] : undefined });
   };
 
@@ -60,6 +62,7 @@ export default function ProfilePage() {
     <>
       <PageHeader title="Profile Optimizer" description="Section-by-section review of your LinkedIn profile with rewrites you can paste straight in." />
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div className="space-y-4">
         <Card className="space-y-4">
           {profile ? (
             <div className="rounded-lg bg-accent-soft p-3 text-sm">
@@ -100,6 +103,9 @@ export default function ProfilePage() {
             </details>
           )}
         </Card>
+
+        {profile && <ProfileGaps report={analyseProfile(profile)} />}
+        </div>
 
         <OutputPanel
           output={gen.output}
