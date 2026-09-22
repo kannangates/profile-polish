@@ -225,7 +225,7 @@ PRs are welcome. Read [CLAUDE.md](CLAUDE.md) first — it lists the invariants t
 
 ## Codebase map
 
-`graphify-out/` holds a generated knowledge graph of this repo — 352 nodes, 690 edges, 17 communities — for anyone (or any AI assistant) getting oriented:
+`graphify-out/` holds a generated knowledge graph of this repo, for anyone (or any AI assistant) getting oriented. Current node, edge and community counts are at the top of the report rather than repeated here, so they cannot drift:
 
 | File | What it is |
 |---|---|
