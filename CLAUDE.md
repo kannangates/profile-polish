@@ -62,6 +62,17 @@ npm run lint       # eslint
 npm run build      # production build — must pass before merge
 ```
 
+## The codebase map
+
+`graphify-out/` holds a generated knowledge graph of this repo — an interactive `graph.html`, a plain-language `GRAPH_REPORT.md`, and `graph.json` for tooling. It exists so a newcomer, human or AI, can see the shape of the project without reading every file. Regenerate it with the `graphify` skill.
+
+It is a **snapshot committed to git**, which means it can lie. Two rules keep it honest:
+
+- **Regenerate after a docs change, not alongside one.** This has already gone wrong once: a graph merged in the same PR as a CLAUDE.md edit was extracted before that edit landed, so the committed map described ten invariants while the file beside it had twelve — and named "Ten Hard Invariants" as the most connected node in the repo.
+- **Check one fact before committing it.** Open `GRAPH_REPORT.md`, read the top god node, and confirm it matches the code you are shipping. A map whose most prominent claim is wrong is worse than no map.
+
+A stale graph is documentation drift, not a build artefact that will fix itself.
+
 ## Conventions
 
 - **TypeScript strict.** No `any`, no custom types duplicating SDK types.
@@ -110,6 +121,8 @@ git diff origin/main | grep -nE "AIza|gsk_|sk-ant-|sk-[A-Za-z0-9]{20}"   # must 
 **6. Privacy claims still true.** If the change adds a network call, confirm the README's privacy table and `docs/PRIVACY.md` are still accurate. Update them in the same PR if not.
 
 **7. Docs updated.** New feature → README feature table. New file → README folder tree. New env var → `.env.example` *and* the README deploy table.
+
+**8. The codebase map is not stale.** If this PR changed `CLAUDE.md`, the README, or the shape of `src/`, regenerate `graphify-out/` — **after** those edits are final, in a separate commit or PR, never in the same pass that writes them. Extraction reads the files as they were when it started, so a graph built alongside a docs change describes the version before it.
 
 ## When reviewing someone else's PR
 
