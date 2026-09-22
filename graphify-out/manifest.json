@@ -265,48 +265,23 @@
     "semantic_hash": "6f4c34caa748bc1edcbce22bb61983a6"
   },
   "CLAUDE.md": {
-    "mtime": 1790082136.3639338,
+    "mtime": 1790082623.1987634,
     "ast_hash": "c81037d6459fa0681d4bfc27cc722cf2",
     "semantic_hash": "c81037d6459fa0681d4bfc27cc722cf2"
   },
   "CONTRIBUTING.md": {
-    "mtime": 1790082136.3643992,
+    "mtime": 1790082623.1990528,
     "ast_hash": "a9fcff3624879bb8d8c817c393677100",
     "semantic_hash": "a9fcff3624879bb8d8c817c393677100"
   },
   "README.md": {
-    "mtime": 1790082136.3649004,
-    "ast_hash": "ce70db3dfed7a5368d290dfbd9c52533",
-    "semantic_hash": "ce70db3dfed7a5368d290dfbd9c52533"
+    "mtime": 1790082623.1994236,
+    "ast_hash": "bb1d8596aee5d9fca336462ec2584d28",
+    "semantic_hash": "bb1d8596aee5d9fca336462ec2584d28"
   },
   "docs/PRIVACY.md": {
     "mtime": 1790076576.161668,
     "ast_hash": "9584e0f745dbf5506af7772dd9251197",
     "semantic_hash": "9584e0f745dbf5506af7772dd9251197"
-  },
-  "public/file.svg": {
-    "mtime": 1790072045.6303701,
-    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
-    "semantic_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
-  },
-  "public/globe.svg": {
-    "mtime": 1790072045.630753,
-    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
-    "semantic_hash": "2aaafa6a49b6563925fe440891e32717"
-  },
-  "public/next.svg": {
-    "mtime": 1790072045.6305096,
-    "ast_hash": "8e061864f388b47f33a1c3780831193e",
-    "semantic_hash": "8e061864f388b47f33a1c3780831193e"
-  },
-  "public/vercel.svg": {
-    "mtime": 1790072045.6306818,
-    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
-    "semantic_hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
-  },
-  "public/window.svg": {
-    "mtime": 1790072045.6305046,
-    "ast_hash": "a2760511c65806022ad20adf74370ff3",
-    "semantic_hash": "a2760511c65806022ad20adf74370ff3"
   }
 }

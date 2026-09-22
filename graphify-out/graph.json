@@ -4,8 +4,8 @@
   "graph": {
     "hyperedges": [
       {
-        "id": "ten_hard_invariants_set",
-        "label": "The Ten Hard Invariants",
+        "id": "twelve_hard_invariants_set",
+        "label": "The Twelve Hard Invariants",
         "nodes": [
           "claude_invariant_1_byok_direct",
           "claude_invariant_2_client_side_content",
@@ -16,7 +16,9 @@
           "claude_invariant_7_prompts_forbid_invention",
           "claude_invariant_8_no_secrets",
           "claude_invariant_9_no_content_analytics",
-          "claude_invariant_10_dont_oversell"
+          "claude_invariant_10_dont_oversell",
+          "claude_invariant_11_storage_confirmed_save",
+          "claude_invariant_12_rule_based_first"
         ],
         "relation": "form",
         "confidence": "EXTRACTED",
@@ -29,6 +31,8 @@
         "nodes": [
           "claude_pre_merge_checklist",
           "claude_browser_verification",
+          "claude_check_rendered_result",
+          "claude_test_on_real_data",
           "claude_pr_review_priority_order",
           "workflows_ci_check_job",
           "workflows_claude_review_review_job",
@@ -68,7 +72,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "eslint_config",
-      "community": 14,
+      "community": 13,
       "norm_label": "eslint.config.mjs"
     },
     {
@@ -78,7 +82,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "eslint_config_eslintconfig",
-      "community": 14,
+      "community": 13,
       "norm_label": "eslintconfig"
     },
     {
@@ -88,7 +92,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "next_config",
-      "community": 15,
+      "community": 14,
       "norm_label": "next.config.ts"
     },
     {
@@ -98,7 +102,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "next_config_nextconfig",
-      "community": 15,
+      "community": 14,
       "norm_label": "nextconfig"
     },
     {
@@ -518,7 +522,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "postcss_config",
-      "community": 16,
+      "community": 15,
       "norm_label": "postcss.config.mjs"
     },
     {
@@ -528,7 +532,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "postcss_config_config",
-      "community": 16,
+      "community": 15,
       "norm_label": "config"
     },
     {
@@ -538,7 +542,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_copy_pdf_worker",
-      "community": 13,
+      "community": 12,
       "norm_label": "copy-pdf-worker.mjs"
     },
     {
@@ -548,7 +552,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "scripts_copy_pdf_worker_require",
-      "community": 13,
+      "community": 12,
       "norm_label": "require"
     },
     {
@@ -558,7 +562,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "scripts_copy_pdf_worker_pkg",
-      "community": 13,
+      "community": 12,
       "norm_label": "pkg"
     },
     {
@@ -638,7 +642,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "messages_page",
-      "community": 1,
+      "community": 2,
       "norm_label": "page.tsx"
     },
     {
@@ -648,7 +652,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "messages_page_tones",
-      "community": 1,
+      "community": 2,
       "norm_label": "tones"
     },
     {
@@ -658,7 +662,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "messages_page_messagespage",
-      "community": 1,
+      "community": 2,
       "norm_label": "messagespage()"
     },
     {
@@ -668,7 +672,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "posts_page",
-      "community": 1,
+      "community": 9,
       "norm_label": "page.tsx"
     },
     {
@@ -678,7 +682,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "posts_page_styles",
-      "community": 1,
+      "community": 9,
       "norm_label": "styles"
     },
     {
@@ -688,7 +692,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "posts_page_filter",
-      "community": 1,
+      "community": 9,
       "norm_label": "filter"
     },
     {
@@ -698,7 +702,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "posts_page_postspage",
-      "community": 1,
+      "community": 2,
       "norm_label": "postspage()"
     },
     {
@@ -708,7 +712,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_page",
-      "community": 1,
+      "community": 2,
       "norm_label": "page.tsx"
     },
     {
@@ -718,7 +722,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "profile_page_profilepage",
-      "community": 1,
+      "community": 2,
       "norm_label": "profilepage()"
     },
     {
@@ -728,7 +732,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "profile_page_screenshotdrop",
-      "community": 1,
+      "community": 2,
       "norm_label": "screenshotdrop()"
     },
     {
@@ -738,7 +742,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "resume_page",
-      "community": 1,
+      "community": 2,
       "norm_label": "page.tsx"
     },
     {
@@ -748,7 +752,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "resume_page_resumepage",
-      "community": 1,
+      "community": 2,
       "norm_label": "resumepage()"
     },
     {
@@ -758,7 +762,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "resume_page_atsscorecard",
-      "community": 1,
+      "community": 2,
       "norm_label": "atsscorecard()"
     },
     {
@@ -768,7 +772,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_page",
-      "community": 2,
+      "community": 1,
       "norm_label": "page.tsx"
     },
     {
@@ -778,7 +782,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "settings_page_row",
-      "community": 2,
+      "community": 1,
       "norm_label": "row"
     },
     {
@@ -788,7 +792,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "settings_page_loadrows",
-      "community": 2,
+      "community": 1,
       "norm_label": "loadrows()"
     },
     {
@@ -808,7 +812,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "settings_page_settingsform",
-      "community": 2,
+      "community": 1,
       "norm_label": "settingsform()"
     },
     {
@@ -818,7 +822,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "settings_page_providercardprops",
-      "community": 2,
+      "community": 1,
       "norm_label": "providercardprops"
     },
     {
@@ -828,7 +832,7 @@
       "source_location": "L243",
       "_origin": "ast",
       "id": "settings_page_providercard",
-      "community": 2,
+      "community": 1,
       "norm_label": "providercard()"
     },
     {
@@ -838,7 +842,7 @@
       "source_location": "L375",
       "_origin": "ast",
       "id": "settings_page_providerpill",
-      "community": 2,
+      "community": 1,
       "norm_label": "providerpill()"
     },
     {
@@ -848,7 +852,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "generate_route",
-      "community": 9,
+      "community": 10,
       "norm_label": "route.ts"
     },
     {
@@ -858,7 +862,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "generate_route_no_store",
-      "community": 9,
+      "community": 10,
       "norm_label": "no_store"
     },
     {
@@ -868,7 +872,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "generate_route_post",
-      "community": 9,
+      "community": 10,
       "norm_label": "post()"
     },
     {
@@ -878,7 +882,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "status_route",
-      "community": 17,
+      "community": 16,
       "norm_label": "route.ts"
     },
     {
@@ -888,7 +892,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "status_route_get",
-      "community": 17,
+      "community": 16,
       "norm_label": "get()"
     },
     {
@@ -898,7 +902,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "trending_route",
-      "community": 10,
+      "community": 9,
       "norm_label": "route.ts"
     },
     {
@@ -908,7 +912,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "trending_route_get",
-      "community": 10,
+      "community": 9,
       "norm_label": "get()"
     },
     {
@@ -988,7 +992,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_page_onboardingpage",
-      "community": 4,
+      "community": 2,
       "norm_label": "onboardingpage()"
     },
     {
@@ -1098,7 +1102,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_filedrop",
-      "community": 1,
+      "community": 4,
       "norm_label": "filedrop.tsx"
     },
     {
@@ -1108,7 +1112,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "components_filedrop_props",
-      "community": 1,
+      "community": 4,
       "norm_label": "props"
     },
     {
@@ -1118,7 +1122,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_filedrop_filedrop",
-      "community": 1,
+      "community": 4,
       "norm_label": "filedrop()"
     },
     {
@@ -1168,7 +1172,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_outputpanel_outputpanel",
-      "community": 1,
+      "community": 2,
       "norm_label": "outputpanel()"
     },
     {
@@ -1208,7 +1212,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_profilegaps",
-      "community": 1,
+      "community": 2,
       "norm_label": "profilegaps.tsx"
     },
     {
@@ -1218,7 +1222,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "components_profilegaps_profilegaps",
-      "community": 1,
+      "community": 2,
       "norm_label": "profilegaps()"
     },
     {
@@ -1248,7 +1252,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_setupsteps",
-      "community": 2,
+      "community": 1,
       "norm_label": "setupsteps.tsx"
     },
     {
@@ -1258,7 +1262,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "components_setupsteps_renderstep",
-      "community": 2,
+      "community": 1,
       "norm_label": "renderstep()"
     },
     {
@@ -1268,7 +1272,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "components_setupsteps_setupsteps",
-      "community": 2,
+      "community": 1,
       "norm_label": "setupsteps()"
     },
     {
@@ -1278,7 +1282,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_ui",
-      "community": 1,
+      "community": 2,
       "norm_label": "ui.tsx"
     },
     {
@@ -1288,7 +1292,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "components_ui_variant",
-      "community": 1,
+      "community": 2,
       "norm_label": "variant"
     },
     {
@@ -1298,7 +1302,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_ui_variants",
-      "community": 1,
+      "community": 2,
       "norm_label": "variants"
     },
     {
@@ -1318,7 +1322,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "components_ui_linkbutton",
-      "community": 1,
+      "community": 2,
       "norm_label": "linkbutton()"
     },
     {
@@ -1328,7 +1332,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "components_ui_card",
-      "community": 1,
+      "community": 2,
       "norm_label": "card()"
     },
     {
@@ -1338,7 +1342,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "components_ui_label",
-      "community": 1,
+      "community": 2,
       "norm_label": "label()"
     },
     {
@@ -1348,7 +1352,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "components_ui_pageheader",
-      "community": 1,
+      "community": 2,
       "norm_label": "pageheader()"
     },
     {
@@ -1358,7 +1362,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "components_ui_spinner",
-      "community": 1,
+      "community": 5,
       "norm_label": "spinner()"
     },
     {
@@ -1368,7 +1372,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "components_ui_badge",
-      "community": 2,
+      "community": 1,
       "norm_label": "badge()"
     },
     {
@@ -1378,7 +1382,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_usegenerate",
-      "community": 2,
+      "community": 1,
       "norm_label": "usegenerate.ts"
     },
     {
@@ -1388,7 +1392,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "components_usegenerate_usegenerate",
-      "community": 1,
+      "community": 2,
       "norm_label": "usegenerate()"
     },
     {
@@ -1398,7 +1402,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ai_client",
-      "community": 2,
+      "community": 1,
       "norm_label": "client.ts"
     },
     {
@@ -1408,7 +1412,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "ai_client_quotaerror",
-      "community": 2,
+      "community": 1,
       "norm_label": "quotaerror"
     },
     {
@@ -1418,7 +1422,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "ai_client_quotaerror_constructor",
-      "community": 2,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -1428,7 +1432,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ai_client_loaders",
-      "community": 2,
+      "community": 1,
       "norm_label": "loaders"
     },
     {
@@ -1438,7 +1442,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "ai_client_generateoptions",
-      "community": 2,
+      "community": 1,
       "norm_label": "generateoptions"
     },
     {
@@ -1448,7 +1452,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "ai_client_friendlymessage",
-      "community": 2,
+      "community": 1,
       "norm_label": "friendlymessage()"
     },
     {
@@ -1458,7 +1462,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "ai_client_generateresult",
-      "community": 2,
+      "community": 1,
       "norm_label": "generateresult"
     },
     {
@@ -1468,7 +1472,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "ai_client_generate",
-      "community": 2,
+      "community": 1,
       "norm_label": "generate()"
     },
     {
@@ -1478,7 +1482,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "ai_client_modellisters",
-      "community": 2,
+      "community": 1,
       "norm_label": "modellisters"
     },
     {
@@ -1488,7 +1492,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "ai_client_listmodels",
-      "community": 2,
+      "community": 1,
       "norm_label": "listmodels()"
     },
     {
@@ -1498,7 +1502,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ai_prompts",
-      "community": 1,
+      "community": 2,
       "norm_label": "prompts.ts"
     },
     {
@@ -1508,7 +1512,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "ai_prompts_profileblock",
-      "community": 1,
+      "community": 2,
       "norm_label": "profileblock()"
     },
     {
@@ -1518,7 +1522,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ai_prompts_profileoptimizeprompt",
-      "community": 1,
+      "community": 2,
       "norm_label": "profileoptimizeprompt()"
     },
     {
@@ -1528,7 +1532,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "ai_prompts_messagekind",
-      "community": 1,
+      "community": 2,
       "norm_label": "messagekind"
     },
     {
@@ -1538,7 +1542,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "ai_prompts_message_kinds",
-      "community": 1,
+      "community": 2,
       "norm_label": "message_kinds"
     },
     {
@@ -1548,7 +1552,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "ai_prompts_messageprompt",
-      "community": 1,
+      "community": 2,
       "norm_label": "messageprompt()"
     },
     {
@@ -1558,7 +1562,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "ai_prompts_postprompt",
-      "community": 1,
+      "community": 2,
       "norm_label": "postprompt()"
     },
     {
@@ -1568,7 +1572,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "ai_prompts_atsprompt",
-      "community": 1,
+      "community": 2,
       "norm_label": "atsprompt()"
     },
     {
@@ -1578,7 +1582,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "ai_prompts_resumefixprompt",
-      "community": 1,
+      "community": 2,
       "norm_label": "resumefixprompt()"
     },
     {
@@ -1748,7 +1752,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_ats",
-      "community": 1,
+      "community": 2,
       "norm_label": "ats.ts"
     },
     {
@@ -1758,7 +1762,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "lib_ats_atscheck",
-      "community": 1,
+      "community": 2,
       "norm_label": "atscheck"
     },
     {
@@ -1768,7 +1772,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "lib_ats_atsreport",
-      "community": 1,
+      "community": 2,
       "norm_label": "atsreport"
     },
     {
@@ -1778,7 +1782,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "lib_ats_stop",
-      "community": 1,
+      "community": 2,
       "norm_label": "stop"
     },
     {
@@ -1788,7 +1792,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "lib_ats_tokenize",
-      "community": 1,
+      "community": 2,
       "norm_label": "tokenize()"
     },
     {
@@ -1798,7 +1802,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "lib_ats_extractjdkeywords",
-      "community": 1,
+      "community": 2,
       "norm_label": "extractjdkeywords()"
     },
     {
@@ -1808,7 +1812,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "lib_ats_runatschecks",
-      "community": 1,
+      "community": 2,
       "norm_label": "runatschecks()"
     },
     {
@@ -1818,7 +1822,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "lib_ats_atsreporttotext",
-      "community": 1,
+      "community": 2,
       "norm_label": "atsreporttotext()"
     },
     {
@@ -1828,7 +1832,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_config",
-      "community": 2,
+      "community": 1,
       "norm_label": "config.ts"
     },
     {
@@ -1838,7 +1842,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "lib_config_providerid",
-      "community": 2,
+      "community": 1,
       "norm_label": "providerid"
     },
     {
@@ -1848,7 +1852,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "lib_config_modeloption",
-      "community": 2,
+      "community": 1,
       "norm_label": "modeloption"
     },
     {
@@ -1858,7 +1862,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "lib_config_providerinfo",
-      "community": 2,
+      "community": 1,
       "norm_label": "providerinfo"
     },
     {
@@ -1868,7 +1872,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "lib_config_providers",
-      "community": 2,
+      "community": 1,
       "norm_label": "providers"
     },
     {
@@ -1878,7 +1882,7 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "lib_config_provider_by_id",
-      "community": 2,
+      "community": 1,
       "norm_label": "provider_by_id"
     },
     {
@@ -1988,7 +1992,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "lib_hooks_useprofile",
-      "community": 1,
+      "community": 2,
       "norm_label": "useprofile()"
     },
     {
@@ -2008,7 +2012,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_keys",
-      "community": 2,
+      "community": 1,
       "norm_label": "keys.ts"
     },
     {
@@ -2018,7 +2022,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "lib_keys_activeprovider",
-      "community": 2,
+      "community": 1,
       "norm_label": "activeprovider"
     },
     {
@@ -2028,7 +2032,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "lib_keys_memory",
-      "community": 2,
+      "community": 1,
       "norm_label": "memory"
     },
     {
@@ -2038,7 +2042,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "lib_keys_isbrowser",
-      "community": 2,
+      "community": 1,
       "norm_label": "isbrowser()"
     },
     {
@@ -2048,7 +2052,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "lib_keys_safeget",
-      "community": 2,
+      "community": 1,
       "norm_label": "safeget()"
     },
     {
@@ -2058,7 +2062,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "lib_keys_safeset",
-      "community": 2,
+      "community": 1,
       "norm_label": "safeset()"
     },
     {
@@ -2068,7 +2072,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "lib_keys_saferemove",
-      "community": 2,
+      "community": 1,
       "norm_label": "saferemove()"
     },
     {
@@ -2078,7 +2082,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "lib_keys_readvalue",
-      "community": 2,
+      "community": 1,
       "norm_label": "readvalue()"
     },
     {
@@ -2088,7 +2092,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "lib_keys_writevalue",
-      "community": 2,
+      "community": 1,
       "norm_label": "writevalue()"
     },
     {
@@ -2098,7 +2102,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "lib_keys_removevalue",
-      "community": 2,
+      "community": 1,
       "norm_label": "removevalue()"
     },
     {
@@ -2108,7 +2112,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "lib_keys_getremember",
-      "community": 2,
+      "community": 1,
       "norm_label": "getremember()"
     },
     {
@@ -2118,7 +2122,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "lib_keys_setremember",
-      "community": 2,
+      "community": 1,
       "norm_label": "setremember()"
     },
     {
@@ -2128,7 +2132,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "lib_keys_getkey",
-      "community": 2,
+      "community": 1,
       "norm_label": "getkey()"
     },
     {
@@ -2138,7 +2142,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "lib_keys_setkey",
-      "community": 2,
+      "community": 1,
       "norm_label": "setkey()"
     },
     {
@@ -2148,7 +2152,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "lib_keys_getmodel",
-      "community": 2,
+      "community": 1,
       "norm_label": "getmodel()"
     },
     {
@@ -2158,7 +2162,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "lib_keys_setmodel",
-      "community": 2,
+      "community": 1,
       "norm_label": "setmodel()"
     },
     {
@@ -2168,7 +2172,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "lib_keys_getactiveprovider",
-      "community": 2,
+      "community": 1,
       "norm_label": "getactiveprovider()"
     },
     {
@@ -2178,7 +2182,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "lib_keys_setactiveprovider",
-      "community": 2,
+      "community": 1,
       "norm_label": "setactiveprovider()"
     },
     {
@@ -2198,7 +2202,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "lib_keys_maskkey",
-      "community": 2,
+      "community": 1,
       "norm_label": "maskkey()"
     },
     {
@@ -2208,7 +2212,7 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "lib_keys_getdeviceid",
-      "community": 2,
+      "community": 1,
       "norm_label": "getdeviceid()"
     },
     {
@@ -2218,7 +2222,7 @@
       "source_location": "L150",
       "_origin": "ast",
       "id": "lib_keys_clearallkeys",
-      "community": 2,
+      "community": 1,
       "norm_label": "clearallkeys()"
     },
     {
@@ -2298,7 +2302,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_profile_gaps",
-      "community": 1,
+      "community": 2,
       "norm_label": "profile-gaps.ts"
     },
     {
@@ -2308,7 +2312,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "lib_profile_gaps_gap",
-      "community": 1,
+      "community": 2,
       "norm_label": "gap"
     },
     {
@@ -2318,7 +2322,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "lib_profile_gaps_gapreport",
-      "community": 1,
+      "community": 2,
       "norm_label": "gapreport"
     },
     {
@@ -2328,7 +2332,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "lib_profile_gaps_words",
-      "community": 1,
+      "community": 2,
       "norm_label": "words()"
     },
     {
@@ -2338,7 +2342,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "lib_profile_gaps_hascustomurl",
-      "community": 1,
+      "community": 2,
       "norm_label": "hascustomurl()"
     },
     {
@@ -2348,7 +2352,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "lib_profile_gaps_roleswithoutdescription",
-      "community": 1,
+      "community": 2,
       "norm_label": "roleswithoutdescription()"
     },
     {
@@ -2358,7 +2362,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "lib_profile_gaps_analyseprofile",
-      "community": 1,
+      "community": 2,
       "norm_label": "analyseprofile()"
     },
     {
@@ -2368,7 +2372,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "lib_profile_gaps_gapstotext",
-      "community": 1,
+      "community": 2,
       "norm_label": "gapstotext()"
     },
     {
@@ -2508,7 +2512,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_ratelimit",
-      "community": 9,
+      "community": 10,
       "norm_label": "ratelimit.ts"
     },
     {
@@ -2518,7 +2522,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "lib_ratelimit_per_device",
-      "community": 9,
+      "community": 10,
       "norm_label": "per_device"
     },
     {
@@ -2528,7 +2532,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "lib_ratelimit_global",
-      "community": 9,
+      "community": 10,
       "norm_label": "global"
     },
     {
@@ -2538,7 +2542,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "lib_ratelimit_memory",
-      "community": 9,
+      "community": 10,
       "norm_label": "memory"
     },
     {
@@ -2548,7 +2552,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "lib_ratelimit_today",
-      "community": 9,
+      "community": 10,
       "norm_label": "today()"
     },
     {
@@ -2558,7 +2562,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "lib_ratelimit_bump",
-      "community": 9,
+      "community": 10,
       "norm_label": "bump()"
     },
     {
@@ -2568,7 +2572,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "lib_ratelimit_limitresult",
-      "community": 9,
+      "community": 10,
       "norm_label": "limitresult"
     },
     {
@@ -2578,7 +2582,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "lib_ratelimit_checksharedlimit",
-      "community": 9,
+      "community": 10,
       "norm_label": "checksharedlimit()"
     },
     {
@@ -2588,7 +2592,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_trending",
-      "community": 10,
+      "community": 9,
       "norm_label": "trending.ts"
     },
     {
@@ -2598,7 +2602,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "lib_trending_trend",
-      "community": 10,
+      "community": 9,
       "norm_label": "trend"
     },
     {
@@ -2608,7 +2612,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "lib_trending_revalidate",
-      "community": 10,
+      "community": 9,
       "norm_label": "revalidate"
     },
     {
@@ -2618,7 +2622,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "lib_trending_decode",
-      "community": 10,
+      "community": 9,
       "norm_label": "decode()"
     },
     {
@@ -2628,7 +2632,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "lib_trending_googletrends",
-      "community": 10,
+      "community": 9,
       "norm_label": "googletrends()"
     },
     {
@@ -2638,7 +2642,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "lib_trending_hackernews",
-      "community": 10,
+      "community": 9,
       "norm_label": "hackernews()"
     },
     {
@@ -2648,7 +2652,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "lib_trending_devto",
-      "community": 10,
+      "community": 9,
       "norm_label": "devto()"
     },
     {
@@ -2658,7 +2662,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "lib_trending_fetchtrends",
-      "community": 10,
+      "community": 9,
       "norm_label": "fetchtrends()"
     },
     {
@@ -2668,7 +2672,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "lib_trending_evergreen_topics",
-      "community": 10,
+      "community": 9,
       "norm_label": "evergreen_topics"
     },
     {
@@ -2678,7 +2682,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_types",
-      "community": 5,
+      "community": 1,
       "norm_label": "types.ts"
     },
     {
@@ -2728,7 +2732,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "lib_types_generaterequest",
-      "community": 2,
+      "community": 1,
       "norm_label": "generaterequest"
     },
     {
@@ -3222,7 +3226,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "21-slide MBA-edition deck plus script for running a LinkedIn session. The recommended demo is live profile review rather than slides, because two minutes of real output convinces where a slide does not.",
+      "rationale": "21-slide MBA-edition deck plus script for running a LinkedIn session. The recommended demo is live profile review rather than slides, because two minutes of real output convinces where a slide does not; students are told to open the site on their phones during setup.",
       "id": "readme_workshop_deck",
       "community": 0,
       "norm_label": "workshop slide deck and speaker script"
@@ -3250,13 +3254,13 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Must cost the host Rs 0; student data must never reach the server; a student must be usable in under two minutes on a shared lab computer without an account. Stated as the root from which the whole design follows: a change that breaks one is the wrong change however good the feature.",
+      "rationale": "Must cost the host Rs 0; student data must never reach the server; a student must be able to use it in under two minutes on a shared lab computer without an account. Stated as the root from which the whole design follows: a change that breaks one is the wrong change however good the feature.",
       "id": "claude_three_constraints",
       "community": 0,
       "norm_label": "three founding constraints"
     },
     {
-      "label": "Ten Hard Invariants",
+      "label": "Twelve Hard Invariants",
       "file_type": "rationale",
       "source_file": "CLAUDE.md",
       "source_location": null,
@@ -3264,10 +3268,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "A numbered, never-break table so reviewers can cite a breakage by number rather than argue taste. Each row pairs the rule with its why, making the table usable by both humans and the automated Claude PR reviewer.",
+      "rationale": "A numbered, never-break table so reviewers can cite a breakage by number rather than argue taste. Each row pairs the rule with its why, making the table usable by both humans and the automated Claude PR reviewer. Grown from ten to twelve as specific production failures were turned into rules.",
       "id": "claude_invariants",
       "community": 0,
-      "norm_label": "ten hard invariants"
+      "norm_label": "twelve hard invariants"
     },
     {
       "label": "Invariant 1: BYOK Calls Go Browser to Provider Directly",
@@ -3410,6 +3414,90 @@
       "norm_label": "invariant 10: don't oversell"
     },
     {
+      "label": "Invariant 11: Never Claim a Save Unless Storage Confirms It",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "UI state must be decided from what is stored, never from the value being typed, and a failed write must surface instead of being swallowed. Added after a card read hasKey from the input buffer and unmounted the Save button on the first keystroke, so pasting a key looked successful but stored nothing and every later request failed with a confusing error about the deployment.",
+      "id": "claude_invariant_11_storage_confirmed_save",
+      "community": 0,
+      "norm_label": "invariant 11: never claim a save unless storage confirms it"
+    },
+    {
+      "label": "Invariant 12: Anything Checkable Without a Model Is Checked Without One",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Rule-based results appear instantly, cost nothing, and work before a student has a key. The ATS checks and the profile gap panel both run in the browser, and the AI builds on their findings instead of repeating them.",
+      "id": "claude_invariant_12_rule_based_first",
+      "community": 0,
+      "norm_label": "invariant 12: anything checkable without a model is checked without one"
+    },
+    {
+      "label": "Phones Are the Default (375px Check)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Most students open the app on a phone, so every change is checked at 375px: navigation stays reachable, banners stay small, upload zones say tap rather than drop, and nothing scrolls sideways.",
+      "id": "claude_mobile_first_convention",
+      "community": 0,
+      "norm_label": "phones are the default (375px check)"
+    },
+    {
+      "label": "Model Ids Go Stale",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "config.ts holds a curated list per provider while Settings can fetch the live list with the student's key. When a default stops working the fix is to check the provider's docs rather than guess an id.",
+      "id": "claude_model_ids_go_stale",
+      "community": 0,
+      "norm_label": "model ids go stale"
+    },
+    {
+      "label": "Check the Rendered Result, Not the Edit",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A find-and-replace that matches nothing reports success and changes nothing, so the new behaviour must be confirmed in the running app. If a change does not appear, suspect a stale build before suspecting the logic.",
+      "id": "claude_check_rendered_result",
+      "community": 0,
+      "norm_label": "check the rendered result, not the edit"
+    },
+    {
+      "label": "Test on Real Data, Not Only Fixtures",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The repo's synthetic profile was clean, comma-separated and short; a real LinkedIn export broke the location regex, truncated multi-line headlines, reported 24 roles for six, and used a check-mark glyph as a bullet. Fixtures confirm what you expected, real files find what you did not.",
+      "id": "claude_test_on_real_data",
+      "community": 0,
+      "norm_label": "test on real data, not only fixtures"
+    },
+    {
       "label": "Task-to-File Map (CLAUDE.md)",
       "file_type": "document",
       "source_file": "CLAUDE.md",
@@ -3432,7 +3520,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "TypeScript strict with no any, Server Components by default, browser-only reads gated behind useIsClient() after hydration, no synchronous setState inside useEffect, lazily loaded provider SDKs, comments that explain why not what, and copy written for a 19-year-old in a hurry.",
+      "rationale": "TypeScript strict with no any, Server Components by default, browser-only reads gated behind useIsClient() after hydration, no synchronous setState inside useEffect, lazily loaded provider SDKs, comments that explain why not what, copy written for a 19-year-old in a hurry, a 375px phone check on every change, and a curated-plus-live model list because ids go stale.",
       "id": "claude_conventions",
       "community": 0,
       "norm_label": "code conventions"
@@ -3446,7 +3534,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Seven steps: build and checks, explicit invariant greps on src/lib/ai, keys.ts, db.ts and API routes, a secret-prefix grep on the diff, real browser exercise, the no-key path, privacy-claim accuracy, and docs updates. Results must be reported honestly rather than merged around.",
+      "rationale": "Steps 1 to 7 plus 4a and 4b: build and checks, explicit invariant greps on src/lib/ai, keys.ts, db.ts and API routes, a secret-prefix grep on the diff, hands-on browser exercise, checking the rendered result rather than the edit, testing on a real export rather than a fixture, the no-key path, privacy-claim accuracy, and docs updates. Results must be reported honestly rather than merged around.",
       "id": "claude_pre_merge_checklist",
       "community": 0,
       "norm_label": "pre-merge verification checklist"
@@ -3460,7 +3548,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "A page that compiles is not a page that works. Several historical bugs (a stuck loading spinner, a mis-parsed PDF section, an error visible only after clicking Generate) passed both tsc and eslint, so the changed path must be exercised end to end in a real browser.",
+      "rationale": "A page that compiles is not a page that works, and reading the page's markup is not using it: the changed path must be typed into and clicked through in a running dev server. Every user-visible bug in the repo's history passed tsc, eslint and build - a stuck loading spinner, a mis-parsed PDF section, an error only visible after clicking Generate, a Save button that unmounted as you typed, and an ATS rule that scored a well-written profile at zero.",
       "id": "claude_browser_verification",
       "community": 0,
       "norm_label": "browser verification requirement"
@@ -3516,7 +3604,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "A five-point plain-language restatement of the invariants (zero cost, privacy is the product, no direct DOM manipulation, honest prompts, don't oversell), pointing at CLAUDE.md as the source of truth so contributors read the rules before a rewrite is needed.",
+      "rationale": "A five-point plain-language restatement of the twelve invariants (zero cost, privacy is the product, no direct DOM manipulation, honest prompts, don't oversell), pointing at CLAUDE.md as the source of truth so contributors read the rules before a rewrite is needed. The count is repeated here, so it has to be updated whenever the CLAUDE.md table grows.",
       "id": "contributing_ground_rules",
       "community": 0,
       "norm_label": "contributor ground rules"
@@ -3558,7 +3646,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "New prompts, more ATS rules, more trending sources, better PDF parsing and UI translations are suggested first because they are pure functions or single-file changes that cannot break an invariant.",
+      "rationale": "New prompts, more ATS rules, more trending sources, better PDF parsing and UI translations are suggested first because they are pure functions or single-file changes that cannot break an invariant. PDF-parsing fixes are asked to come with a redacted real sample.",
       "id": "contributing_good_first_contributions",
       "community": 0,
       "norm_label": "good first contributions"
@@ -3744,71 +3832,6 @@
       "id": "issue_template_feature_request_template",
       "community": 0,
       "norm_label": "feature request issue template"
-    },
-    {
-      "label": "File/Document Icon (unused Next.js boilerplate asset)",
-      "file_type": "image",
-      "source_file": "public/file.svg",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "public_file_fileicon",
-      "community": 12,
-      "norm_label": "file/document icon (unused next.js boilerplate asset)"
-    },
-    {
-      "label": "Globe/World Icon (unused Next.js boilerplate asset)",
-      "file_type": "image",
-      "source_file": "public/globe.svg",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "public_globe_globeicon",
-      "community": 12,
-      "norm_label": "globe/world icon (unused next.js boilerplate asset)"
-    },
-    {
-      "label": "Next.js Wordmark Logo (unused create-next-app asset)",
-      "file_type": "image",
-      "source_file": "public/next.svg",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "public_next_nextlogo",
-      "community": 12,
-      "norm_label": "next.js wordmark logo (unused create-next-app asset)"
-    },
-    {
-      "label": "Vercel Triangle Logo (unused create-next-app asset)",
-      "file_type": "image",
-      "source_file": "public/vercel.svg",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "public_vercel_vercellogo",
-      "community": 12,
-      "norm_label": "vercel triangle logo (unused create-next-app asset)"
-    },
-    {
-      "label": "Browser Window Icon (unused Next.js boilerplate asset)",
-      "file_type": "image",
-      "source_file": "public/window.svg",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "public_window_windowicon",
-      "community": 12,
-      "norm_label": "browser window icon (unused next.js boilerplate asset)"
     }
   ],
   "links": [
@@ -10062,6 +10085,16 @@
       "target": "claude_three_constraints"
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_test_on_real_data",
+      "target": "readme_linkedin_pdf_export"
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -10122,6 +10155,16 @@
       "target": "readme_onboarding"
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_12_rule_based_first",
+      "target": "readme_profile_optimizer"
+    },
+    {
       "relation": "semantically_similar_to",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -10162,6 +10205,16 @@
       "target": "readme_trending_feed"
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_12_rule_based_first",
+      "target": "readme_resume_ats_check"
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -10190,6 +10243,16 @@
       "weight": 1.0,
       "source": "readme_my_drafts",
       "target": "claude_invariant_4_ttl"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_11_storage_confirmed_save",
+      "target": "readme_settings"
     },
     {
       "relation": "references",
@@ -10255,6 +10318,16 @@
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_model_ids_go_stale",
+      "target": "readme_models"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
       "source_file": "CONTRIBUTING.md",
       "source_location": null,
       "weight": 1.0,
@@ -10314,6 +10387,16 @@
     {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_mobile_first_convention",
+      "target": "readme_workshop_deck"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "README.md",
       "source_location": null,
@@ -10330,6 +10413,16 @@
       "weight": 1.0,
       "source": "readme_tech_stack",
       "target": "claude_project_layout"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_12_rule_based_first",
+      "target": "claude_three_constraints"
     },
     {
       "relation": "references",
@@ -10360,6 +10453,26 @@
       "weight": 1.0,
       "source": "claude_invariants",
       "target": "claude_invariant_10_dont_oversell"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariants",
+      "target": "claude_invariant_11_storage_confirmed_save"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariants",
+      "target": "claude_invariant_12_rule_based_first"
     },
     {
       "relation": "references",
@@ -10544,6 +10657,16 @@
     {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_11_storage_confirmed_save",
+      "target": "claude_invariant_5_session_storage_keys"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "CLAUDE.md",
       "source_location": null,
@@ -10630,6 +10753,106 @@
       "weight": 1.0,
       "source": "contributing_ground_rules",
       "target": "claude_invariant_10_dont_oversell"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_check_rendered_result",
+      "target": "claude_invariant_11_storage_confirmed_save"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_invariant_11_storage_confirmed_save",
+      "target": "claude_browser_verification"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_conventions",
+      "target": "claude_mobile_first_convention"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_mobile_first_convention",
+      "target": "claude_browser_verification"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "issue_template_bug_report_template",
+      "target": "claude_mobile_first_convention"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_conventions",
+      "target": "claude_model_ids_go_stale"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_pre_merge_checklist",
+      "target": "claude_check_rendered_result"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_pre_merge_checklist",
+      "target": "claude_test_on_real_data"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_test_on_real_data",
+      "target": "claude_browser_verification"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CONTRIBUTING.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contributing_good_first_contributions",
+      "target": "claude_test_on_real_data"
     },
     {
       "relation": "references",
@@ -10840,72 +11063,12 @@
       "weight": 1.0,
       "source": "workflows_claude_review_review_job",
       "target": "workflows_claude_review_api_key_gate"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "public/file.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_file_fileicon",
-      "target": "public_globe_globeicon"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "public/window.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_file_fileicon",
-      "target": "public_window_windowicon"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "public/next.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_next_nextlogo",
-      "target": "public_file_fileicon"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "public/globe.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_globe_globeicon",
-      "target": "public_window_windowicon"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "public/vercel.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_vercel_vercellogo",
-      "target": "public_globe_globeicon"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "public/next.svg",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "public_next_nextlogo",
-      "target": "public_vercel_vercellogo"
     }
   ],
   "hyperedges": [
     {
-      "id": "ten_hard_invariants_set",
-      "label": "The Ten Hard Invariants",
+      "id": "twelve_hard_invariants_set",
+      "label": "The Twelve Hard Invariants",
       "nodes": [
         "claude_invariant_1_byok_direct",
         "claude_invariant_2_client_side_content",
@@ -10916,7 +11079,9 @@
         "claude_invariant_7_prompts_forbid_invention",
         "claude_invariant_8_no_secrets",
         "claude_invariant_9_no_content_analytics",
-        "claude_invariant_10_dont_oversell"
+        "claude_invariant_10_dont_oversell",
+        "claude_invariant_11_storage_confirmed_save",
+        "claude_invariant_12_rule_based_first"
       ],
       "relation": "form",
       "confidence": "EXTRACTED",
@@ -10929,6 +11094,8 @@
       "nodes": [
         "claude_pre_merge_checklist",
         "claude_browser_verification",
+        "claude_check_rendered_result",
+        "claude_test_on_real_data",
         "claude_pr_review_priority_order",
         "workflows_ci_check_job",
         "workflows_claude_review_review_job",
@@ -10959,5 +11126,5 @@
       "source_file": "docs/PRIVACY.md"
     }
   ],
-  "built_at_commit": "d2ceb815c3f31ab713780480b255cfa29a78f772"
+  "built_at_commit": "aa43e5f2bcba6f72c6661336703b4fad29f6ef52"
 }
