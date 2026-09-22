@@ -48,8 +48,13 @@ One known candidate, recorded so it stops looking like an accident: the README
 roadmap floats **optional accounts with cross-device sync**, which invariant 3
 forbids today. It is a real possibility if students ask for it, and it would mean
 accepting server-side storage of student data, real authentication, and a
-host-side cost — so it changes constraints 1 and 3 and invariants 2 and 3
-together. Treat it as a fork in the road, not a backlog item.
+host-side cost. That moves four things at once: the zero-cost constraint, the
+two-minute no-account constraint, "student content stays client-side", and "no
+server-side database". Treat it as a fork in the road, not a backlog item.
+
+Refer to a constraint or an invariant by what it says, not only by its number.
+Both lists are numbered, so "constraint 3" and "invariant 3" are different rules
+that read alike — and a number shifts the moment a row is inserted above it.
 
 ## Project layout
 
