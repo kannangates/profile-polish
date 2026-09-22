@@ -1,12 +1,17 @@
 <div align="center">
 
-# ● CareerLift
+# ● ProfilePolish
 
 **Free, private LinkedIn & resume coach for college students.**
 
-Fix your profile · write messages that get replies · post about what's trending · pass ATS resume filters
+Polish your profile · draft messages and posts · check your resume against ATS rules
 
 Runs in your browser · Bring your own free API key · No sign-up · No database · MIT licensed
+
+### 👉 [**Use it now — profilepolish-app.vercel.app**](https://profilepolish-app.vercel.app)
+
+[![CI](https://github.com/kannangates/profile-polish/actions/workflows/ci.yml/badge.svg)](https://github.com/kannangates/profile-polish/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [Getting started](#getting-started-students) · [Deploy your own](#deploy-your-own-free) · [How it works](#how-it-works) · [Privacy](#privacy-model) · [Contributing](CONTRIBUTING.md)
 
@@ -16,12 +21,14 @@ Runs in your browser · Bring your own free API key · No sign-up · No database
 
 ## Why this exists
 
-Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on their servers. Students don't need that. CareerLift is a static-ish Next.js app that:
+Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on their servers. Students don't need that. ProfilePolish is a static-ish Next.js app that:
 
 - reads the **PDF export LinkedIn already gives you** (no scraping, no LinkedIn login),
 - talks to the AI provider **directly from your browser with your own free key** (Gemini and Groq have free tiers, no card),
 - keeps everything — profile, resume, drafts, keys — **in your browser only**, auto-clearing after 48 hours,
 - costs the person hosting it **₹0** (Vercel Hobby + optional free-tier shared key).
+
+> **The name is the promise.** ProfilePolish polishes what you write — your profile, messages, posts and resume. It doesn't apply for jobs, contact recruiters for you, or guarantee interviews. Everything it produces is a draft for you to read, edit and use.
 
 ## Features
 
@@ -37,7 +44,7 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 
 ## Getting started (students)
 
-1. Open the app (the URL your college / senior shared, or see [Deploy your own](#deploy-your-own-free)).
+1. Open **[profilepolish-app.vercel.app](https://profilepolish-app.vercel.app)**.
 2. On LinkedIn (web, not the mobile app): your profile → **More** (or **Resources**) → **Save to PDF**.
 3. Drop that PDF on the first screen. Check the preview, click **Looks good**.
 4. Go to **Settings**, click **Get a key** next to Google Gemini (free, no card, ~1 minute), paste it, **Save**.
@@ -64,6 +71,8 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
 
 4. Click **Deploy**. You get a `https://<name>.vercel.app` URL to share. Every merge to `main` redeploys automatically.
 
+> The official instance runs at [profilepolish-app.vercel.app](https://profilepolish-app.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons.
+
 <details>
 <summary>Other hosts</summary>
 
@@ -75,8 +84,8 @@ The app needs two small server routes (`/api/generate` for the shared key and `/
 Requires Node 20+ (`.nvmrc` pins 22).
 
 ```bash
-git clone https://github.com/kannangates/careerlift.git
-cd careerlift
+git clone https://github.com/kannangates/profile-polish.git
+cd profile-polish
 npm install
 cp .env.example .env.local     # optional: add a shared GEMINI_API_KEY
 npm run dev

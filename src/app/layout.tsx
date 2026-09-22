@@ -8,7 +8,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: `${APP_NAME} — ${APP_TAGLINE}`,
-  description: "Upgrade your LinkedIn profile, write better messages and posts, and pass ATS resume checks. Free, private, runs in your browser.",
+  description: "Polish your LinkedIn profile, draft better messages and posts, and check your resume against ATS rules. Free, private, runs in your browser.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

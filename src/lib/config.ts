@@ -1,5 +1,5 @@
-export const APP_NAME = "CareerLift";
-export const APP_TAGLINE = "Free LinkedIn & resume coach for students";
+export const APP_NAME = "ProfilePolish";
+export const APP_TAGLINE = "Polish your LinkedIn profile & resume";
 
 /** Drafts and the parsed profile auto-clear after this long. */
 export const DRAFT_TTL_MS = 48 * 60 * 60 * 1000;

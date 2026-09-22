@@ -1,6 +1,6 @@
 # Privacy notes for hosts
 
-This is what you, as the person hosting CareerLift, should be able to tell students truthfully.
+This is what you, as the person hosting ProfilePolish, should be able to tell students truthfully.
 
 ## What the server sees
 

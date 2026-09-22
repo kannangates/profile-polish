@@ -24,7 +24,7 @@ function downloadMarkdown(drafts: Draft[]) {
   // Detached anchor purely to trigger a download — never attached to the DOM.
   const a = document.createElement("a");
   a.href = url;
-  a.download = `careerlift-drafts-${new Date().toISOString().slice(0, 10)}.md`;
+  a.download = `profile-polish-drafts-${new Date().toISOString().slice(0, 10)}.md`;
   a.click();
   URL.revokeObjectURL(url);
 }

@@ -6,12 +6,12 @@ import type { Draft, DraftType, Profile } from "./types";
  * All student data lives in IndexedDB in their own browser. Nothing is
  * ever sent to our server. Rows carry an expiresAt and are purged on load.
  */
-class CareerLiftDB extends Dexie {
+class ProfilePolishDB extends Dexie {
   profiles!: EntityTable<Profile, "id">;
   drafts!: EntityTable<Draft, "id">;
 
   constructor() {
-    super("careerlift");
+    super("profile-polish");
     this.version(1).stores({
       profiles: "id, expiresAt",
       drafts: "++id, type, createdAt, expiresAt",
@@ -19,7 +19,7 @@ class CareerLiftDB extends Dexie {
   }
 }
 
-export const db = new CareerLiftDB();
+export const db = new ProfilePolishDB();
 
 export async function purgeExpired() {
   const now = Date.now();

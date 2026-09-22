@@ -195,7 +195,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">{APP_TAGLINE}</h1>
         <p className="mt-2 max-w-lg text-sm text-muted">
-          Fix your profile, write messages that get replies, post about what&apos;s trending, and pass ATS resume filters. Free forever — your data never leaves your browser.
+          Polish your profile, draft messages and posts, and check your resume against ATS rules. Free forever — your data never leaves your browser.
         </p>
       </div>
       <div className="w-full max-w-2xl">{children}</div>
