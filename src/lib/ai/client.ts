@@ -24,6 +24,31 @@ export interface GenerateOptions extends GenerateRequest {
   signal?: AbortSignal;
 }
 
+/**
+ * Providers surface failures as raw JSON or SDK stack messages. Students need
+ * to know which of the few things that matter went wrong, and what to do.
+ */
+function friendlyMessage(providerName: string, err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err);
+  const lower = raw.toLowerCase();
+  if (/api[_ ]?key[_ ]?(not valid|invalid)|invalid[_ ]api[_ ]key|unauthorized|401|permission_denied|authentication/.test(lower)) {
+    return `That ${providerName} key was rejected. Open Settings and check you pasted the whole key, and that it still exists in your ${providerName} account.`;
+  }
+  if (/quota|rate.?limit|resource_exhausted|429|too many requests/.test(lower)) {
+    return `This key has hit its limit for now. Wait a few minutes, or add a second free key (Groq) in Settings and switch to it.`;
+  }
+  if (/failed to fetch|networkerror|load failed|econnrefused|network error|fetch failed/.test(lower)) {
+    return `Couldn't reach ${providerName}. Check your internet connection and try again.`;
+  }
+  if (/model/.test(lower) && /not found|404|not supported|does not exist|unsupported/.test(lower)) {
+    return `The model chosen in Settings isn't available on this key. Pick another one, or use "Load models from ${providerName}".`;
+  }
+  if (/safety|blocked|refus/.test(lower)) {
+    return `${providerName} declined to answer this one. Try rephrasing what you asked for.`;
+  }
+  return `${providerName} returned an error: ${raw.slice(0, 300)}`;
+}
+
 export interface GenerateResult {
   text: string;
   via: "byok" | "shared";
@@ -41,17 +66,23 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   if (active !== "shared") {
     const apiKey = getKey(active);
     if (apiKey) {
-      const stream = await loaders[active]();
-      const text = await stream({
-        apiKey,
-        model: getModel(active),
-        system: opts.system,
-        prompt: opts.prompt,
-        images: opts.images,
-        onToken: opts.onToken,
-        signal: opts.signal,
-      });
-      return { text, via: "byok", provider: PROVIDER_BY_ID[active].name };
+      const providerName = PROVIDER_BY_ID[active].name;
+      try {
+        const stream = await loaders[active]();
+        const text = await stream({
+          apiKey,
+          model: getModel(active),
+          system: opts.system,
+          prompt: opts.prompt,
+          images: opts.images,
+          onToken: opts.onToken,
+          signal: opts.signal,
+        });
+        return { text, via: "byok", provider: providerName };
+      } catch (err) {
+        if (opts.signal?.aborted) throw err;
+        throw new Error(friendlyMessage(providerName, err));
+      }
     }
   }
 
