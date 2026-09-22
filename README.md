@@ -8,7 +8,7 @@ Polish your profile · draft messages and posts · check your resume against ATS
 
 Runs in your browser · Bring your own free API key · No sign-up · No database · MIT licensed
 
-### 👉 [**Use it now — profilepolish-app.vercel.app**](https://profilepolish-app.vercel.app)
+### 👉 [**Use it now — theprofilepolish.vercel.app**](https://theprofilepolish.vercel.app)
 
 [![CI](https://github.com/kannangates/profile-polish/actions/workflows/ci.yml/badge.svg)](https://github.com/kannangates/profile-polish/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -44,7 +44,7 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 
 ## Getting started (students)
 
-1. Open **[profilepolish-app.vercel.app](https://profilepolish-app.vercel.app)**.
+1. Open **[theprofilepolish.vercel.app](https://theprofilepolish.vercel.app)**.
 2. On LinkedIn (web, not the mobile app): your profile → **More** (or **Resources**) → **Save to PDF**.
 3. Drop that PDF on the first screen. Check the preview, click **Looks good**.
 4. Go to **Settings** → open **"How do I get this key?"** under Google Gemini. It walks you through it step by step (free, no credit card, about a minute). Paste the key, click **Save**.
@@ -71,7 +71,8 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
 
 4. Click **Deploy**. You get a `https://<name>.vercel.app` URL to share. Every merge to `main` redeploys automatically.
 
-> The official instance runs at [profilepolish-app.vercel.app](https://profilepolish-app.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons.
+> The official instance runs at [theprofilepolish.vercel.app](https://theprofilepolish.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons.
+> Two aliases point at the same deployment, so older links keep working: [polishprofile.vercel.app](https://polishprofile.vercel.app) and [profilepolish-app.vercel.app](https://profilepolish-app.vercel.app). `profilepolish.vercel.app` itself belongs to an unrelated Vercel account.
 
 <details>
 <summary>Other hosts</summary>
