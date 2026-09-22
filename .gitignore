@@ -46,3 +46,5 @@ public/pdf.worker.min.mjs
 
 # local editor/tooling config
 .claude/
+# local scratch for testing with real files (never commit personal PDFs)
+public/_test/

@@ -70,7 +70,10 @@ export default function ResumePage() {
                 </p>
               ) : (
                 <>
-                  <p className="font-medium">Drop your resume (PDF, DOCX or TXT)</p>
+                  <p className="font-medium">
+                    <span className="sm:hidden">Tap to choose your resume (PDF, DOCX or TXT)</span>
+                    <span className="hidden sm:inline">Drop your resume (PDF, DOCX or TXT)</span>
+                  </p>
                   <p className="mt-1 text-xs text-muted">Parsed in your browser. Never uploaded.</p>
                 </>
               )}

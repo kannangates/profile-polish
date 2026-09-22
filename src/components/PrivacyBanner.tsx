@@ -19,7 +19,7 @@ export function PrivacyBanner() {
 
   if (!isClient || dismissed || isDismissed()) return null;
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-warning-fg/30 bg-warning-bg px-4 py-3 text-sm text-warning-fg">
+    <div className="flex items-start gap-2 rounded-lg border border-warning-fg/30 bg-warning-bg px-3 py-2.5 text-xs text-warning-fg sm:gap-3 sm:px-4 sm:py-3 sm:text-sm">
       <span aria-hidden>🔒</span>
       <p className="flex-1">
         <strong>Everything stays in your browser.</strong> Your API key clears when you close this tab. Drafts and your profile auto-clear

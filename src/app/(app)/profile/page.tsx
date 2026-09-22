@@ -131,7 +131,10 @@ function ScreenshotDrop({ onImage, compact }: { onImage: (v: { img: ImageInput; 
           onImage({ img: { mimeType: f.type, base64: await fileToBase64(f) }, name: f.name });
         }}
       >
-        <p className={compact ? "text-sm" : "font-medium"}>Drop a screenshot of your LinkedIn profile</p>
+        <p className={compact ? "text-sm" : "font-medium"}>
+          <span className="sm:hidden">Tap to add a screenshot of your LinkedIn profile</span>
+          <span className="hidden sm:inline">Drop a screenshot of your LinkedIn profile</span>
+        </p>
         <p className="mt-1 text-xs text-muted">PNG or JPG. Works with Gemini, OpenAI and Claude; some Groq models don&apos;t support images.</p>
       </FileDrop>
       {err && <p className="mt-1 text-xs text-danger">{err}</p>}
