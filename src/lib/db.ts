@@ -32,6 +32,11 @@ export async function saveProfile(p: Omit<Profile, "id" | "createdAt" | "expires
   await db.profiles.put({ ...p, id: "current", createdAt: now, expiresAt: now + DRAFT_TTL_MS });
 }
 
+/** Resolves to false when there is no profile to attach the role to. */
+export async function saveTargetRole(targetRole: string) {
+  return (await db.profiles.update("current", { targetRole })) === 1;
+}
+
 export async function clearProfile() {
   await db.profiles.delete("current");
 }
