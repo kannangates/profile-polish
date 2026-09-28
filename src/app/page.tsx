@@ -128,7 +128,7 @@ export default function OnboardingPage() {
       <Card className="space-y-5">
         <fieldset>
           <legend className="mb-2 text-sm font-medium">How do you want to add your profile?</legend>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2">
             <ModeOption checked={mode === "upload"} onChange={() => setMode("upload")} title="Upload LinkedIn PDF" badge="Recommended">
               Best results. Keeps every section and role in order.
             </ModeOption>
