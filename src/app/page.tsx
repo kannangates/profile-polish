@@ -126,9 +126,12 @@ export default function OnboardingPage() {
   return (
     <Shell>
       <Card className="space-y-5">
-        <div className="flex gap-2 text-sm">
+        <div className="flex flex-wrap gap-2 text-sm">
           <TabButton active={mode === "upload"} onClick={() => setMode("upload")}>
-            Upload LinkedIn PDF
+            Upload LinkedIn PDF{" "}
+            <span className={`ml-1 rounded-full px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide ${mode === "upload" ? "bg-white/20" : "bg-accent-soft text-accent"}`}>
+              Recommended
+            </span>
           </TabButton>
           <TabButton active={mode === "paste"} onClick={() => setMode("paste")}>
             Paste profile text
@@ -171,6 +174,10 @@ export default function OnboardingPage() {
           </>
         ) : (
           <div className="space-y-3">
+            <p className="rounded-lg bg-warning-bg px-3 py-2 text-xs text-warning-fg">
+              The PDF gives better results: it keeps your sections and every role&apos;s dates in order, so the review can go role by role. Pasted text
+              often loses that structure. Use this if you can&apos;t get the PDF.
+            </p>
             <textarea
               className="field min-h-40"
               placeholder="Paste your name, headline, About section, experience, education and skills…"

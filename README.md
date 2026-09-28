@@ -34,7 +34,7 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 
 | Page | What you get |
 |---|---|
-| **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Or paste text. Or skip and continue without a profile. |
+| **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Marked as recommended; pasting text is the fallback for phones, where LinkedIn doesn't offer the PDF. Or skip and continue without a profile. |
 | **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then the AI review: score out of 100, quick wins, 3 headline rewrites, a full About rewrite, bullet-by-bullet experience rewrites, skills to add. Accepts a screenshot for vision models. |
 | **Message Writer** | Connection request, referral ask, alumni outreach, post-interview follow-up, thank-you, cold message to a recruiter. Three variants each (short / warm / direct) with a "when to send" tip. |
 | **Post Generator** | Live trending topics from Google Trends (India), Hacker News and Dev.to, plus evergreen student topics. Pick a topic, add your angle, choose a style → 3 hooks, a full post, hashtags, best time to post. |
