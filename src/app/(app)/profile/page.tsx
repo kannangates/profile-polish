@@ -2,23 +2,30 @@
 
 import { useState } from "react";
 import { FileDrop } from "@/components/FileDrop";
+import { Markdown } from "@/components/Markdown";
+import { MakeoverReport } from "@/components/MakeoverReport";
 import { ProfileGaps } from "@/components/ProfileGaps";
 import { OutputPanel } from "@/components/OutputPanel";
 import { Button, Card, Label, LinkButton, PageHeader } from "@/components/ui";
 import { useGenerate } from "@/components/useGenerate";
 import { profileOptimizePrompt } from "@/lib/ai/prompts";
+import { saveTargetRole } from "@/lib/db";
 import { useProfile } from "@/lib/hooks";
+import { isMakeover, makeoverToMarkdown, parseMakeover } from "@/lib/makeover";
 import { fileToBase64 } from "@/lib/pdf";
 import { analyseProfile, gapsToText } from "@/lib/profile-gaps";
 import type { ImageInput, Profile } from "@/lib/types";
 
 export default function ProfilePage() {
   const profile = useProfile();
-  const [focus, setFocus] = useState("");
+  // null = not edited yet, so the field shows the role saved at upload.
+  const [draftRole, setDraftRole] = useState<string | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
   const [screenshot, setScreenshot] = useState<{ img: ImageInput; name: string } | null>(null);
   const gen = useGenerate();
 
   if (profile === undefined) return null;
+  const focus = draftRole ?? profile?.targetRole ?? "";
 
   if (!profile && !screenshot) {
     return (
@@ -36,7 +43,12 @@ export default function ProfilePage() {
     );
   }
 
-  const run = () => {
+  const run = async () => {
+    const role = focus.trim();
+    if (profile && role !== (profile.targetRole ?? "")) {
+      const ok = await saveTargetRole(role).catch(() => false);
+      setRoleError(ok ? null : "Couldn't save your target role in this browser. This review still uses it.");
+    }
     const p: Profile =
       profile ??
       ({
@@ -54,7 +66,7 @@ export default function ProfilePage() {
         createdAt: 0,
         expiresAt: 0,
       } satisfies Profile);
-    const { system, prompt } = profileOptimizePrompt(p, focus.trim(), profile ? gapsToText(analyseProfile(profile)) : undefined);
+    const { system, prompt } = profileOptimizePrompt(p, role, profile ? gapsToText(analyseProfile(profile)) : undefined, Boolean(screenshot));
     gen.run({ system, prompt, images: screenshot ? [screenshot.img] : undefined });
   };
 
@@ -80,14 +92,15 @@ export default function ProfilePage() {
           )}
 
           <div>
-            <Label hint="optional">What are you aiming for?</Label>
+            <Label hint="recommended">Target role</Label>
             <input
               className="field"
-              placeholder="e.g. SDE intern at a product company, data analyst roles, MBA admissions"
+              placeholder="e.g. SDE intern, data analyst, product manager"
               value={focus}
-              onChange={(e) => setFocus(e.target.value)}
+              onChange={(e) => setDraftRole(e.target.value)}
             />
-            <p className="mt-1 text-xs text-muted">Suggestions are tailored to this target. Leave blank for a general review.</p>
+            <p className="mt-1 text-xs text-muted">Every rewrite is tailored to this role. Leave blank and we&apos;ll guess from your profile.</p>
+            {roleError && <p className="mt-1 text-xs text-danger">{roleError}</p>}
           </div>
 
           <Button onClick={run} disabled={gen.loading} className="w-full">
@@ -115,7 +128,16 @@ export default function ProfilePage() {
           onStop={gen.stop}
           draftType="profile"
           draftTitle={`Profile review${focus ? ` — ${focus}` : ""}`}
-          emptyHint="Click “Review my profile” to get a score, quick wins, and rewritten headline, About and experience bullets."
+          emptyHint="Click “Review my profile” for a section-by-section makeover: your original, a rewrite for your target role, and why it's better."
+          render={(out) => {
+            const m = parseMakeover(out);
+            // A model that ignored the format still gets its answer shown.
+            return isMakeover(m) ? <MakeoverReport makeover={m} profile={profile} loading={gen.loading} hasScreenshot={Boolean(screenshot)} /> : <Markdown>{out}</Markdown>;
+          }}
+          exportText={(out) => {
+            const m = parseMakeover(out);
+            return isMakeover(m) ? makeoverToMarkdown(m) : out;
+          }}
         />
       </div>
     </>

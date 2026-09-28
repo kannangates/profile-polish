@@ -8,6 +8,8 @@ export interface Profile {
   education: string;
   skills: string[];
   certifications: string[];
+  /** The role the student is aiming for; every rewrite is tailored to it. */
+  targetRole?: string;
   /** Full extracted text — this is what the AI actually reads. */
   raw: string;
   source: "pdf" | "text" | "image";

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { saveDraft } from "@/lib/db";
 import type { DraftType } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
@@ -17,10 +17,15 @@ interface Props {
   draftTitle: string;
   onStop?: () => void;
   emptyHint?: string;
+  /** Replaces the Markdown view, e.g. with a structured report. */
+  render?: (output: string) => ReactNode;
+  /** What Copy and Save draft store, when the raw output isn't readable on its own. */
+  exportText?: (output: string) => string;
 }
 
-export function OutputPanel({ output, loading, error, meta, draftType, draftTitle, onStop, emptyHint }: Props) {
+export function OutputPanel({ output, loading, error, meta, draftType, draftTitle, onStop, emptyHint, render, exportText }: Props) {
   const [saved, setSaved] = useState(false);
+  const text = exportText ? exportText(output) : output;
 
   return (
     <Card className="flex min-h-[320px] flex-col">
@@ -36,12 +41,12 @@ export function OutputPanel({ output, loading, error, meta, draftType, draftTitl
               Stop
             </Button>
           )}
-          <CopyButton text={output} />
+          <CopyButton text={text} label={render ? "Copy all" : "Copy"} />
           <Button
             variant="secondary"
             disabled={!output || loading || saved}
             onClick={async () => {
-              await saveDraft(draftType, draftTitle, output);
+              await saveDraft(draftType, draftTitle, text);
               setSaved(true);
               setTimeout(() => setSaved(false), 2000);
             }}
@@ -63,7 +68,7 @@ export function OutputPanel({ output, loading, error, meta, draftType, draftTitl
       )}
 
       {output ? (
-        <Markdown>{output}</Markdown>
+        render ? render(output) : <Markdown>{output}</Markdown>
       ) : (
         !loading && !error && <p className="my-auto text-center text-sm text-muted">{emptyHint ?? "Your result will appear here."}</p>
       )}

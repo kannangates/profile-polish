@@ -12,37 +12,48 @@ function profileBlock(profile?: Profile | null) {
   return `STUDENT'S CURRENT LINKEDIN PROFILE (extracted from their PDF export):\n"""\n${profile.raw.slice(0, 12000)}\n"""`;
 }
 
-export function profileOptimizePrompt(profile: Profile, focus: string, gapFindings?: string) {
+/**
+ * The review comes back as marker lines rather than JSON: every provider can
+ * follow it, it parses while it streams, and a half-finished answer still
+ * renders. `src/lib/makeover.ts` owns the parser — change both together.
+ */
+export function profileOptimizePrompt(profile: Profile, targetRole: string, gapFindings?: string, hasScreenshot = false) {
+  const target = targetRole
+    ? `The candidate is targeting: ${targetRole}. Tailor every rewrite, keyword and skill to this role.`
+    : "The candidate did not name a target role. Infer the most likely one from the profile, and say which role you assumed in the score line.";
   return {
     system: SYSTEM_BASE,
     prompt: `${profileBlock(profile)}
 
-Review this LinkedIn profile for a student / early-career candidate${focus ? ` who is targeting: ${focus}` : ""}.
+Review this LinkedIn profile section by section. Match the seniority you see in the profile — a student and a manager with ten years' experience need different advice.
+${target}
 ${gapFindings ? `\nAUTOMATED COMPLETENESS CHECKS ALREADY SHOWN TO THEM (do not just repeat these — write the actual content that fills each gap):\n${gapFindings}\n` : ""}
-Produce:
-## Profile score
-A score out of 100 with a one-line reason.
+OUTPUT FORMAT — follow it exactly. Each marker sits alone at the start of its own line. Write no text before the first marker, and no code fences.
 
-## Quick wins (do today)
-3–5 bullets, highest impact first.
+@@SCORE <number 0-100> | <one-line reason>
+@@QUICKWINS
+<3–5 bullets, highest impact first>
 
-## Headline
-- What's weak about the current one (1 line)
-- 3 rewritten options (each ≤ 220 characters, include target role + key skills + a hook)
+Then one block per section, in this order: headline, about, one "experience" block per role (most recent first, at most 6 roles), skills${hasScreenshot ? ", photo, banner" : ""}, other.
 
-## About section
-- What's missing
-- A full rewritten About (120–200 words, first person, ends with a call to action)
+@@SECTION <kind>[ | <role title> | <company> | <dates>]
+@@ORIGINAL
+<the current text, copied word for word from the profile. Write "(empty)" if the section is missing.>
+@@UPDATED
+<your rewrite>
+@@BEFORE
+<2–4 sentences: what is weak about the original for the target role>
+@@AFTER
+<2–4 sentences: why the rewrite works better for the target role>
+@@NEXT
+<2–3 bullets the candidate should do next>
 
-## Experience & projects
-For each role/project you can identify: rewrite the bullets using action verb + what you did + measurable result. Mark unknown numbers as [add number].
-If there is no experience, suggest 3 project/volunteering ideas that fit their degree and skills.
-
-## Skills
-- Skills to add (based on their target role) and which 3 to pin as Top Skills.
-
-## Other sections
-Education, certifications, featured, banner, profile photo, custom URL — only mention what needs fixing.`,
+Section rules:
+- headline: give 3 options, each under its own @@UPDATED marker, each ≤ 220 characters, built from target role + key skills + a hook.
+- about: one @@UPDATED with a full first-person About (150–250 words): opening line, what they do, 3–5 achievement bullets using only facts from the profile, a core skills line, and a closing call to action.
+- experience: put the role title, company and dates in the @@SECTION line, separated by " | ". One @@UPDATED holding a 1–2 sentence description, then "Achievements:" with bullets (action verb + what they did + result), then "Skills:" with 5 comma-separated skills. Keep EVERY number from the original bullets; mark missing ones as [add number].
+- skills: @@ORIGINAL is their current skills, comma-separated. One @@UPDATED with 15–30 comma-separated skills for the target role, most important first — only skills the profile shows evidence of, plus ones marked "(only if true)".${hasScreenshot ? "\n- photo and banner: judge them from the attached screenshot. @@ORIGINAL is a one-line description of what you see; @@UPDATED is a concrete description of what to change or use instead." : ""}
+- other: skip @@ORIGINAL, @@BEFORE and @@AFTER. One @@UPDATED with bullets covering only what needs fixing in education, certifications, featured, custom URL.`,
   };
 }
 
