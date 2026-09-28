@@ -34,8 +34,8 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 
 | Page | What you get |
 |---|---|
-| **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Marked as recommended; pasting text is the fallback for phones, where LinkedIn doesn't offer the PDF. Or skip and continue without a profile. |
-| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then the AI review: score out of 100, quick wins, 3 headline rewrites, a full About rewrite, bullet-by-bullet experience rewrites, skills to add. Accepts a screenshot for vision models. |
+| **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Marked as recommended; pasting text is the fallback for phones, where LinkedIn doesn't offer the PDF. Asks which role you're aiming for, so every rewrite is tailored to it. Or skip and continue without a profile. |
+| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then a section-by-section AI makeover for your target role: a score and quick wins, then one card each for headline (3 options), About, every experience role, and skills — showing your original, the rewrite with its own Copy button, why it's better (before / after), and next steps. Attach a screenshot and vision models add photo and banner feedback. |
 | **Message Writer** | Connection request, referral ask, alumni outreach, post-interview follow-up, thank-you, cold message to a recruiter. Three variants each (short / warm / direct) with a "when to send" tip. |
 | **Post Generator** | Live trending topics from Google Trends (India), Hacker News and Dev.to, plus evergreen student topics. Pick a topic, add your angle, choose a style → 3 hooks, a full post, hashtags, best time to post. |
 | **Resume ATS Check** | Instant rule-based score (13 checks, zero AI calls): contact info, standard headings, length, action verbs, metrics, clichés, table/column artefacts, and keyword match against a pasted job description. Then an AI review with keyword gaps and before/after bullet rewrites, or a full one-page rewrite. PDF, DOCX and TXT. |
@@ -154,6 +154,7 @@ npm run build      # production build
 │   │   ├── SetupBanner.tsx          "Add a free key" prompt when none is set
 │   │   ├── SetupSteps.tsx           Per-provider key instructions
 │   │   ├── ProfileGaps.tsx          "What's missing" panel
+│   │   ├── MakeoverReport.tsx       Section cards for the profile review
 │   │   ├── CopyButton.tsx
 │   │   └── ui.tsx                   Button, Card, Label, Badge, Spinner, PageHeader
 │   └── lib/
@@ -165,6 +166,7 @@ npm run build      # production build
 │       ├── useIsClient.ts           Hydration-safe "am I in the browser" hook
 │       ├── pdf.ts                   pdf.js + mammoth text extraction
 │       ├── profile-parser.ts        Heuristics for LinkedIn's PDF layout
+│       ├── makeover.ts              Parses the profile review's @@ markers into sections
 │       ├── ats.ts                   Rule-based ATS checks + JD keyword extraction
 │       ├── trending.ts              Google Trends / HN / Dev.to fetchers
 │       ├── ratelimit.ts             Upstash or in-memory daily counters

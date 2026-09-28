@@ -23,6 +23,7 @@ export default function OnboardingPage() {
   const [source, setSource] = useState<"pdf" | "text">("pdf");
   const [pasted, setPasted] = useState("");
   const [replacing, setReplacing] = useState(false);
+  const [targetRole, setTargetRole] = useState("");
 
   async function handleFile(file: File) {
     setError(null);
@@ -52,7 +53,7 @@ export default function OnboardingPage() {
 
   async function confirm() {
     if (!parsed) return;
-    await saveProfile({ ...parsed, source });
+    await saveProfile({ ...parsed, source, targetRole: targetRole.trim() || undefined });
     router.push("/profile");
   }
 
@@ -112,6 +113,19 @@ export default function OnboardingPage() {
             <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-accent-soft p-3 text-xs">{parsed.raw}</pre>
           </details>
           <p className="text-xs text-muted">The AI reads the full text above, so even if the name or headline was mis-detected, your suggestions will still be accurate.</p>
+          <div>
+            <label htmlFor="target-role" className="mb-1.5 block text-sm font-medium">
+              What role are you aiming for?
+            </label>
+            <input
+              id="target-role"
+              className="field"
+              placeholder="e.g. SDE intern, data analyst, product manager"
+              value={targetRole}
+              onChange={(e) => setTargetRole(e.target.value)}
+            />
+            <p className="mt-1 text-xs text-muted">Your headline, About, experience and skills rewrites are all tailored to this. You can change it later.</p>
+          </div>
           <div className="flex flex-wrap gap-2">
             <Button onClick={confirm}>Looks good — continue</Button>
             <Button variant="secondary" onClick={() => setParsed(null)}>
