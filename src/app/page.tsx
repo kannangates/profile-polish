@@ -140,14 +140,17 @@ export default function OnboardingPage() {
   return (
     <Shell>
       <Card className="space-y-5">
-        <div className="flex gap-2 text-sm">
-          <TabButton active={mode === "upload"} onClick={() => setMode("upload")}>
-            Upload LinkedIn PDF
-          </TabButton>
-          <TabButton active={mode === "paste"} onClick={() => setMode("paste")}>
-            Paste profile text
-          </TabButton>
-        </div>
+        <fieldset>
+          <legend className="mb-2 text-sm font-medium">How do you want to add your profile?</legend>
+          <div className="grid grid-cols-2 gap-2">
+            <ModeOption checked={mode === "upload"} onChange={() => setMode("upload")} title="Upload LinkedIn PDF" badge="Recommended">
+              Best results. Keeps every section and role in order.
+            </ModeOption>
+            <ModeOption checked={mode === "paste"} onChange={() => setMode("paste")} title="Paste profile text">
+              For when you can&apos;t get the PDF, like on a phone.
+            </ModeOption>
+          </div>
+        </fieldset>
 
         {mode === "upload" ? (
           <>
@@ -252,13 +255,44 @@ function Step({ n, children }: { n: number; children: React.ReactNode }) {
   );
 }
 
-function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function ModeOption({
+  checked,
+  onChange,
+  title,
+  badge,
+  children,
+}: {
+  checked: boolean;
+  onChange: () => void;
+  title: string;
+  badge?: string;
+  children: React.ReactNode;
+}) {
+  const [expanded, setExpanded] = useState(false);
   return (
-    <button
-      onClick={onClick}
-      className={`rounded-lg px-3 py-1.5 font-medium transition ${active ? "bg-accent text-white" : "border border-border text-muted hover:text-foreground"}`}
+    <label
+      className={`flex cursor-pointer gap-3 rounded-lg border p-3 text-sm transition ${checked ? "border-accent bg-accent-soft" : "border-border hover:border-accent/50"}`}
     >
-      {children}
-    </button>
+      <input type="radio" name="profile-source" className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]" checked={checked} onChange={onChange} />
+      <span>
+        <span className="flex flex-wrap items-center gap-2 font-medium">
+          {title}
+          {badge && <span className="rounded-full bg-accent px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-white">{badge}</span>}
+        </span>
+        <span className={`mt-0.5 text-xs text-muted ${expanded ? "block" : "line-clamp-1 sm:line-clamp-none"}`}>{children}</span>
+        <button
+          type="button"
+          className="mt-0.5 text-xs font-medium text-accent hover:underline sm:hidden"
+          aria-expanded={expanded}
+          onClick={(e) => {
+            // Inside a label, so stop the click also selecting this option.
+            e.preventDefault();
+            setExpanded((v) => !v);
+          }}
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      </span>
+    </label>
   );
 }
