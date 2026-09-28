@@ -254,6 +254,7 @@ function ModeOption({
   badge?: string;
   children: React.ReactNode;
 }) {
+  const [expanded, setExpanded] = useState(false);
   return (
     <label
       className={`flex cursor-pointer gap-3 rounded-lg border p-3 text-sm transition ${checked ? "border-accent bg-accent-soft" : "border-border hover:border-accent/50"}`}
@@ -264,7 +265,19 @@ function ModeOption({
           {title}
           {badge && <span className="rounded-full bg-accent px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-white">{badge}</span>}
         </span>
-        <span className="mt-0.5 block text-xs text-muted">{children}</span>
+        <span className={`mt-0.5 text-xs text-muted ${expanded ? "block" : "line-clamp-1 sm:line-clamp-none"}`}>{children}</span>
+        <button
+          type="button"
+          className="mt-0.5 text-xs font-medium text-accent hover:underline sm:hidden"
+          aria-expanded={expanded}
+          onClick={(e) => {
+            // Inside a label, so stop the click also selecting this option.
+            e.preventDefault();
+            setExpanded((v) => !v);
+          }}
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
       </span>
     </label>
   );
