@@ -123,8 +123,8 @@ export const SECTION_INFO: Record<SectionKind, { title: string; about: string }>
   about: { title: "About", about: "Your professional summary — what you do, what you've achieved and what you want next." },
   experience: { title: "Experience", about: "Each role, with what you did and what changed because of it." },
   skills: { title: "Skills", about: "The keywords recruiters filter on. Pin the three that matter most for your target role." },
-  photo: { title: "Profile photo", about: "The picture next to your name everywhere on LinkedIn." },
-  banner: { title: "Background banner", about: "The wide image behind your photo at the top of your profile." },
+  photo: { title: "Profile photo", about: "What to upload and why. We give advice only — we never generate or edit photos of you." },
+  banner: { title: "Background banner", about: "The wide image behind your photo. What it should show for your target role." },
   other: { title: "Everything else", about: "Education, certifications, featured and your custom URL." },
 };
 

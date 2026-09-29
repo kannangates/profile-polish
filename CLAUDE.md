@@ -70,7 +70,8 @@ Full tree is in the README. The short version:
 | Trending sources | `src/lib/trending.ts` |
 | LinkedIn PDF parsing | `src/lib/profile-parser.ts` |
 | Browser storage & TTL | `src/lib/db.ts`, `src/lib/keys.ts` |
-| Shared-key limits | `src/lib/ratelimit.ts` |
+| Shared-key and banner limits | `src/lib/ratelimit.ts` |
+| LinkedIn banner maker (the paid exception) | `src/app/api/banner/route.ts`, `src/lib/banner.ts`, `src/components/BannerGenerator.tsx` |
 | Shared UI primitives | `src/components/ui.tsx` |
 
 ## Commands

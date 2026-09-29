@@ -34,7 +34,7 @@ OUTPUT FORMAT — follow it exactly. Each marker sits alone at the start of its 
 @@QUICKWINS
 <3–5 bullets, highest impact first>
 
-Then one block per section, in this order: headline, about, one "experience" block per role (most recent first, at most 6 roles), skills${hasScreenshot ? ", photo, banner" : ""}, other.
+Then one block per section, in this order: headline, about, one "experience" block per role (most recent first, at most 6 roles), skills, photo, banner, other.
 
 @@SECTION <kind>[ | <role title> | <company> | <dates>]
 @@ORIGINAL
@@ -52,7 +52,9 @@ Section rules:
 - headline: exactly ONE "@@SECTION headline" block containing exactly THREE @@UPDATED markers — one per option. Each option ≤ 220 characters, built from target role + key skills + a hook.
 - about: one @@UPDATED with a full first-person About (150–250 words): opening line, what they do, 3–5 achievement bullets using only facts from the profile, a core skills line, and a closing call to action.
 - experience: put the role title, company and dates in the @@SECTION line, separated by " | ". One @@UPDATED holding a 1–2 sentence description, then "Achievements:" with bullets (action verb + what they did + result), then "Skills:" with 5 comma-separated skills. Keep EVERY number from the original bullets; mark missing ones as [add number].
-- skills: @@ORIGINAL is their current skills, comma-separated. One @@UPDATED with 15–30 comma-separated skills for the target role, most important first — only skills the profile shows evidence of, plus ones marked "(only if true)".${hasScreenshot ? "\n- photo and banner: judge them from the attached screenshot. @@ORIGINAL is a one-line description of what you see; @@UPDATED is a concrete description of what to change or use instead." : ""}
+- skills: @@ORIGINAL is their current skills, comma-separated. One @@UPDATED with 15–30 comma-separated skills for the target role, most important first — only skills the profile shows evidence of, plus ones marked "(only if true)".
+- photo: advice only — never describe generating or editing a photo. ${hasScreenshot ? "@@ORIGINAL is a one-line description of the photo in the screenshot; @@BEFORE and @@AFTER compare it with what you recommend." : "The PDF has no images: skip @@ORIGINAL, @@BEFORE and @@AFTER."} One @@UPDATED with 4–6 bullets on what photo to upload for the target role: framing (head and shoulders, face about 60% of the frame), attire for that field, background, lighting, expression, and why each matters to a recruiter in that field.
+- banner: ${hasScreenshot ? "@@ORIGINAL is a one-line description of the banner in the screenshot." : "skip @@ORIGINAL, @@BEFORE and @@AFTER."} One @@UPDATED with 3–5 bullets on what the banner should show for the target role (theme, colours, optional short text line) and why. Keep it concrete enough to brief a designer or an image tool. Its size is 1584 × 396 and the profile photo covers the lower left.
 - other: skip @@ORIGINAL, @@BEFORE and @@AFTER. One @@UPDATED with bullets covering only what needs fixing in education, certifications, featured, custom URL.`,
   };
 }
