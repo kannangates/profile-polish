@@ -66,8 +66,11 @@ terms — a change that loosens any of them is a new decision, not a tweak:
   (`BANNER_DAILY_LIMIT_GLOBAL`) that bounds the host's worst-case bill.
 - **Cheapest adequate model.** `BANNER_MODEL` defaults to the lowest-cost
   Gemini image model; check the provider's price page before changing it.
-- **Off without billing.** With a free-tier key the endpoint fails cleanly and
-  the UI says banners aren't available here. Everything else still costs ₹0.
+- **Opt-in, and off without billing.** Nothing is generated unless the host
+  sets `BANNER_ENABLED=true`, so adding a billed key for text never starts
+  image spending by accident. With a free-tier key the endpoint fails
+  cleanly and the UI says banners aren't available here. Everything else
+  still costs ₹0.
 - **Minimal data.** It receives the target role and an optional tagline, and
   stores neither (invariant 2).
 
