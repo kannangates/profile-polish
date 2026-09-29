@@ -10,6 +10,8 @@ export interface Profile {
   certifications: string[];
   /** The role the student is aiming for; every rewrite is tailored to it. */
   targetRole?: string;
+  /** Ticked when they sell freelance or consulting work; adds the Services page card. */
+  offersServices?: boolean;
   /** Full extracted text — this is what the AI actually reads. */
   raw: string;
   source: "pdf" | "text" | "image";

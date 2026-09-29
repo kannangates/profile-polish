@@ -10,7 +10,7 @@ import { OutputPanel } from "@/components/OutputPanel";
 import { Button, Card, Label, LinkButton, PageHeader } from "@/components/ui";
 import { useGenerate } from "@/components/useGenerate";
 import { profileOptimizePrompt } from "@/lib/ai/prompts";
-import { saveTargetRole } from "@/lib/db";
+import { saveOffersServices, saveTargetRole } from "@/lib/db";
 import { useProfile } from "@/lib/hooks";
 import { isMakeover, makeoverToMarkdown, parseMakeover } from "@/lib/makeover";
 import { fileToBase64 } from "@/lib/pdf";
@@ -21,12 +21,14 @@ export default function ProfilePage() {
   const profile = useProfile();
   // null = not edited yet, so the field shows the role saved at upload.
   const [draftRole, setDraftRole] = useState<string | null>(null);
+  const [draftServices, setDraftServices] = useState<boolean | null>(null);
   const [roleError, setRoleError] = useState<string | null>(null);
   const [screenshot, setScreenshot] = useState<{ img: ImageInput; name: string } | null>(null);
   const gen = useGenerate();
 
   if (profile === undefined) return null;
   const focus = draftRole ?? profile?.targetRole ?? "";
+  const offersServices = draftServices ?? profile?.offersServices ?? false;
 
   if (!profile && !screenshot) {
     return (
@@ -50,6 +52,10 @@ export default function ProfilePage() {
       const ok = await saveTargetRole(role).catch(() => false);
       setRoleError(ok ? null : "Couldn't save your target role in this browser. This review still uses it.");
     }
+    if (profile && offersServices !== (profile.offersServices ?? false)) {
+      const ok = await saveOffersServices(offersServices).catch(() => false);
+      if (!ok) setRoleError("Couldn't save your services choice in this browser. This review still uses it.");
+    }
     const p: Profile =
       profile ??
       ({
@@ -67,7 +73,7 @@ export default function ProfilePage() {
         createdAt: 0,
         expiresAt: 0,
       } satisfies Profile);
-    const { system, prompt } = profileOptimizePrompt(p, role, profile ? gapsToText(analyseProfile(profile)) : undefined, Boolean(screenshot));
+    const { system, prompt } = profileOptimizePrompt(p, role, profile ? gapsToText(analyseProfile(profile)) : undefined, Boolean(screenshot), offersServices);
     gen.run({ system, prompt, images: screenshot ? [screenshot.img] : undefined });
   };
 
@@ -102,6 +108,13 @@ export default function ProfilePage() {
             />
             <p className="mt-1 text-xs text-muted">Every rewrite is tailored to this role. Leave blank and we&apos;ll guess from your profile.</p>
             {roleError && <p className="mt-1 text-xs text-danger">{roleError}</p>}
+            <label className="mt-3 flex cursor-pointer items-start gap-2 text-sm">
+              <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[var(--accent)]" checked={offersServices} onChange={(e) => setDraftServices(e.target.checked)} />
+              <span>
+                I offer freelance or consulting services
+                <span className="block text-xs text-muted">Adds a card for LinkedIn&apos;s Services page: what to put in each field.</span>
+              </span>
+            </label>
           </div>
 
           <Button onClick={run} disabled={gen.loading} className="w-full">
