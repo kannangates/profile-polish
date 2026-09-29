@@ -71,13 +71,18 @@ function SettingsForm() {
   const [rows, setRows] = useState<Record<ProviderId, Row>>(loadRows);
   const [cleared, setCleared] = useState(false);
   const [sharedKey, setSharedKey] = useState<boolean | null>(null);
+  const [demoEnded, setDemoEnded] = useState(false);
   const anyKey = PROVIDERS.some((p) => !!rows[p.id].savedKey);
 
   useEffect(() => {
     let cancelled = false;
     fetch("/api/status")
       .then((r) => r.json())
-      .then((d: { sharedKey: boolean }) => !cancelled && setSharedKey(d.sharedKey))
+      .then((d: { sharedKey: boolean; demoEnded?: boolean }) => {
+        if (cancelled) return;
+        setSharedKey(d.sharedKey);
+        setDemoEnded(Boolean(d.demoEnded));
+      })
       .catch(() => !cancelled && setSharedKey(false));
     return () => {
       cancelled = true;
@@ -123,7 +128,8 @@ function SettingsForm() {
             <p className="text-sm">
               ProfilePolish uses an AI provider to write your drafts. You bring your own key so the app stays free and your text never
               passes through our server.
-              {sharedKey === false && " This deployment has no shared key, so a key of your own is required."}
+              {sharedKey === false &&
+                (demoEnded ? " The free demo has ended, so a key of your own is required now." : " This deployment has no shared key, so a key of your own is required.")}
               {sharedKey === true && " You can also try a few requests a day on the shared key without any setup."}
             </p>
             <ol className="ml-5 list-decimal space-y-1 text-sm">
@@ -146,7 +152,9 @@ function SettingsForm() {
             <div className="font-medium">Which AI to use</div>
             <p className="text-sm text-muted">
               {sharedKey === false
-                ? "This deployment doesn't have a shared key, so you'll need your own. It's free and takes a minute — steps are below."
+                ? demoEnded
+                  ? "The free demo has ended, so you'll need your own key. It's free and takes a minute — steps are below."
+                  : "This deployment doesn't have a shared key, so you'll need your own. It's free and takes a minute — steps are below."
                 : "With no key of your own, requests use the app's shared free key — limited to a few per day per person so everyone gets a turn."}
             </p>
           </div>
@@ -156,7 +164,7 @@ function SettingsForm() {
               disabled={sharedKey === false}
               onClick={() => { setActiveProvider("shared"); setActive("shared"); }}
             >
-              Shared free key{sharedKey === false ? " (not available)" : ""}
+              Shared free key{sharedKey === false ? (demoEnded ? " (demo ended)" : " (not available)") : ""}
             </ProviderPill>
             {PROVIDERS.map((p) => (
               <ProviderPill key={p.id} selected={active === p.id} disabled={!rows[p.id].savedKey} onClick={() => { setActiveProvider(p.id); setActive(p.id); }}>

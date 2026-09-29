@@ -65,6 +65,7 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | Variable | What it is |
    |---|---|
    | `GEMINI_API_KEY` | A free key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Only used server-side, only for students who haven't added their own key. |
+   | `SHARED_KEY_ENABLED` | Default on. Your key acts as a free demo for students without their own key. Set it to `false` to end the demo: students then get "The free demo has ended" and a link to add their own free key. Anyone who already added a key notices nothing. The banner maker keeps working, because it has its own switch. |
    | `SHARED_MODEL` | Default `gemini-3.8-flash` (best quality on the free tier). Switch to `gemini-3.5-flash-lite` if the shared key keeps hitting its free quota. |
    | `SHARED_DAILY_LIMIT_PER_DEVICE` | Default `10`. Requests per student per day on the shared key. |
    | `SHARED_DAILY_LIMIT_GLOBAL` | Default `200`. Keep this under your Gemini free-tier daily quota. |
@@ -75,6 +76,8 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional. A free [Upstash](https://upstash.com) Redis makes the limits reliable across serverless instances. Without it, limits are in-memory per instance (fine for a small pilot). |
 
 4. Click **Deploy**. You get a `https://<name>.vercel.app` URL to share. Every merge to `main` redeploys automatically.
+
+> **Running a workshop demo?** Leave `SHARED_KEY_ENABLED` unset so students can try it without a key. For a large session, raise `SHARED_DAILY_LIMIT_GLOBAL` for the day: 60 students × 3 reviews is already 180 of the default 200. Afterwards, set `SHARED_KEY_ENABLED=false`. **Changing any environment variable in Vercel only takes effect after a redeploy** (Deployments → ⋯ → Redeploy), and students' browsers pick up the change within about a minute of it.
 
 > The official instance runs at [theprofilepolish.vercel.app](https://theprofilepolish.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons. Everything is free to host except the optional banner maker, which is off unless you set `BANNER_ENABLED=true` (see CLAUDE.md → *The paid exception*).
 > Two aliases point at the same deployment, so older links keep working: [polishprofile.vercel.app](https://polishprofile.vercel.app) and [profilepolish-app.vercel.app](https://profilepolish-app.vercel.app). `profilepolish.vercel.app` itself belongs to an unrelated Vercel account.
@@ -179,6 +182,7 @@ npm run build      # production build
 │       ├── ats.ts                   Rule-based ATS checks + JD keyword extraction
 │       ├── trending.ts              Google Trends / HN / Dev.to fetchers
 │       ├── ratelimit.ts             Upstash or in-memory daily counters
+│       ├── shared-key.ts            SHARED_KEY_ENABLED demo switch: on / off / missing
 │       └── ai/
 │           ├── prompts.ts           One prompt builder per feature
 │           ├── client.ts            generate() + listModels(): BYOK direct or shared proxy
@@ -187,7 +191,7 @@ npm run build      # production build
 ├── scripts/copy-pdf-worker.mjs      postinstall: copies pdf.worker.min.mjs into public/
 ├── tests/                           node:test suites for the answer parsers, plain-text copy and prompt rules
 ├── docs/                            Extra documentation
-├── .github/                         CI (typecheck + lint + build), optional Claude PR review, issue & PR templates
+├── .github/                         CI (typecheck + lint + tests + build), optional Claude PR review, issue & PR templates
 ├── CLAUDE.md                        Invariants + pre-merge checklist for AI/human reviewers
 ├── .env.example                     All server env vars, documented
 └── .nvmrc                           Node 22

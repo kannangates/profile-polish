@@ -1,6 +1,7 @@
 import { GoogleGenAI, type Part } from "@google/genai";
 import { NextRequest } from "next/server";
 import { checkSharedLimit } from "@/lib/ratelimit";
+import { SHARED_KEY_MESSAGES, sharedKeyState } from "@/lib/shared-key";
 import type { GenerateRequest } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -15,10 +16,9 @@ const NO_STORE = { "cache-control": "no-store" };
  * Nothing about the request is logged or stored.
  */
 export async function POST(req: NextRequest) {
+  const state = sharedKeyState();
+  if (state !== "on") return new Response(SHARED_KEY_MESSAGES[state], { status: 503, headers: NO_STORE });
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return new Response("The shared free key isn't set up on this deployment. Add your own free API key in Settings.", { status: 503, headers: NO_STORE });
-  }
 
   const deviceId = req.headers.get("x-device-id")?.slice(0, 64) || "anon";
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
