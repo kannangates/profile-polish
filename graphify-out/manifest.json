@@ -275,9 +275,9 @@
     "semantic_hash": "91bbac8bed8fac96862e9df2d073b5d9"
   },
   "README.md": {
-    "mtime": 1790692758.2299538,
-    "ast_hash": "042fabc1372b766c79696cf1843a2a79",
-    "semantic_hash": "042fabc1372b766c79696cf1843a2a79"
+    "mtime": 1790694182.763659,
+    "ast_hash": "0e2276e6dc28b18a1a5924509ecb4c80",
+    "semantic_hash": "0e2276e6dc28b18a1a5924509ecb4c80"
   },
   "docs/PRIVACY.md": {
     "mtime": 1790685252.1551511,
@@ -305,9 +305,9 @@
     "semantic_hash": "8419ce13f6300977dd3f22e1ee60d367"
   },
   "src/lib/banner.ts": {
-    "mtime": 1790685252.1598709,
-    "ast_hash": "5ffaef170ecf4d4d644dca05811f504d",
-    "semantic_hash": "5ffaef170ecf4d4d644dca05811f504d"
+    "mtime": 1790694182.7643614,
+    "ast_hash": "9f431a88af9c2c999eb46f4b51838769",
+    "semantic_hash": "9f431a88af9c2c999eb46f4b51838769"
   },
   "src/lib/linkedin-text.ts": {
     "mtime": 1790690827.0647025,
@@ -338,5 +338,10 @@
     "mtime": 1790692249.5176864,
     "ast_hash": "f4c5677574ea463ddfe36e6637b733ae",
     "semantic_hash": "f4c5677574ea463ddfe36e6637b733ae"
+  },
+  "tests/banner.test.ts": {
+    "mtime": 1790694182.7647614,
+    "ast_hash": "79053080f40005a2e0f51c53d41f14c4",
+    "semantic_hash": "79053080f40005a2e0f51c53d41f14c4"
   }
 }
