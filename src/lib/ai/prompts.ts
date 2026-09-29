@@ -25,7 +25,7 @@ export function profileOptimizePrompt(profile: Profile, targetRole: string, gapF
     system: SYSTEM_BASE,
     prompt: `${profileBlock(profile)}
 
-Review this LinkedIn profile section by section. Match the seniority you see in the profile — a student and a manager with ten years' experience need different advice.
+Review this LinkedIn profile section by section. Match the seniority you see in the profile — a student and a manager with ten years' experience need different advice. Never raise their title or seniority: no "Senior", "Lead" or "Head of" unless the profile already uses it.
 ${target}
 ${gapFindings ? `\nAUTOMATED COMPLETENESS CHECKS ALREADY SHOWN TO THEM (do not just repeat these — write the actual content that fills each gap):\n${gapFindings}\n` : ""}
 OUTPUT FORMAT — follow it exactly. Each marker sits alone at the start of its own line. Write no text before the first marker, and no code fences.
@@ -49,7 +49,7 @@ Then one block per section, in this order: headline, about, one "experience" blo
 <2–3 bullets the candidate should do next>
 
 Section rules:
-- headline: give 3 options, each under its own @@UPDATED marker, each ≤ 220 characters, built from target role + key skills + a hook.
+- headline: exactly ONE "@@SECTION headline" block containing exactly THREE @@UPDATED markers — one per option. Each option ≤ 220 characters, built from target role + key skills + a hook.
 - about: one @@UPDATED with a full first-person About (150–250 words): opening line, what they do, 3–5 achievement bullets using only facts from the profile, a core skills line, and a closing call to action.
 - experience: put the role title, company and dates in the @@SECTION line, separated by " | ". One @@UPDATED holding a 1–2 sentence description, then "Achievements:" with bullets (action verb + what they did + result), then "Skills:" with 5 comma-separated skills. Keep EVERY number from the original bullets; mark missing ones as [add number].
 - skills: @@ORIGINAL is their current skills, comma-separated. One @@UPDATED with 15–30 comma-separated skills for the target role, most important first — only skills the profile shows evidence of, plus ones marked "(only if true)".${hasScreenshot ? "\n- photo and banner: judge them from the attached screenshot. @@ORIGINAL is a one-line description of what you see; @@UPDATED is a concrete description of what to change or use instead." : ""}
