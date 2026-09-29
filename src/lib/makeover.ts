@@ -51,7 +51,7 @@ export function parseMakeover(text: string): Makeover {
     else if (section) {
       if (field === "updated") {
         if (value) section.updated.push(value);
-      } else section[field] = value;
+      } else if (!section[field]) section[field] = value;
     }
   };
 
@@ -83,9 +83,16 @@ export function parseMakeover(text: string): Makeover {
         break;
       case "SECTION": {
         const [kind, title = "", company = "", dates = ""] = rest.split("|").map((s) => s.trim());
-        section = { kind: toKind(kind), original: "", updated: [], before: "", after: "", next: "" };
-        if (section.kind === "experience") section.role = { title, company, dates };
-        out.sections.push(section);
+        const k = toKind(kind);
+        // Models often send each headline option as its own block. Every kind
+        // except experience appears once, so fold repeats into the first card.
+        const existing = k === "experience" ? undefined : out.sections.find((s) => s.kind === k);
+        if (existing) section = existing;
+        else {
+          section = { kind: k, original: "", updated: [], before: "", after: "", next: "" };
+          if (k === "experience") section.role = { title, company, dates };
+          out.sections.push(section);
+        }
         field = null;
         break;
       }
