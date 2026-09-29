@@ -17,7 +17,7 @@ function profileBlock(profile?: Profile | null) {
  * follow it, it parses while it streams, and a half-finished answer still
  * renders. `src/lib/makeover.ts` owns the parser — change both together.
  */
-export function profileOptimizePrompt(profile: Profile, targetRole: string, gapFindings?: string, hasScreenshot = false) {
+export function profileOptimizePrompt(profile: Profile, targetRole: string, gapFindings?: string, hasScreenshot = false, offersServices = false) {
   const target = targetRole
     ? `The candidate is targeting: ${targetRole}. Tailor every rewrite, keyword and skill to this role.`
     : "The candidate did not name a target role. Infer the most likely one from the profile, and say which role you assumed in the score line.";
@@ -34,7 +34,7 @@ OUTPUT FORMAT — follow it exactly. Each marker sits alone at the start of its 
 @@QUICKWINS
 <3–5 bullets, highest impact first>
 
-Then one block per section, in this order: headline, about, one "experience" block per role (most recent first, at most 6 roles), skills, photo, banner, other.
+Then one block per section, in this order: headline, about, one "experience" block per role (most recent first, at most 6 roles), skills, photo, banner, ${offersServices ? "services, " : ""}other.
 
 @@SECTION <kind>[ | <role title> | <company> | <dates>]
 @@ORIGINAL
@@ -55,7 +55,26 @@ Section rules:
 - skills: @@ORIGINAL is their current skills, comma-separated. One @@UPDATED listing 15–30 skills for the target role, ONE SKILL PER LINE, most important first — no commas, bullets or numbering. LinkedIn only counts a skill in recruiter keyword search when it matches an entry in LinkedIn's own skills list; anything else is saved as an unrecognised custom skill. So every line must be a standard skill name exactly as LinkedIn and job postings write it — for example "Product Management", "Project Management", "Data Analysis", "Process Improvement", "Stakeholder Management", "Cross-functional Team Leadership", "Agile Methodologies", "Change Management", "Root Cause Analysis", "Supply Chain Management", "Inventory Management", "Business Process Improvement", "Microsoft Excel", "SQL", "Tableau". Never coin a phrase or bolt on words like "Solutions", "Strategies", "Workflows", "Optimization", "Excellence" or "Expert" to make a new one; if the idea has no standard name, use the closest standard skill instead. The examples only show the naming style — include one only if the profile supports it. Skills already listed on the profile are already in LinkedIn's list, so keep every one that fits the target role, spelled exactly as it is now. Only skills the profile shows evidence of; end a line with " (only if true)" for ones it doesn't.
 - photo: advice only — never describe generating or editing a photo. ${hasScreenshot ? "@@ORIGINAL is a one-line description of the photo in the screenshot; @@BEFORE and @@AFTER compare it with what you recommend." : "The PDF has no images: skip @@ORIGINAL, @@BEFORE and @@AFTER."} One @@UPDATED with 4–6 bullets on what photo to upload for the target role: framing (head and shoulders, face about 60% of the frame), attire for that field, background, lighting, expression, and why each matters to a recruiter in that field.
 - banner: ${hasScreenshot ? "@@ORIGINAL is a one-line description of the banner in the screenshot." : "skip @@ORIGINAL, @@BEFORE and @@AFTER."} One @@UPDATED with 3–5 bullets on what the banner should show for the target role (theme, colours, optional short text line) and why. Keep it concrete enough to brief a designer or an image tool. Its size is 1584 × 396 and the profile photo covers the lower left.
-- other: skip @@ORIGINAL, @@BEFORE and @@AFTER. One @@UPDATED covering only what needs fixing in contact info, custom URL, education, certifications, featured and projects. For each fix write one line saying what to change and why, then numbered steps to do it on LinkedIn (desktop web), then a blank line. Use these real paths and don't invent other menus (tell them names can shift slightly):
+${offersServices ? `- services: the candidate offers freelance or consulting work and wants to fill in LinkedIn's Services page. Skip @@ORIGINAL, @@BEFORE and @@AFTER. One @@UPDATED using exactly these labels, each alone on its line, in this order:
+Services:
+(up to 10 lines, one service each. LinkedIn's "Add services" box only accepts entries from its own fixed list of service categories, so write standard category names — for example "Management Consulting" or "Business Consulting" — never a coined phrase. Only services the profile shows they can deliver.)
+About:
+(one first-person paragraph, at most 500 characters including spaces, plain text, only facts from the profile: what they help with, for whom, and their strongest proof point.)
+Work location:
+(one line: whether to also tick "I am available to work remotely", and why.)
+Pricing:
+(one line: recommend "Contact for pricing" or "Starting hourly rate", and why. Never suggest an amount — the profile gives no basis for one.)
+Messages:
+(one line: whether to allow free messages through Open Profile, and why.)
+Steps:
+1. Go to your profile and click "Open to" under your name, then "Providing services".
+(continue the numbered steps through the form's fields to Publish.)
+` : ""}- other: skip @@ORIGINAL, @@BEFORE and @@AFTER. One @@UPDATED listing at most 5 fixes, most important first, covering only what needs fixing in contact info, custom URL, education, certifications, featured, projects and pinned skills. Write each fix in exactly this shape, with a blank line between fixes and nothing else before, between or after them:
+Fix: <what to change, in under 12 words>
+Why: <one short sentence>
+1. <first step>
+2. <next step>
+Steps are for LinkedIn on desktop. Use only these real paths — never invent other menus:
   - Contact info: your profile → "Contact info" under your name → pencil icon.
   - Custom URL: your profile → "Edit public profile & URL" (top right) → pencil next to your URL.
   - Education, certifications, projects, featured: your profile → "Add profile section" → pick the section (Education is under Core; Licenses & certifications, Projects and Featured are under Recommended). To change an existing entry, click the pencil on that section.

@@ -5,7 +5,7 @@
  * a stray code fence, "## @@SECTION".
  */
 
-export type SectionKind = "headline" | "about" | "experience" | "skills" | "photo" | "banner" | "other";
+export type SectionKind = "headline" | "about" | "experience" | "skills" | "photo" | "banner" | "services" | "other";
 
 export interface MakeoverSection {
   kind: SectionKind;
@@ -26,7 +26,7 @@ export interface Makeover {
   sections: MakeoverSection[];
 }
 
-const KINDS: SectionKind[] = ["headline", "about", "experience", "skills", "photo", "banner", "other"];
+const KINDS: SectionKind[] = ["headline", "about", "experience", "skills", "photo", "banner", "services", "other"];
 
 type Field = "quickWins" | "original" | "updated" | "before" | "after" | "next" | null;
 
@@ -125,12 +125,91 @@ export const SECTION_INFO: Record<SectionKind, { title: string; about: string }>
   skills: { title: "Skills", about: "The keywords recruiters filter on. Pin the three that matter most for your target role." },
   photo: { title: "Profile photo", about: "What to upload and why. We give advice only — we never generate or edit photos of you." },
   banner: { title: "Background banner", about: "The wide image behind your photo. What it should show for your target role." },
+  services: { title: "Services page", about: "What to put in each field of LinkedIn's Services form, in order." },
   other: { title: "Everything else", about: "Contact info, custom URL, education, certifications and featured — what to fix, and where to click." },
 };
 
 export function sectionHeading(s: MakeoverSection) {
   if (s.kind === "experience" && s.role?.title) return [s.role.title, s.role.company].filter(Boolean).join(" · ");
   return SECTION_INFO[s.kind].title;
+}
+
+const STEP = /^\s*\d+[.)]\s+(.*)$/;
+
+export interface Fix {
+  title: string;
+  why: string;
+  steps: string[];
+}
+
+/**
+ * "Everything else" comes back as blocks of Fix: / Why: / 1. 2. 3. separated
+ * by blank lines. Anything that isn't part of a fix is kept as a loose note
+ * so nothing the model wrote disappears.
+ */
+export function parseFixes(text: string): { fixes: Fix[]; notes: string[] } {
+  const fixes: Fix[] = [];
+  const notes: string[] = [];
+  let cur: Fix | null = null;
+  for (const raw of text.split("\n")) {
+    const line = raw.replace(/\*\*/g, "").trim();
+    if (!line) continue;
+    const fix = line.match(/^(?:[-*]\s*)?fix:\s*(.*)$/i);
+    const why = line.match(/^(?:[-*]\s*)?why:\s*(.*)$/i);
+    const step = line.match(STEP);
+    if (fix) fixes.push((cur = { title: fix[1].replace(/:$/, ""), why: "", steps: [] }));
+    else if (why && cur) cur.why = why[1];
+    else if (step && cur) cur.steps.push(step[1]);
+    else if (cur && !cur.steps.length && !cur.why) cur.why = line;
+    else notes.push(line);
+  }
+  return { fixes, notes };
+}
+
+export interface ServicesPlan {
+  services: Skill[];
+  about: string;
+  location: string;
+  pricing: string;
+  messages: string;
+  steps: string[];
+}
+
+/** LinkedIn's Services "About" box stops at this many characters. */
+export const SERVICES_ABOUT_MAX = 500;
+export const SERVICES_MAX = 10;
+
+const SERVICE_LABELS: Record<string, string> = {
+  services: "services",
+  about: "about",
+  "work location": "location",
+  pricing: "pricing",
+  messages: "messages",
+  steps: "steps",
+};
+
+/** Splits the labelled services answer into the fields of LinkedIn's form. */
+export function parseServices(text: string): ServicesPlan | null {
+  const buckets: Record<string, string[]> = {};
+  let key: string | null = null;
+  for (const raw of text.split("\n")) {
+    const line = raw.replace(/\*\*/g, "").trim();
+    const label = line.match(/^(services|about|work location|pricing|messages|steps):\s*(.*)$/i);
+    if (label) {
+      key = SERVICE_LABELS[label[1].toLowerCase()];
+      buckets[key] ??= [];
+      if (label[2]) buckets[key].push(label[2]);
+    } else if (key && line) buckets[key].push(line);
+  }
+  if (!buckets.services && !buckets.about) return null;
+  return {
+    services: splitSkills((buckets.services ?? []).join("\n")).slice(0, SERVICES_MAX),
+    about: (buckets.about ?? []).join(" "),
+    location: (buckets.location ?? []).join(" "),
+    pricing: (buckets.pricing ?? []).join(" "),
+    messages: (buckets.messages ?? []).join(" "),
+    steps: (buckets.steps ?? []).map((l) => l.match(STEP)?.[1] ?? l),
+  };
 }
 
 /** LinkedIn rejects a skill longer than this. */

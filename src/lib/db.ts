@@ -37,6 +37,10 @@ export async function saveTargetRole(targetRole: string) {
   return (await db.profiles.update("current", { targetRole })) === 1;
 }
 
+export async function saveOffersServices(offersServices: boolean) {
+  return (await db.profiles.update("current", { offersServices })) === 1;
+}
+
 export async function clearProfile() {
   await db.profiles.delete("current");
 }
