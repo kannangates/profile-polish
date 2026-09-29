@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   let upstream: AsyncGenerator<{ text?: string }>;
   try {
     upstream = await ai.models.generateContentStream({
-      model: process.env.SHARED_MODEL ?? "gemini-3.5-flash-lite",
+      model: process.env.SHARED_MODEL ?? "gemini-3.8-flash",
       contents: [{ role: "user", parts }],
       config: { systemInstruction: body.system, abortSignal: req.signal },
     });

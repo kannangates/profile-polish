@@ -65,7 +65,7 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | Variable | What it is |
    |---|---|
    | `GEMINI_API_KEY` | A free key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Only used server-side, only for students who haven't added their own key. |
-   | `SHARED_MODEL` | Default `gemini-3.5-flash-lite` (most generous free quota). |
+   | `SHARED_MODEL` | Default `gemini-3.8-flash` (best quality on the free tier). Switch to `gemini-3.5-flash-lite` if the shared key keeps hitting its free quota. |
    | `SHARED_DAILY_LIMIT_PER_DEVICE` | Default `10`. Requests per student per day on the shared key. |
    | `SHARED_DAILY_LIMIT_GLOBAL` | Default `200`. Keep this under your Gemini free-tier daily quota. |
    | `BANNER_ENABLED` | Default off. Set to `true` to turn on the LinkedIn banner maker. **This one costs money:** Gemini has no free tier for images, so it needs billing on `GEMINI_API_KEY`. That's about $0.034 (≈ ₹3) per banner on the default model. |

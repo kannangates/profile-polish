@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SECTION_INFO, sectionHeading, type Makeover, type MakeoverSection } from "@/lib/makeover";
+import { SECTION_INFO, SKILL_MAX, sectionHeading, splitSkills, type Makeover, type MakeoverSection } from "@/lib/makeover";
 import type { Profile } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { Markdown } from "./Markdown";
@@ -101,9 +101,9 @@ function SectionCard({ section: s, original, writing }: { section: MakeoverSecti
             <div key={i} className="rounded-lg bg-accent-soft/60 p-3">
               <div className="mb-1 flex items-center justify-between gap-2">
                 <span className="text-xs font-medium uppercase tracking-wide text-accent">{multi ? `Option ${i + 1}` : "Updated"}</span>
-                <CopyButton text={u} />
+                <CopyButton text={s.kind === "skills" ? splitSkills(u).map((k) => k.name).join("\n") : u} />
               </div>
-              <Markdown>{u}</Markdown>
+              {s.kind === "skills" ? <SkillChips text={u} /> : <Markdown>{u}</Markdown>}
             </div>
           ))
         )}
@@ -140,5 +140,42 @@ function SectionCard({ section: s, original, writing }: { section: MakeoverSecti
         )}
       </div>
     </section>
+  );
+}
+
+function SkillChips({ text }: { text: string }) {
+  const [copied, setCopied] = useState<number | null>(null);
+  const skills = splitSkills(text);
+  return (
+    <div className="space-y-2">
+      <p className="text-xs text-muted">LinkedIn adds skills one at a time. Tap a skill to copy it, then paste it into Add skill.</p>
+      <ul className="flex flex-wrap gap-2">
+        {skills.map((k, i) => {
+          const tooLong = k.name.length > SKILL_MAX;
+          return (
+            <li key={i}>
+              <button
+                type="button"
+                aria-label={`Copy skill: ${k.name}`}
+                title={tooLong ? `Over LinkedIn's ${SKILL_MAX}-character limit — shorten it before adding` : "Tap to copy"}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(k.name);
+                    setCopied(i);
+                    setTimeout(() => setCopied((c) => (c === i ? null : c)), 1500);
+                  } catch {
+                    /* clipboard blocked — the text is still visible to copy by hand */
+                  }
+                }}
+                className={`rounded-full border px-3 py-1 text-sm transition ${tooLong ? "border-danger/40 text-danger" : "border-border bg-surface hover:border-accent"}`}
+              >
+                {copied === i ? "Copied ✓" : k.name}
+                {k.onlyIfTrue && copied !== i && <span className="ml-1 text-xs text-muted">· only if true</span>}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
