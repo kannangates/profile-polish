@@ -105,7 +105,7 @@ npm install        # postinstall copies the pdf.js worker into public/
 npm run dev        # http://localhost:3000
 npx tsc --noEmit   # types
 npm run lint       # eslint
-npm test           # parser + prompt tests (node:test, no extra packages)
+npm test           # parser, prompt and demo-switch tests (node:test, no extra packages)
 npm run build      # production build — must pass before merge
 ```
 
@@ -165,7 +165,7 @@ git diff origin/main | grep -nE "AIza|gsk_|sk-ant-|sk-[A-Za-z0-9]{20}"   # must 
 
 **4b. Test on real data, not only on a fixture you wrote.** The synthetic profile in this repo's history was clean, comma-separated and short. A real LinkedIn export broke the location regex, truncated multi-line headlines, reported 24 roles for six, and used `✔️` as a bullet glyph. Fixtures confirm what you expected; real files find what you did not.
 
-**5. The no-key path still behaves.** With no API key saved and no shared key configured, the app must say so up front (`SetupBanner`) rather than failing at the moment of generation.
+**5. The no-key path still behaves.** With no API key saved and no shared key configured, the app must say so up front (`SetupBanner`) rather than failing at the moment of generation. The same goes for the demo-ended state — a shared key that is set but switched off with `SHARED_KEY_ENABLED=false` — where the banner, Settings and any generate call must say "The free demo has ended".
 
 **6. Privacy claims still true.** If the change adds a network call, confirm the README's privacy table and `docs/PRIVACY.md` are still accurate. Update them in the same PR if not.
 
@@ -184,7 +184,7 @@ Be direct about real problems and quiet about style preferences. Priority order:
 5. Is the copy honest and student-readable? → suggest wording.
 6. Everything else is a suggestion, not a blocker.
 
-Do not merge a PR you have not verified. Do not approve on the basis that CI is green — CI only checks types, lint, the parser and prompt tests, and the build — not what a student sees.
+Do not merge a PR you have not verified. Do not approve on the basis that CI is green — CI only checks types, lint, the automated tests in `tests/`, and the build — not what a student sees.
 
 ## Enabling automated Claude review (optional)
 

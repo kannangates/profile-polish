@@ -85,7 +85,7 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
 <details>
 <summary>Other hosts</summary>
 
-The app needs two small server routes (`/api/generate` for the shared key and `/api/trending` for the cached feed), so it can't be a purely static site. Netlify and Cloudflare Pages (via the OpenNext adapter) both work on their free tiers. If you don't want a shared key at all, you can delete `src/app/api/generate` and the app becomes BYOK-only.
+The app needs four small server routes, so it can't be a purely static site: `/api/generate` (the shared key), `/api/status` (tells the browser whether the demo is on), `/api/banner` (the optional banner maker) and `/api/trending` (the cached feed). Netlify and Cloudflare Pages (via the OpenNext adapter) both work on their free tiers. If you don't want a shared key at all, set `SHARED_KEY_ENABLED=false` (or leave `GEMINI_API_KEY` unset) and the app becomes BYOK-only.
 </details>
 
 ## Run locally
@@ -105,7 +105,7 @@ Open http://localhost:3000.
 ```bash
 npx tsc --noEmit   # types
 npm run lint       # eslint
-npm test           # parser + prompt tests (node:test, no extra packages)
+npm test           # parser, prompt and demo-switch tests (node:test, no extra packages)
 npm run build      # production build
 ```
 
@@ -123,12 +123,15 @@ npm run build      # production build
 │        └─ no key ────────► POST /api/generate ─┐        │
 └────────────────────────────────────────────────┼────────┘
                                                  ▼
-                               ┌─── Vercel serverless (yours) ───┐
-                               │ /api/generate: shared GEMINI key │
-                               │   + per-device/IP/global limits  │
-                               │ /api/trending: Google Trends RSS │
-                               │   + HN + Dev.to, cached hourly   │
-                               └──────────────────────────────────┘
+                               ┌───── Vercel serverless (yours) ──────┐
+                               │ /api/generate: shared GEMINI key     │
+                               │   + demo switch + daily limits       │
+                               │ /api/status:   is the demo on?       │
+                               │ /api/banner:   banner maker (opt-in, │
+                               │   paid, 2 a day per student)         │
+                               │ /api/trending: Google Trends RSS     │
+                               │   + HN + Dev.to, cached hourly       │
+                               └──────────────────────────────────────┘
 ```
 
 **Tech:** Next.js 16 (App Router) · React 19 · Tailwind 4 · Dexie (IndexedDB) · pdf.js · mammoth · official SDKs for `@google/genai`, `groq-sdk`, `openai`, `@anthropic-ai/sdk` (each lazy-loaded only when chosen) · `react-markdown` · Upstash Redis (optional).
@@ -153,6 +156,7 @@ npm run build      # production build
 │   │   └── api/
 │   │       ├── generate/route.ts    Shared-key proxy (streams text, no-store)
 │   │       ├── banner/route.ts      LinkedIn banner maker (opt-in, 2/day, no-store)
+│   │       ├── status/route.ts      Is the shared-key demo on? (read by SetupBanner and Settings)
 │   │       └── trending/route.ts    Trend feed endpoint
 │   ├── components/
 │   │   ├── AppShell.tsx             Layout + nav
@@ -178,6 +182,7 @@ npm run build      # production build
 │       ├── pdf.ts                   pdf.js + mammoth text extraction
 │       ├── profile-parser.ts        Heuristics for LinkedIn's PDF layout
 │       ├── makeover.ts              Parses the profile review's @@ markers into sections
+│       ├── linkedin-text.ts         Markdown → plain text for LinkedIn's boxes (✔ bullets, no markup)
 │       ├── banner.ts                Banner size, styles, 21:9 → 4:1 crop (OffscreenCanvas)
 │       ├── ats.ts                   Rule-based ATS checks + JD keyword extraction
 │       ├── trending.ts              Google Trends / HN / Dev.to fetchers
