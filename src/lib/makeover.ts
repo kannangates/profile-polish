@@ -125,7 +125,7 @@ export const SECTION_INFO: Record<SectionKind, { title: string; about: string }>
   skills: { title: "Skills", about: "The keywords recruiters filter on. Pin the three that matter most for your target role." },
   photo: { title: "Profile photo", about: "What to upload and why. We give advice only — we never generate or edit photos of you." },
   banner: { title: "Background banner", about: "The wide image behind your photo. What it should show for your target role." },
-  other: { title: "Everything else", about: "Education, certifications, featured and your custom URL." },
+  other: { title: "Everything else", about: "Contact info, custom URL, education, certifications and featured — what to fix, and where to click." },
 };
 
 export function sectionHeading(s: MakeoverSection) {
