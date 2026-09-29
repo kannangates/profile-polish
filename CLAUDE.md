@@ -104,6 +104,7 @@ npm install        # postinstall copies the pdf.js worker into public/
 npm run dev        # http://localhost:3000
 npx tsc --noEmit   # types
 npm run lint       # eslint
+npm test           # parser + prompt tests (node:test, no extra packages)
 npm run build      # production build — must pass before merge
 ```
 
@@ -138,8 +139,10 @@ if something fails, say so rather than merging.
 
 **1. It builds and passes checks**
 ```bash
-npx tsc --noEmit && npm run lint && npm run build
+npx tsc --noEmit && npm run lint && npm test && npm run build
 ```
+
+If you change how the AI is asked (`prompts.ts`) or how its answer is read (`makeover.ts`, `linkedin-text.ts`), add a test in `tests/` for the shape you saw — every case there is a real model answer that once broke the page.
 
 **2. The invariants above still hold.** For any diff touching `src/lib/ai/`, `src/lib/keys.ts`, `src/lib/db.ts` or the API routes, check explicitly:
 ```bash

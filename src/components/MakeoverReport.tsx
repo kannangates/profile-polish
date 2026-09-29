@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SECTION_INFO, SERVICES_ABOUT_MAX, SKILL_MAX, parseFixes, parseServices, sectionHeading, splitSkills, type Makeover, type MakeoverSection, type Skill } from "@/lib/makeover";
+import { LINKEDIN_LIMITS, SECTION_INFO, SERVICES_ABOUT_MAX, SKILL_MAX, charCount, parseFixes, parseServices, sectionHeading, splitSkills, type Makeover, type MakeoverSection, type Skill } from "@/lib/makeover";
 import { toLinkedInText } from "@/lib/linkedin-text";
 import type { Profile } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
@@ -197,7 +197,20 @@ function UpdatedBlock({ kind, text, label }: { kind: MakeoverSection["kind"]; te
         <CopyButton text={kind === "skills" ? splitSkills(text).map((k) => k.name).join("\n") : toLinkedInText(text)} />
       </div>
       {kind === "skills" ? <SkillChips skills={splitSkills(text)} /> : <Markdown>{text}</Markdown>}
+      <CharCount text={toLinkedInText(text)} limit={LINKEDIN_LIMITS[kind]} />
     </div>
+  );
+}
+
+/** Counted on the plain text that Copy puts on the clipboard — what LinkedIn will actually receive. */
+function CharCount({ text, limit }: { text: string; limit?: number }) {
+  if (!limit) return null;
+  const n = charCount(text);
+  const over = n > limit;
+  return (
+    <p className={`mt-2 text-xs ${over ? "font-medium text-danger" : "text-muted"}`}>
+      {n.toLocaleString()} / {limit.toLocaleString()} characters{over ? " — LinkedIn won't take this much. Trim it before pasting." : ""}
+    </p>
   );
 }
 
@@ -259,7 +272,8 @@ function Field({ label, children, copy }: { label: string; children: React.React
 }
 
 function ServicesForm({ plan }: { plan: { services: Skill[]; about: string; location: string; pricing: string; messages: string; steps: string[] } }) {
-  const over = plan.about.length > SERVICES_ABOUT_MAX;
+  const aboutLength = charCount(plan.about);
+  const over = aboutLength > SERVICES_ABOUT_MAX;
   return (
     <div className="space-y-3">
       {plan.services.length > 0 && (
@@ -271,7 +285,7 @@ function ServicesForm({ plan }: { plan: { services: Skill[]; about: string; loca
         <Field label="About" copy={plan.about}>
           <p className="text-sm">{plan.about}</p>
           <p className={`mt-1 text-xs ${over ? "text-danger" : "text-muted"}`}>
-            {plan.about.length} / {SERVICES_ABOUT_MAX} characters{over ? " — trim it before pasting" : ""}
+            {aboutLength} / {SERVICES_ABOUT_MAX} characters{over ? " — trim it before pasting" : ""}
           </p>
         </Field>
       )}

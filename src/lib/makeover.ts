@@ -175,6 +175,14 @@ export interface ServicesPlan {
   steps: string[];
 }
 
+/** LinkedIn's limits for the boxes each rewrite gets pasted into. */
+export const LINKEDIN_LIMITS: Partial<Record<SectionKind, number>> = { headline: 220, about: 2600, experience: 2000 };
+
+/** Counts characters as a person sees them, so ✔ and emoji count once, not twice. */
+export function charCount(text: string) {
+  return [...text].length;
+}
+
 /** LinkedIn's Services "About" box stops at this many characters. */
 export const SERVICES_ABOUT_MAX = 500;
 export const SERVICES_MAX = 10;

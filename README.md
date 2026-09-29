@@ -35,7 +35,7 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 | Page | What you get |
 |---|---|
 | **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Marked as recommended; pasting text is the fallback for phones, where LinkedIn doesn't offer the PDF. Asks which role you're aiming for, so every rewrite is tailored to it. Or skip and continue without a profile. |
-| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then a section-by-section AI makeover for your target role: a score and quick wins, then one card each for headline (3 options), About, every experience role, and skills — showing your original, the rewrite with its own Copy button, why it's better (before / after), and next steps. Skills come as one-tap chips, because LinkedIn adds them one at a time. Photo and banner advice is always text: what to upload for your target role and why. We never generate or edit photos of you. Attach a screenshot to get feedback on your current ones. Tick **I offer freelance or consulting services** to add a Services page card that follows LinkedIn's form: services, About (500 characters), work location, pricing, messages, and setup steps. **Everything else** lists up to five fixes, each with a reason and click-by-click LinkedIn steps. |
+| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then a section-by-section AI makeover for your target role: a score and quick wins, then one card each for headline (3 options), About, every experience role, and skills — showing your original, the rewrite with its own Copy button, why it's better (before / after), and next steps. Skills come as one-tap chips, because LinkedIn adds them one at a time. Photo and banner advice is always text: what to upload for your target role and why. We never generate or edit photos of you. Attach a screenshot to get feedback on your current ones. Tick **I offer freelance or consulting services** to add a Services page card that follows LinkedIn's form: services, About (500 characters), work location, pricing, messages, and setup steps. **Everything else** lists up to five fixes, each with a reason and click-by-click LinkedIn steps. Headline, About and experience rewrites show a live count against LinkedIn's limits (220, 2,600 and 2,000 characters). |
 | **LinkedIn banner** *(if the host turns it on)* | Makes a background banner for your target role at LinkedIn's exact size (1584 × 396). Pick a style, add an optional line of text, then download a PNG. Two a day per student. Only your target role and that line of text are sent. The banner isn't stored anywhere; download it to keep it. |
 | **Message Writer** | Connection request, referral ask, alumni outreach, post-interview follow-up, thank-you, cold message to a recruiter. Three variants each (short / warm / direct) with a "when to send" tip. |
 | **Post Generator** | Live trending topics from Google Trends (India), Hacker News and Dev.to, plus evergreen student topics. Pick a topic, add your angle, choose a style → 3 hooks, a full post, hashtags, best time to post. |
@@ -102,6 +102,7 @@ Open http://localhost:3000.
 ```bash
 npx tsc --noEmit   # types
 npm run lint       # eslint
+npm test           # parser + prompt tests (node:test, no extra packages)
 npm run build      # production build
 ```
 
@@ -184,6 +185,7 @@ npm run build      # production build
 │           └── providers/           gemini.ts · groq.ts · openai.ts · anthropic.ts · types.ts
 ├── public/                          Static assets (pdf.js worker is copied here on install)
 ├── scripts/copy-pdf-worker.mjs      postinstall: copies pdf.worker.min.mjs into public/
+├── tests/                           node:test suites for the answer parsers, plain-text copy and prompt rules
 ├── docs/                            Extra documentation
 ├── .github/                         CI (typecheck + lint + build), optional Claude PR review, issue & PR templates
 ├── CLAUDE.md                        Invariants + pre-merge checklist for AI/human reviewers
