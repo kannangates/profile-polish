@@ -23,6 +23,7 @@ export default function ProfilePage() {
   const [draftRole, setDraftRole] = useState<string | null>(null);
   const [draftServices, setDraftServices] = useState<boolean | null>(null);
   const [roleError, setRoleError] = useState<string | null>(null);
+  const [servicesError, setServicesError] = useState<string | null>(null);
   const [screenshot, setScreenshot] = useState<{ img: ImageInput; name: string } | null>(null);
   const gen = useGenerate();
 
@@ -54,7 +55,7 @@ export default function ProfilePage() {
     }
     if (profile && offersServices !== (profile.offersServices ?? false)) {
       const ok = await saveOffersServices(offersServices).catch(() => false);
-      if (!ok) setRoleError("Couldn't save your services choice in this browser. This review still uses it.");
+      setServicesError(ok ? null : "Couldn't save this choice in this browser. This review still uses it.");
     }
     const p: Profile =
       profile ??
@@ -115,6 +116,7 @@ export default function ProfilePage() {
                 <span className="block text-xs text-muted">Adds a card for LinkedIn&apos;s Services page: what to put in each field.</span>
               </span>
             </label>
+            {servicesError && <p className="mt-1 text-xs text-danger">{servicesError}</p>}
           </div>
 
           <Button onClick={run} disabled={gen.loading} className="w-full">
