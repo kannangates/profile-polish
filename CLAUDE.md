@@ -10,7 +10,7 @@ ProfilePolish is a free LinkedIn and resume coach for college students. It runs
 almost entirely in the student's browser. The whole design follows from three
 constraints:
 
-1. **It must cost the host ₹0.** Vercel Hobby, free-tier AI keys, no database, no paid add-ons.
+1. **It must cost the host ₹0 by default.** Vercel Hobby, free-tier AI keys, no database, no paid add-ons. The one paid exception is the LinkedIn banner generator (see *The paid exception* below): it is capped, and it does nothing unless the host's key has billing turned on.
 2. **Student data must never reach the server.** Profiles, resumes, drafts and API keys live in the browser.
 3. **A student must be able to use it in under two minutes**, on a shared lab computer, without an account.
 
@@ -22,7 +22,7 @@ If a change breaks one of these, it is the wrong change — however good the fea
 | # | Invariant | Why |
 |---|---|---|
 | 1 | **BYOK calls go browser → provider directly.** A student's API key must never be sent to our server, logged, or put in a URL. | If the server never holds it, it cannot leak it. |
-| 2 | **Student content stays client-side.** Profile text, resume text and drafts live in IndexedDB / component state. The only exception is the shared-key proxy, which forwards one prompt to Gemini and stores nothing. | This is the product's promise, stated in the README and in-app. |
+| 2 | **Student content stays client-side.** Profile text, resume text and drafts live in IndexedDB / component state. Two exceptions, both of which store nothing: the shared-key proxy, which forwards one prompt to Gemini; and the banner endpoint, which receives only the target role and an optional one-line tagline — never the profile, never an image. | This is the product's promise, stated in the README and in-app. |
 | 3 | **No server-side database, no accounts, no auth.** | Holding resumes and keys server-side without real auth is a liability, and an account gate breaks the two-minute constraint above. Changing this is a decision about what the project is, not a feature — see *Changing an invariant* below. |
 | 4 | **Everything in the browser has a TTL.** Drafts and the parsed profile expire after `DRAFT_TTL_MS` (48 h) and are purged on app load. | Shared computers. |
 | 5 | **Keys default to `sessionStorage`.** `localStorage` is opt-in behind the "Remember on this device" toggle, with a shared-computer warning. | Lab machines. |
@@ -33,6 +33,7 @@ If a change breaks one of these, it is the wrong change — however good the fea
 | 10 | **Don't oversell.** Copy describes what the app does (polish, draft, check) — never promises replies, interviews or jobs. | The app was renamed from "CareerLift" for exactly this reason. |
 | 11 | **Never claim something was saved unless storage confirms it.** Decide UI state from what is stored, never from the value being typed, and surface a failed write instead of swallowing it. | A card that read `hasKey` from the input buffer unmounted the Save button on the first keystroke, so pasting a key looked successful and stored nothing. Every later request then failed with an error about the deployment. |
 | 12 | **Anything checkable without a model is checked without one.** Rule-based results appear instantly, cost nothing, and work before a student has a key. | The ATS checks and the profile gap panel both run in the browser; the AI builds on their findings instead of repeating them. |
+| 13 | **No generated or edited photos of people.** Profile-photo advice is text only: what to upload and why. Image generation is limited to the banner, which contains no people. | A student's face would pass through our server, and a generated face misrepresents the person recruiters will meet. |
 
 ### Changing an invariant
 
@@ -51,6 +52,27 @@ accepting server-side storage of student data, real authentication, and a
 host-side cost. That moves four things at once: the zero-cost constraint, the
 two-minute no-account constraint, "student content stays client-side", and "no
 server-side database". Treat it as a fork in the road, not a backlog item.
+
+### The paid exception: LinkedIn banners
+
+Gemini has no free tier for image models, so the banner generator is the one
+feature that can cost the host money. It was accepted deliberately, on these
+terms — a change that loosens any of them is a new decision, not a tweak:
+
+- **Only the banner.** One fixed format: a LinkedIn background image (4:1,
+  1584 × 396), no people, nothing else.
+- **Capped server-side.** At most `BANNER_DAILY_LIMIT_PER_DEVICE` (2) images
+  per device per day, plus a global daily ceiling
+  (`BANNER_DAILY_LIMIT_GLOBAL`) that bounds the host's worst-case bill.
+- **Cheapest adequate model.** `BANNER_MODEL` defaults to the lowest-cost
+  Gemini image model; check the provider's price page before changing it.
+- **Opt-in, and off without billing.** Nothing is generated unless the host
+  sets `BANNER_ENABLED=true`, so adding a billed key for text never starts
+  image spending by accident. With a free-tier key the endpoint fails
+  cleanly and the UI says banners aren't available here. Everything else
+  still costs ₹0.
+- **Minimal data.** It receives the target role and an optional tagline, and
+  stores neither (invariant 2).
 
 Refer to a constraint or an invariant by what it says, not only by its number.
 Both lists are numbered, so "constraint 3" and "invariant 3" are different rules
@@ -153,7 +175,7 @@ Be direct about real problems and quiet about style preferences. Priority order:
 
 1. Does it break an invariant? → request changes, and name the invariant in the words the table uses.
 2. Does it leak a secret or student data? → request changes immediately.
-3. Does it break the free-to-host constraint (new paid service, new always-on server)? → request changes.
+3. Does it break the free-to-host constraint (new paid service, new always-on server, or loosening any term of the banner exception)? → request changes.
 4. Does it build and work? → run the checklist.
 5. Is the copy honest and student-readable? → suggest wording.
 6. Everything else is a suggestion, not a blocker.
