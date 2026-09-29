@@ -5,7 +5,7 @@
 ## Checklist
 See [CLAUDE.md](../CLAUDE.md) for the full pre-merge checklist.
 
-- [ ] `npx tsc --noEmit`, `npm run lint` and `npm run build` pass
+- [ ] `npx tsc --noEmit`, `npm run lint`, `npm test` and `npm run build` pass
 - [ ] No student data or API keys reach the server (invariants 1–2)
 - [ ] No new paid service or always-on server (invariant: free to host)
 - [ ] No secrets in the diff
