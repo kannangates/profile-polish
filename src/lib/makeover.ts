@@ -133,6 +133,31 @@ export function sectionHeading(s: MakeoverSection) {
   return SECTION_INFO[s.kind].title;
 }
 
+/** LinkedIn rejects a skill longer than this. */
+export const SKILL_MAX = 100;
+
+export interface Skill {
+  name: string;
+  onlyIfTrue: boolean;
+}
+
+/**
+ * LinkedIn adds skills one at a time, so a comma-separated list pasted into
+ * the box fails its 100-character limit. Accept one-per-line (what the prompt
+ * asks for) and older comma-separated answers alike.
+ */
+export function splitSkills(text: string): Skill[] {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const items = lines.length === 1 ? lines[0].split(",") : lines;
+  return items
+    .map((raw) => {
+      const cleaned = raw.replace(/^([-*•]|\d+[.)])\s*/, "").trim();
+      const onlyIfTrue = /\(only if true\)\s*$/i.test(cleaned);
+      return { name: cleaned.replace(/\s*\(only if true\)\s*$/i, "").trim(), onlyIfTrue };
+    })
+    .filter((s) => s.name);
+}
+
 /** Plain Markdown for Copy all and saved drafts, where the markers would be noise. */
 export function makeoverToMarkdown(m: Makeover) {
   const parts: string[] = [];
@@ -142,7 +167,10 @@ export function makeoverToMarkdown(m: Makeover) {
     const lines = [`## ${sectionHeading(s)}`];
     if (s.role?.dates) lines.push(`_${s.role.dates}_`);
     if (s.original) lines.push(`**Original**\n\n${s.original}`);
-    s.updated.forEach((u, i) => lines.push(`**${s.updated.length > 1 ? `Option ${i + 1}` : "Updated"}**\n\n${u}`));
+    s.updated.forEach((u, i) => {
+      const body = s.kind === "skills" ? splitSkills(u).map((k) => `- ${k.name}${k.onlyIfTrue ? " _(only if true)_" : ""}`).join("\n") : u;
+      lines.push(`**${s.updated.length > 1 ? `Option ${i + 1}` : "Updated"}**\n\n${body}`);
+    });
     if (s.before) lines.push(`**Before:** ${s.before}`);
     if (s.after) lines.push(`**After:** ${s.after}`);
     if (s.next) lines.push(`**Next steps**\n\n${s.next}`);

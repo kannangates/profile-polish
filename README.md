@@ -64,7 +64,7 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | Variable | What it is |
    |---|---|
    | `GEMINI_API_KEY` | A free key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Only used server-side, only for students who haven't added their own key. |
-   | `SHARED_MODEL` | Default `gemini-3.5-flash-lite` (most generous free quota). |
+   | `SHARED_MODEL` | Default `gemini-3.8-flash` (best quality on the free tier). Switch to `gemini-3.5-flash-lite` if the shared key keeps hitting its free quota. |
    | `SHARED_DAILY_LIMIT_PER_DEVICE` | Default `10`. Requests per student per day on the shared key. |
    | `SHARED_DAILY_LIMIT_GLOBAL` | Default `200`. Keep this under your Gemini free-tier daily quota. |
    | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional. A free [Upstash](https://upstash.com) Redis makes the limits reliable across serverless instances. Without it, limits are in-memory per instance (fine for a small pilot). |
