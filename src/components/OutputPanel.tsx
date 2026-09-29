@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { saveDraft } from "@/lib/db";
+import { toLinkedInText } from "@/lib/linkedin-text";
 import type { DraftType } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { Markdown } from "./Markdown";
@@ -41,7 +42,8 @@ export function OutputPanel({ output, loading, error, meta, draftType, draftTitl
               Stop
             </Button>
           )}
-          <CopyButton text={text} label={render ? "Copy all" : "Copy"} />
+          {/* Drafts keep the Markdown; the clipboard gets text that pastes cleanly into LinkedIn. */}
+          <CopyButton text={toLinkedInText(text)} label={render ? "Copy all" : "Copy"} />
           <Button
             variant="secondary"
             disabled={!output || loading || saved}
