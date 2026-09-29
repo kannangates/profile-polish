@@ -24,6 +24,23 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
+async function peek(key: string): Promise<number> {
+  const k = `cl:${today()}:${key}`;
+  if (redis) return Number((await redis.get<number>(k)) ?? 0);
+  const e = memory.get(k);
+  return e && e.day === today() ? e.count : 0;
+}
+
+async function unbump(key: string) {
+  const k = `cl:${today()}:${key}`;
+  if (redis) {
+    await redis.decr(k);
+    return;
+  }
+  const e = memory.get(k);
+  if (e && e.day === today() && e.count > 0) memory.set(k, { count: e.count - 1, day: e.day });
+}
+
 async function bump(key: string): Promise<number> {
   const k = `cl:${today()}:${key}`;
   if (redis) {
@@ -58,4 +75,39 @@ export async function checkSharedLimit(deviceId: string, ip: string): Promise<Li
     return { ok: false, reason: "Too many requests from this network today. Add your own API key in Settings to continue." };
   }
   return { ok: true, remaining: PER_DEVICE - device };
+}
+
+/**
+ * Banners are the one paid feature (see CLAUDE.md, "The paid exception"), so
+ * their counters are separate from the text limits and much tighter.
+ */
+export const BANNER_PER_DEVICE = Number(process.env.BANNER_DAILY_LIMIT_PER_DEVICE ?? 2);
+const BANNER_GLOBAL = Number(process.env.BANNER_DAILY_LIMIT_GLOBAL ?? 50);
+
+export async function bannerRemaining(deviceId: string): Promise<number> {
+  return Math.max(0, BANNER_PER_DEVICE - (await peek(`banner:d:${deviceId}`)));
+}
+
+export async function checkBannerLimit(deviceId: string, ip: string): Promise<LimitResult> {
+  const global = await bump("banner:global");
+  if (global > BANNER_GLOBAL) {
+    await unbump("banner:global");
+    return { ok: false, reason: "Today's banners are used up for everyone. Try again tomorrow." };
+  }
+  const device = await bump(`banner:d:${deviceId}`);
+  if (device > BANNER_PER_DEVICE) {
+    await Promise.all([unbump("banner:global"), unbump(`banner:d:${deviceId}`)]);
+    return { ok: false, reason: `You've made today's ${BANNER_PER_DEVICE} banners. You can make more tomorrow.` };
+  }
+  const ipCount = await bump(`banner:ip:${ip}`);
+  if (ipCount > BANNER_PER_DEVICE * 15) {
+    await Promise.all([unbump("banner:global"), unbump(`banner:d:${deviceId}`), unbump(`banner:ip:${ip}`)]);
+    return { ok: false, reason: "Too many banners from this network today. Try again tomorrow." };
+  }
+  return { ok: true, remaining: BANNER_PER_DEVICE - device };
+}
+
+/** A failed generation shouldn't cost the student one of their two. */
+export async function refundBanner(deviceId: string, ip: string) {
+  await Promise.all([unbump("banner:global"), unbump(`banner:d:${deviceId}`), unbump(`banner:ip:${ip}`)]);
 }

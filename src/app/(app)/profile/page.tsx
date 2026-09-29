@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BannerGenerator } from "@/components/BannerGenerator";
 import { FileDrop } from "@/components/FileDrop";
 import { Markdown } from "@/components/Markdown";
 import { MakeoverReport } from "@/components/MakeoverReport";
@@ -109,7 +110,7 @@ export default function ProfilePage() {
 
           {profile && !screenshot && (
             <details className="text-sm">
-              <summary className="cursor-pointer text-muted">Also attach a screenshot (for photo/banner feedback)</summary>
+              <summary className="cursor-pointer text-muted">Also attach a screenshot (to get feedback on your current photo and banner)</summary>
               <div className="mt-2">
                 <ScreenshotDrop onImage={setScreenshot} compact />
               </div>
@@ -118,6 +119,7 @@ export default function ProfilePage() {
         </Card>
 
         {profile && <ProfileGaps report={analyseProfile(profile)} />}
+        <BannerGenerator role={focus} />
         </div>
 
         <OutputPanel
@@ -132,7 +134,7 @@ export default function ProfilePage() {
           render={(out) => {
             const m = parseMakeover(out);
             // A model that ignored the format still gets its answer shown.
-            return isMakeover(m) ? <MakeoverReport makeover={m} profile={profile} loading={gen.loading} hasScreenshot={Boolean(screenshot)} /> : <Markdown>{out}</Markdown>;
+            return isMakeover(m) ? <MakeoverReport makeover={m} profile={profile} loading={gen.loading} /> : <Markdown>{out}</Markdown>;
           }}
           exportText={(out) => {
             const m = parseMakeover(out);
