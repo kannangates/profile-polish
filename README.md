@@ -35,7 +35,8 @@ Most "AI LinkedIn tools" cost ₹500–2,000 a month and keep your profile on th
 | Page | What you get |
 |---|---|
 | **Onboarding** | Drag-drop LinkedIn's *Save to PDF* export. Parsed in the browser into name / headline / about / experience / education / skills. Marked as recommended; pasting text is the fallback for phones, where LinkedIn doesn't offer the PDF. Asks which role you're aiming for, so every rewrite is tailored to it. Or skip and continue without a profile. |
-| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then a section-by-section AI makeover for your target role: a score and quick wins, then one card each for headline (3 options), About, every experience role, and skills — showing your original, the rewrite with its own Copy button, why it's better (before / after), and next steps. Attach a screenshot and vision models add photo and banner feedback. |
+| **Profile Optimizer** | **"What's missing from your profile"** — an instant, rule-based completeness check (13 checks, no AI call) that names the gaps and how to fill them. Then a section-by-section AI makeover for your target role: a score and quick wins, then one card each for headline (3 options), About, every experience role, and skills — showing your original, the rewrite with its own Copy button, why it's better (before / after), and next steps. Skills come as one-tap chips, because LinkedIn adds them one at a time. Photo and banner advice is always text: what to upload for your target role and why. We never generate or edit photos of you. Attach a screenshot to get feedback on your current ones. |
+| **LinkedIn banner** *(if the host turns it on)* | Makes a background banner for your target role at LinkedIn's exact size (1584 × 396). Pick a style, add an optional line of text, then download a PNG. Two a day per student. Only your target role and that line of text are sent. The banner isn't stored anywhere; download it to keep it. |
 | **Message Writer** | Connection request, referral ask, alumni outreach, post-interview follow-up, thank-you, cold message to a recruiter. Three variants each (short / warm / direct) with a "when to send" tip. |
 | **Post Generator** | Live trending topics from Google Trends (India), Hacker News and Dev.to, plus evergreen student topics. Pick a topic, add your angle, choose a style → 3 hooks, a full post, hashtags, best time to post. |
 | **Resume ATS Check** | Instant rule-based score (13 checks, zero AI calls): contact info, standard headings, length, action verbs, metrics, clichés, table/column artefacts, and keyword match against a pasted job description. Then an AI review with keyword gaps and before/after bullet rewrites, or a full one-page rewrite. PDF, DOCX and TXT. |
@@ -67,11 +68,15 @@ You need a GitHub account and a Vercel account (free, sign in with GitHub). No c
    | `SHARED_MODEL` | Default `gemini-3.8-flash` (best quality on the free tier). Switch to `gemini-3.5-flash-lite` if the shared key keeps hitting its free quota. |
    | `SHARED_DAILY_LIMIT_PER_DEVICE` | Default `10`. Requests per student per day on the shared key. |
    | `SHARED_DAILY_LIMIT_GLOBAL` | Default `200`. Keep this under your Gemini free-tier daily quota. |
+   | `BANNER_ENABLED` | Default off. Set to `true` to turn on the LinkedIn banner maker. **This one costs money:** Gemini has no free tier for images, so it needs billing on `GEMINI_API_KEY`. That's about $0.034 (≈ ₹3) per banner on the default model. |
+   | `BANNER_MODEL` | Default `gemini-3.1-flash-lite-image`, the cheapest Gemini image model. |
+   | `BANNER_DAILY_LIMIT_PER_DEVICE` | Default `2`. Banners per student per day. A failed attempt doesn't count. |
+   | `BANNER_DAILY_LIMIT_GLOBAL` | Default `50`. Caps your worst-case banner bill at roughly $1.70 a day. |
    | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional. A free [Upstash](https://upstash.com) Redis makes the limits reliable across serverless instances. Without it, limits are in-memory per instance (fine for a small pilot). |
 
 4. Click **Deploy**. You get a `https://<name>.vercel.app` URL to share. Every merge to `main` redeploys automatically.
 
-> The official instance runs at [theprofilepolish.vercel.app](https://theprofilepolish.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons.
+> The official instance runs at [theprofilepolish.vercel.app](https://theprofilepolish.vercel.app) on Vercel's free Hobby plan — no card, no paid add-ons. Everything is free to host except the optional banner maker, which is off unless you set `BANNER_ENABLED=true` (see CLAUDE.md → *The paid exception*).
 > Two aliases point at the same deployment, so older links keep working: [polishprofile.vercel.app](https://polishprofile.vercel.app) and [profilepolish-app.vercel.app](https://profilepolish-app.vercel.app). `profilepolish.vercel.app` itself belongs to an unrelated Vercel account.
 
 <details>
@@ -143,6 +148,7 @@ npm run build      # production build
 │   │   │   └── settings/page.tsx    BYOK keys, model selection, data clearing
 │   │   └── api/
 │   │       ├── generate/route.ts    Shared-key proxy (streams text, no-store)
+│   │       ├── banner/route.ts      LinkedIn banner maker (opt-in, 2/day, no-store)
 │   │       └── trending/route.ts    Trend feed endpoint
 │   ├── components/
 │   │   ├── AppShell.tsx             Layout + nav
@@ -155,6 +161,7 @@ npm run build      # production build
 │   │   ├── SetupSteps.tsx           Per-provider key instructions
 │   │   ├── ProfileGaps.tsx          "What's missing" panel
 │   │   ├── MakeoverReport.tsx       Section cards for the profile review
+│   │   ├── BannerGenerator.tsx      Banner maker card: style, text, preview, download
 │   │   ├── CopyButton.tsx
 │   │   └── ui.tsx                   Button, Card, Label, Badge, Spinner, PageHeader
 │   └── lib/
@@ -167,6 +174,7 @@ npm run build      # production build
 │       ├── pdf.ts                   pdf.js + mammoth text extraction
 │       ├── profile-parser.ts        Heuristics for LinkedIn's PDF layout
 │       ├── makeover.ts              Parses the profile review's @@ markers into sections
+│       ├── banner.ts                Banner size, styles, 21:9 → 4:1 crop (OffscreenCanvas)
 │       ├── ats.ts                   Rule-based ATS checks + JD keyword extraction
 │       ├── trending.ts              Google Trends / HN / Dev.to fetchers
 │       ├── ratelimit.ts             Upstash or in-memory daily counters
@@ -246,7 +254,9 @@ Regenerate it with the [graphify](https://github.com/safishamsi/graphify) skill 
 | Drafts | IndexedDB | 48 h (export to keep) | No |
 | Your API keys | `sessionStorage` (default) or `localStorage` (opt-in) | Tab close / until removed | **Never** — BYOK requests go browser → provider |
 | Prompts (your profile/resume text) | — | — | Only to the AI provider you chose. With the shared key, to our `/api/generate` which forwards to Gemini with `Cache-Control: no-store` and no logging. |
-| Anonymous device id | `localStorage` | Until cleared | Yes, header only — used to rate-limit the shared key fairly |
+| Banner request (target role + optional line of text) | — | — | Only if the host turned the banner maker on. It goes to our `/api/banner`, which forwards it to Gemini with `Cache-Control: no-store` and no logging. Your profile and photos are never sent. |
+| Generated banner | Page memory | Until you leave the page | No, it's made for you and never stored. Download it to keep it. |
+| Anonymous device id | `localStorage` | Until cleared | Yes, header only. Used to apply the shared-key and banner daily limits fairly. |
 
 Why direct-from-browser BYOK? Because then there is nothing on the server that *can* leak. The only secret the server holds is the host's own shared key.
 
@@ -269,6 +279,7 @@ Model ids change every few months. The **Load models from …** button in Settin
 - **Free tiers have limits.** Gemini/Groq free quotas are per-key per-day; when a student hits them the app tells them to wait or switch provider.
 - **Shared key is best-effort.** Without Upstash, the in-memory limits reset whenever Vercel spins up a new instance.
 - **Browser storage can be cleared** by the browser (private mode, low disk). The privacy banner says so; export important drafts.
+- **Banners cost the host money** and are capped at two per student per day. AI images sometimes misspell words, so check any text before you upload.
 - **AI can be wrong.** Prompts forbid inventing facts and mark unknown numbers as `[add number]`, but students should read before posting.
 
 ## Roadmap ideas

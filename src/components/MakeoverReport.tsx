@@ -20,10 +20,9 @@ function originalFor(s: MakeoverSection, profile: Profile | null) {
   return s.original;
 }
 
-export function MakeoverReport({ makeover, profile, loading, hasScreenshot }: { makeover: Makeover; profile: Profile | null; loading: boolean; hasScreenshot: boolean }) {
+export function MakeoverReport({ makeover, profile, loading }: { makeover: Makeover; profile: Profile | null; loading: boolean }) {
   const { score, scoreReason, quickWins, sections } = makeover;
   const tone = score === null ? "" : score >= 75 ? "text-success" : score >= 50 ? "text-warning-fg" : "text-danger";
-  const shown = new Set(sections.map((s) => s.kind));
 
   return (
     <div className="space-y-4">
@@ -51,12 +50,6 @@ export function MakeoverReport({ makeover, profile, loading, hasScreenshot }: { 
         <SectionCard key={i} section={s} original={originalFor(s, profile)} writing={loading && i === sections.length - 1} />
       ))}
 
-      {!loading && !hasScreenshot && !shown.has("photo") && (
-        <div className="rounded-lg border border-dashed border-border p-4 text-sm">
-          <div className="font-medium">Profile photo and banner</div>
-          <p className="mt-1 text-muted">The PDF export doesn&apos;t include images. Attach a screenshot of your profile and run the review again to get feedback on these too.</p>
-        </div>
-      )}
 
       {!loading && sections.length > 0 && (
         <p className="text-xs text-muted">
