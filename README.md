@@ -183,7 +183,7 @@ npm run build      # production build
 │       ├── profile-parser.ts        Heuristics for LinkedIn's PDF layout
 │       ├── makeover.ts              Parses the profile review's @@ markers into sections
 │       ├── linkedin-text.ts         Markdown → plain text for LinkedIn's boxes (✔ bullets, no markup)
-│       ├── banner.ts                Banner size, styles, 21:9 → 4:1 crop (OffscreenCanvas)
+│       ├── banner.ts                Banner size, styles, 21:9 → 4:1 crop that trims edge strips (OffscreenCanvas)
 │       ├── ats.ts                   Rule-based ATS checks + JD keyword extraction
 │       ├── trending.ts              Google Trends / HN / Dev.to fetchers
 │       ├── ratelimit.ts             Upstash or in-memory daily counters
