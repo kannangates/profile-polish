@@ -5,6 +5,7 @@ import { CopyButton } from "@/components/CopyButton";
 import { Markdown } from "@/components/Markdown";
 import { Badge, Button, Card, PageHeader } from "@/components/ui";
 import { db } from "@/lib/db";
+import { toLinkedInText } from "@/lib/linkedin-text";
 import { useDrafts } from "@/lib/hooks";
 import type { Draft } from "@/lib/types";
 
@@ -58,7 +59,7 @@ export default function DraftsPage() {
                     </div>
                   </button>
                   <div className="flex gap-2">
-                    <CopyButton text={d.content} />
+                    <CopyButton text={toLinkedInText(d.content)} />
                     <Button variant="danger" onClick={() => db.drafts.delete(d.id!)}>
                       Delete
                     </Button>

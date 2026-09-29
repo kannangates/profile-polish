@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SECTION_INFO, SKILL_MAX, sectionHeading, splitSkills, type Makeover, type MakeoverSection } from "@/lib/makeover";
+import { toLinkedInText } from "@/lib/linkedin-text";
 import type { Profile } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { Markdown } from "./Markdown";
@@ -101,7 +102,7 @@ function SectionCard({ section: s, original, writing }: { section: MakeoverSecti
             <div key={i} className="rounded-lg bg-accent-soft/60 p-3">
               <div className="mb-1 flex items-center justify-between gap-2">
                 <span className="text-xs font-medium uppercase tracking-wide text-accent">{multi ? `Option ${i + 1}` : "Updated"}</span>
-                <CopyButton text={s.kind === "skills" ? splitSkills(u).map((k) => k.name).join("\n") : u} />
+                <CopyButton text={s.kind === "skills" ? splitSkills(u).map((k) => k.name).join("\n") : toLinkedInText(u)} />
               </div>
               {s.kind === "skills" ? <SkillChips text={u} /> : <Markdown>{u}</Markdown>}
             </div>
@@ -148,7 +149,9 @@ function SkillChips({ text }: { text: string }) {
   const skills = splitSkills(text);
   return (
     <div className="space-y-2">
-      <p className="text-xs text-muted">LinkedIn adds skills one at a time. Tap a skill to copy it, then paste it into Add skill.</p>
+      <p className="text-xs text-muted">
+        LinkedIn adds skills one at a time. Tap a skill to copy it, paste it into Add skill, then pick the matching suggestion from LinkedIn&apos;s list — that&apos;s what recruiters search. If nothing matches, choose the closest suggestion rather than saving a new one.
+      </p>
       <ul className="flex flex-wrap gap-2">
         {skills.map((k, i) => {
           const tooLong = k.name.length > SKILL_MAX;
