@@ -1,3 +1,5 @@
+import { sharedKeyState } from "@/lib/shared-key";
+
 export const dynamic = "force-dynamic";
 
 /**
@@ -7,7 +9,8 @@ export const dynamic = "force-dynamic";
  */
 export function GET() {
   return Response.json(
-    { sharedKey: !!process.env.GEMINI_API_KEY },
-    { headers: { "cache-control": "public, max-age=300" } },
+    { sharedKey: sharedKeyState() === "on", demoEnded: sharedKeyState() === "off" },
+    // Short, so turning the demo off shows up for students within a minute of the redeploy.
+    { headers: { "cache-control": "public, max-age=60" } },
   );
 }

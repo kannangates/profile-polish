@@ -87,6 +87,7 @@ Full tree is in the README. The short version:
 | Change what the AI is asked | `src/lib/ai/prompts.ts` |
 | Add/remove a model or provider | `src/lib/config.ts` + `src/lib/ai/providers/` |
 | Routing between BYOK and the shared key | `src/lib/ai/client.ts` |
+| The shared-key demo switch (`SHARED_KEY_ENABLED`) | `src/lib/shared-key.ts` |
 | Rule-based ATS checks | `src/lib/ats.ts` |
 | Rule-based profile gap checks | `src/lib/profile-gaps.ts` |
 | Trending sources | `src/lib/trending.ts` |
@@ -183,7 +184,7 @@ Be direct about real problems and quiet about style preferences. Priority order:
 5. Is the copy honest and student-readable? → suggest wording.
 6. Everything else is a suggestion, not a blocker.
 
-Do not merge a PR you have not verified. Do not approve on the basis that CI is green — CI only checks types, lint and build.
+Do not merge a PR you have not verified. Do not approve on the basis that CI is green — CI only checks types, lint, the parser and prompt tests, and the build — not what a student sees.
 
 ## Enabling automated Claude review (optional)
 

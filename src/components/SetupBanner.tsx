@@ -15,6 +15,7 @@ export function SetupBanner() {
   const isClient = useIsClient();
   const pathname = usePathname();
   const [sharedKey, setSharedKey] = useState<boolean | null>(null);
+  const [demoEnded, setDemoEnded] = useState(false);
   // Read synchronously during render (client-only) so there is no extra pass.
   const ownKey = isClient ? hasAnyKey() : false;
 
@@ -22,7 +23,11 @@ export function SetupBanner() {
     let cancelled = false;
     fetch("/api/status")
       .then((r) => r.json())
-      .then((d: { sharedKey: boolean }) => !cancelled && setSharedKey(d.sharedKey))
+      .then((d: { sharedKey: boolean; demoEnded?: boolean }) => {
+        if (cancelled) return;
+        setSharedKey(d.sharedKey);
+        setDemoEnded(Boolean(d.demoEnded));
+      })
       .catch(() => !cancelled && setSharedKey(false));
     return () => {
       cancelled = true;
@@ -37,7 +42,15 @@ export function SetupBanner() {
     <div className="flex flex-col gap-2 rounded-lg border border-accent/40 bg-accent-soft px-4 py-3 text-sm sm:flex-row sm:items-center sm:gap-3">
       <p className="flex-1">
         <span aria-hidden>🔑 </span>
-        <strong>One step before you start:</strong> add a free AI key. About a minute, no credit card, stays in your browser.
+        {demoEnded ? (
+          <>
+            <strong>The free demo has ended.</strong> Add your own free AI key to keep going. About a minute, no credit card, stays in your browser.
+          </>
+        ) : (
+          <>
+            <strong>One step before you start:</strong> add a free AI key. About a minute, no credit card, stays in your browser.
+          </>
+        )}
       </p>
       <Link
         href="/settings"
