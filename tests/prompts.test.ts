@@ -43,3 +43,21 @@ test("skills must be standard LinkedIn names, one per line", () => {
 test("photo advice is text only (invariant 13)", () => {
   assert.match(profileOptimizePrompt(profile, "PM").prompt, /never describe generating or editing a photo/);
 });
+
+// A real answer invented a quoted prompt, swapped the student's numbers for
+// [X,000] and wrote as an engineer for a Product Manager.
+test("posts keep the student's facts, write in their role and stay plain text", () => {
+  const p = postPrompt({ ...profile, targetRole: "Product Manager" }, "AI refactoring", "4,500 lines into 11 files", "story").prompt;
+  assert.match(p, /Their role: Product Manager/);
+  assert.match(p, /Use every number, name, tool and result from their angle exactly as given/);
+  assert.match(p, /Put nothing in quotation marks unless they wrote those words/);
+  assert.match(p, /no Markdown inside the post/);
+  assert.match(p, /1️⃣ 2️⃣ 3️⃣ for steps and ✅ for results/);
+});
+
+test("posts come with an image prompt that shows no people (invariant 13)", () => {
+  const p = postPrompt(profile, "AI", "", "story").prompt;
+  assert.match(p, /## Image prompt/);
+  assert.match(p, /No people, faces or hands/);
+  assert.match(p, /4:5 portrait image \(1080 × 1350\)/);
+});
