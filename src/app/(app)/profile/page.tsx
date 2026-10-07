@@ -24,6 +24,8 @@ export default function ProfilePage() {
   const [draftServices, setDraftServices] = useState<boolean | null>(null);
   const [roleError, setRoleError] = useState<string | null>(null);
   const [servicesError, setServicesError] = useState<string | null>(null);
+  // Scores follow the role this review was written for, not later edits to the box.
+  const [reviewedRole, setReviewedRole] = useState("");
   const [screenshot, setScreenshot] = useState<{ img: ImageInput; name: string } | null>(null);
   const gen = useGenerate();
 
@@ -49,6 +51,7 @@ export default function ProfilePage() {
 
   const run = async () => {
     const role = focus.trim();
+    setReviewedRole(role);
     if (profile && role !== (profile.targetRole ?? "")) {
       const ok = await saveTargetRole(role).catch(() => false);
       setRoleError(ok ? null : "Couldn't save your target role in this browser. This review still uses it.");
@@ -149,7 +152,7 @@ export default function ProfilePage() {
           render={(out) => {
             const m = parseMakeover(out);
             // A model that ignored the format still gets its answer shown.
-            return isMakeover(m) ? <MakeoverReport makeover={m} profile={profile} loading={gen.loading} /> : <Markdown>{out}</Markdown>;
+            return isMakeover(m) ? <MakeoverReport makeover={m} profile={profile} targetRole={reviewedRole} loading={gen.loading} /> : <Markdown>{out}</Markdown>;
           }}
           exportText={(out) => {
             const m = parseMakeover(out);
