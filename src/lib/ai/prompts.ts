@@ -110,24 +110,40 @@ Produce 3 variants under headings "### Option 1", "### Option 2", "### Option 3"
 }
 
 export function postPrompt(profile: Profile | null | undefined, topic: string, angle: string, style: string) {
+  const role = profile?.targetRole?.trim();
+  const voice = role
+    ? `Their role: ${role}. Write as someone in that role, and tie the lesson back to why it matters for that kind of work.`
+    : "Write from the role their profile shows (the most recent one). With no profile, write as a student.";
   return {
     system: SYSTEM_BASE,
     prompt: `${profileBlock(profile)}
 
-Write a LinkedIn post for this student.
+Write a LinkedIn post in this person's voice.
 Topic: ${topic}
 Their angle / opinion / experience: ${angle || "[none given — pick an authentic student angle: learning, curiosity, a question to the network]"}
 Style: ${style}
+${voice}
+
+Rules for the post:
+- Use every number, name, tool and result from their angle exactly as given. If a number would help and they gave none, write a [bracketed placeholder] — never estimate one.
+- Claim results only as strongly as they did: "the tests kept passing", not "zero bugs". Put nothing in quotation marks unless they wrote those words.
+- LinkedIn shows plain text, so no Markdown inside the post: no **bold**, no # headings, no "- " bullets.
+- Make it easy to skim on a phone: a hook line, one or two lines of context, then the substance. When there are several rules, steps or results, put them under a short label ending in a colon (for example "What I did:" or "The outcome:"), one per line, with 1️⃣ 2️⃣ 3️⃣ for steps and ✅ for results; a step may have one line of explanation under it. Otherwise use short paragraphs.
+- Close with one line on the takeaway, then one specific question to readers.
+- A blank line between paragraphs and between blocks. Emoji only as list markers, plus at most one in the hook.
 
 Produce:
 ## 3 hook options
-Three different first lines (each ≤ 12 words) that stop the scroll.
+Three different first lines (each ≤ 18 words) that stop the scroll. Lead with the most concrete detail in their angle — a number, a tool or a result.
 
 ## Post
-A complete post (120–220 words). Short paragraphs, one idea per line, no hashtags inside the body, end with a question or CTA. Use hook option 1.
+A complete post of 150–300 words using hook option 1. No hashtags inside the body.
 
 ## Hashtags
-5 relevant hashtags, mix of broad and niche.
+5–7 hashtags: their role or field, the topic, and one or two broader ones.
+
+## Image prompt
+A ready-to-paste prompt, as one paragraph, for an image tool such as Gemini or ChatGPT, for a picture to post with this. Describe one clear visual that carries the post's main point — a diagram, a before-and-after, an object or a scene — with its style, colours and composition, and ask for a 4:5 portrait image (1080 × 1350), which fills more of a phone screen than a landscape one. No people, faces or hands: a made-up person can pass as the author. At most five words of text in the image, because image tools often misspell it. Then, on its own line: if they have a real screenshot, chart or photo of the work, it will look more credible than a generated image.
 
 ## Best time to post
 One line.`,

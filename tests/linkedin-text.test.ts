@@ -27,3 +27,8 @@ test("keeps [add number] placeholders and numbered steps as they are", () => {
 test("collapses runs of blank lines and trims the ends", () => {
   assert.equal(toLinkedInText("\n\nA\n\n\n\nB\n\n"), "A\n\nB");
 });
+
+test("labelled keycap steps and ✅ results copy through unchanged", () => {
+  const post = "The non-negotiable rules:\n1️⃣ Move only with tests\nEvery extracted file had to pass the existing tests.\n2️⃣ Extract incrementally\n\nThe outcome:\n✅ 4,500+ lines → 11 focused modules\n✅ Existing tests kept passing";
+  assert.equal(toLinkedInText(post), post);
+});
