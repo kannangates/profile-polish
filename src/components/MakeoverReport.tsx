@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LINKEDIN_LIMITS, SECTION_INFO, SERVICES_ABOUT_MAX, SKILL_MAX, charCount, parseFixes, parseServices, sectionHeading, splitSkills, type Makeover, type MakeoverSection, type Skill } from "@/lib/makeover";
+import { bestOption, rateHeadline, type HeadlineRating } from "@/lib/headline-score";
 import { toLinkedInText } from "@/lib/linkedin-text";
 import type { Profile } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
@@ -21,7 +22,7 @@ function originalFor(s: MakeoverSection, profile: Profile | null) {
   return s.original;
 }
 
-export function MakeoverReport({ makeover, profile, loading }: { makeover: Makeover; profile: Profile | null; loading: boolean }) {
+export function MakeoverReport({ makeover, profile, targetRole, loading }: { makeover: Makeover; profile: Profile | null; targetRole: string; loading: boolean }) {
   const { score, scoreReason, quickWins, sections } = makeover;
   const tone = score === null ? "" : score >= 75 ? "text-success" : score >= 50 ? "text-warning-fg" : "text-danger";
 
@@ -48,7 +49,13 @@ export function MakeoverReport({ makeover, profile, loading }: { makeover: Makeo
       )}
 
       {sections.map((s, i) => (
-        <SectionCard key={i} section={s} original={originalFor(s, profile)} writing={loading && i === sections.length - 1} />
+        <SectionCard
+          key={i}
+          section={s}
+          original={originalFor(s, profile)}
+          writing={loading && i === sections.length - 1}
+          rate={s.kind === "headline" ? (text) => rateHeadline(toLinkedInText(text), { targetRole, skills: profile?.skills }) : undefined}
+        />
       ))}
 
 
@@ -61,12 +68,27 @@ export function MakeoverReport({ makeover, profile, loading }: { makeover: Makeo
   );
 }
 
-function SectionCard({ section: s, original, writing }: { section: MakeoverSection; original: string; writing: boolean }) {
+function SectionCard({
+  section: s,
+  original,
+  writing,
+  rate,
+}: {
+  section: MakeoverSection;
+  original: string;
+  writing: boolean;
+  /** Headlines only: a rule-based rating per option, so the student can see which to use. */
+  rate?: (text: string) => HeadlineRating;
+}) {
   const [view, setView] = useState<"updated" | "original">("updated");
   const [why, setWhy] = useState(false);
   const info = SECTION_INFO[s.kind];
   const hasOriginal = Boolean(original) && original !== "(empty)";
   const multi = s.updated.length > 1;
+  // A half-streamed option would score low and then jump, so wait for the card to finish.
+  const ratings = rate && !writing ? s.updated.map(rate) : null;
+  const best = ratings ? bestOption(ratings) : -1;
+  const current = rate && !writing && hasOriginal ? rate(original) : null;
 
   return (
     <section className="rounded-lg border border-border">
@@ -94,11 +116,25 @@ function SectionCard({ section: s, original, writing }: { section: MakeoverSecti
         )}
 
         {view === "original" && hasOriginal ? (
-          <div className="whitespace-pre-wrap rounded-lg bg-accent-soft/60 p-3 text-sm text-muted">{original}</div>
+          <div className="rounded-lg bg-accent-soft/60 p-3">
+            <div className="whitespace-pre-wrap text-sm text-muted">{original}</div>
+            {current && <RatingDetails rating={current} />}
+          </div>
         ) : s.updated.length === 0 ? (
           <p className="text-sm text-muted">{writing ? "Writing…" : "No rewrite suggested for this section."}</p>
         ) : (
-          s.updated.map((u, i) => <UpdatedBlock key={i} kind={s.kind} text={u} label={multi ? `Option ${i + 1}` : "Updated"} />)
+          <>
+            {ratings && (
+              <p className="text-xs text-muted">
+                Scored in your browser on the checks below, not by AI.{" "}
+                {current && `Your current headline scores ${current.score}. `}
+                {best < 0 && multi ? "These options tie on our checks, so pick the one that sounds most like you." : "A higher score means fewer gaps. Still pick the one that sounds like you."}
+              </p>
+            )}
+            {s.updated.map((u, i) => (
+              <UpdatedBlock key={i} kind={s.kind} text={u} label={multi ? `Option ${i + 1}` : "Updated"} rating={ratings?.[i]} best={i === best} />
+            ))}
+          </>
         )}
 
         {(s.before || s.after) && (
@@ -181,7 +217,19 @@ function SkillChips({ skills, noun = "skill" }: { skills: Skill[]; noun?: "skill
  * Services page are checklists, so they get their own layouts — and fall
  * back to the plain block if the model didn't follow the shape.
  */
-function UpdatedBlock({ kind, text, label }: { kind: MakeoverSection["kind"]; text: string; label: string }) {
+function UpdatedBlock({
+  kind,
+  text,
+  label,
+  rating,
+  best = false,
+}: {
+  kind: MakeoverSection["kind"];
+  text: string;
+  label: string;
+  rating?: HeadlineRating;
+  best?: boolean;
+}) {
   if (kind === "other") {
     const { fixes, notes } = parseFixes(text);
     if (fixes.length) return <FixList fixes={fixes} notes={notes} />;
@@ -193,12 +241,50 @@ function UpdatedBlock({ kind, text, label }: { kind: MakeoverSection["kind"]; te
   return (
     <div className="rounded-lg bg-accent-soft/60 p-3">
       <div className="mb-1 flex items-center justify-between gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-accent">{label}</span>
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="text-xs font-medium uppercase tracking-wide text-accent">{label}</span>
+          {rating && <ScoreBadge score={rating.score} />}
+          {best && <span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success">Best match</span>}
+        </span>
         <CopyButton text={kind === "skills" ? splitSkills(text).map((k) => k.name).join("\n") : toLinkedInText(text)} />
       </div>
       {kind === "skills" ? <SkillChips skills={splitSkills(text)} /> : <Markdown>{text}</Markdown>}
       <CharCount text={toLinkedInText(text)} limit={LINKEDIN_LIMITS[kind]} />
+      {rating && <RatingDetails rating={rating} />}
     </div>
+  );
+}
+
+function ScoreBadge({ score }: { score: number }) {
+  const tone = score >= 75 ? "text-success" : score >= 50 ? "text-warning-fg" : "text-danger";
+  return (
+    <span className="text-xs text-muted">
+      <span className={`font-semibold ${tone}`}>{score}</span>/100
+    </span>
+  );
+}
+
+function RatingDetails({ rating }: { rating: HeadlineRating }) {
+  const missed = rating.checks.filter((c) => !c.ok).length;
+  return (
+    <details className="mt-2 text-xs">
+      <summary className="cursor-pointer text-accent">
+        {missed ? `Score ${rating.score}/100 · ${missed} check${missed === 1 ? "" : "s"} missed` : `Score ${rating.score}/100 · every check passed`}
+      </summary>
+      <ul className="mt-1.5 space-y-1">
+        {rating.checks.map((c) => (
+          <li key={c.label} className="flex gap-1.5">
+            <span className={c.ok ? "text-success" : "text-danger"} aria-hidden>
+              {c.ok ? "✓" : "✗"}
+            </span>
+            <span className={c.ok ? "text-muted" : ""}>
+              <span className="sr-only">{c.ok ? "Passed: " : "Missed: "}</span>
+              {c.label}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }
 
